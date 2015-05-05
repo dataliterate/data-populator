@@ -61,7 +61,8 @@ The data need to be stored in JSON files that can be loaded by the plugin from a
     "city": "Semanding",
     "country": "Indonesia",
     "avatar_image": "assets/3.jpg"
-  }, …```
+  }, …
+```
   
 Note that the image files are referenced from a folder called _assets_. This means all your image data must be placed inside a folder that sits on the same level as your JSON file. The images folder as well as your images can be named anything you like, you just need to reference them accordingly within the JSON file.
 
