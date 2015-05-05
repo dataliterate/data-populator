@@ -1,0 +1,58 @@
+[
+  {
+    "id": 1,
+    "product_name": "Apple MacBook",
+    "variant": "Silver",
+    "description": "512GB PCIe-based onboard flash storage",
+    "price": "$1,599.00",
+    "product_image": "assets/macbook-select-silver.png"
+  },
+    {
+    "id": 2,
+    "product_name": "Apple MacBook",
+    "variant": "Gold",
+    "description": "512GB PCIe-based onboard flash storage",
+    "price": "$1,599.00",
+    "product_image": "assets/macbook-select-gold.png"
+  },
+    {
+    "id": 3,
+    "product_name": "Apple MacBook",
+    "variant": "Space Gray",
+    "description": "512GB PCIe-based onboard flash storage",
+    "price": "$1,599.00",
+    "product_image": "assets/macbook-select-spacegray.png"
+  },
+    {
+    "id": 4,
+    "product_name": "Apple iMac",
+    "variant": "with Retina 5K display",
+    "description": "27-inch: 3.5GHz with Retina 5K display",
+    "price": "$2,499.00",
+    "product_image": "assets/imac-retina.jpeg"
+  },
+    {
+    "id": 5,
+    "product_name": "Apple iPad Air 2",
+    "variant": "Silver",
+    "description": "16, 64 or 128 GB",
+    "price": "from $499.00",
+    "product_image": "assets/ipad-air-select-silver.png"
+  },
+    {
+    "id": 6,
+    "product_name": "Apple iPad Air 2",
+    "variant": "Gold",
+    "description": "16, 64 or 128 GB",
+    "price": "from $499.00",
+    "product_image": "assets/ipad-air-select-gold.png"
+  },
+    {
+    "id": 7,
+    "product_name": "Apple iPad Air 2",
+    "variant": "Space Gray",
+    "description": "16, 64 or 128 GB",
+    "price": "from $499.00",
+    "product_image": "assets/ipad-air-select-gray.png"
+  }
+]
