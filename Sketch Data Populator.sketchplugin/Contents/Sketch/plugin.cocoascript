@@ -1,0 +1,145 @@
+//===============================================
+// sketch data binding - plugin
+//===============================================
+
+@import 'library.cocoascript';
+@import 'sandbox.cocoascript';
+
+
+function bindHandler(context) {
+
+	//get selection
+	var selectedLayers;
+	if(context.selection.count() > 0) {
+		selectedLayers = Library.jsArray(context.selection);
+	}
+
+	//make sure there are selected layers
+	if(!selectedLayers) {
+		context.document.showMessage('Please select the layers you would like to bind data to.');
+		return;
+	}
+
+	//get color palette json
+	var filePath = Library.askForJSON();
+	if(!filePath) return;
+
+	//get root dir
+	var rootDir = [filePath stringByDeletingLastPathComponent] + '/';
+	if(!Sandbox.authoriseDir(rootDir)) return;
+
+	//load contents
+	var fileContent = Library.readFileAsText(filePath);
+
+	//create data structure
+	var data = JSON.parse(fileContent);
+
+	//process each selected layer
+	for(var i = 0; i < selectedLayers.length; i++) {
+			
+		//get data row
+		var dataRow = data[i % data.length];
+
+		//check type of selected layer
+		var selectedLayer = selectedLayers[i];
+		if(Library.isLayerGroup(selectedLayer)) {
+
+			//get all text layers in selected layer
+			var textLayers = Library.findLayersInLayer(false, false, 'MSTextLayer', selectedLayer, false, false);
+			
+			//process all text layers
+			textLayers.forEach(function(textLayer) {
+				processTextLayer(textLayer, dataRow);
+			});
+
+			//get all shape groups in selected layer
+			var shapeGroups = Library.findLayersInLayer('{*}', false, 'MSShapeGroup', selectedLayer, false, false);
+
+			//process all shape groups
+			shapeGroups.forEach(function(shapeGroup) {
+				processShapeGroup(shapeGroup, dataRow, rootDir);
+			});
+
+		}
+		else if(Library.isLayerText(selectedLayer)) {
+			processTextLayer(selectedLayer, dataRow);
+		}
+	}
+
+
+	function processTextLayer(textLayer, dataRow) {
+
+		//get text from text layer
+		var text = [textLayer stringValue];
+
+		//get placeholders in text
+		var placeholders = getPlaceholders(text);
+
+		//assign values to placeholders
+		var values = {};
+		placeholders.forEach(function(placeholder) {
+			values[placeholder] = dataRow[placeholder];
+		});
+
+		//merge text with values
+		var mergedText = Library.mergeStringWithValues(text, values);
+
+		//set text layer text
+		textLayer.setStringValue(mergedText);
+
+		//resize text layer to fit text
+		Library.resizeTextLayer(textLayer);
+	}
+
+
+	function processShapeGroup(shapeGroup, dataRow, rootDir) {
+		
+		//get shape group name
+		var shapeGroupName = [shapeGroup name].toString();
+
+		//get placeholder name
+		var placeholder = shapeGroupName.substring(1, [shapeGroupName length] - 1);
+
+		//get image url for placeholder from data row
+		var imageUrl = dataRow[placeholder];
+		if(!imageUrl) return;
+		if(imageUrl[0] == '/') imageUrl = imageUrl.substring(1);
+
+		//build full image url
+		var fullImageUrl = rootDir + imageUrl;
+
+		//load image
+		var fileManager = [NSFileManager defaultManager];
+		if ([fileManager fileExistsAtPath: fullImageUrl]) {				
+			var image = [[NSImage alloc] initWithContentsOfFile: fullImageUrl];
+
+			//get shape group fill
+			var fill = [[[shapeGroup style] fills] firstObject];
+
+			//set pattern fill
+            fill.setFillType(4);
+
+            //set image as pattern fill
+            var imageCollection = fill.documentData().images();
+            [fill setPatternImage: image collection: imageCollection];
+            fill.setPatternFillType(1);
+		}
+	}
+
+
+	function getPlaceholders(str) {
+		
+		//collect placeholders
+		var results = []; 
+
+		//regex matching
+		var re = /{([^}]+)}/g;
+		var text;
+
+		//find placeholders
+	  	while(text = re.exec(str)) {
+	    	results.push(text[1]);
+	  	}
+	  	return results;
+	}
+}

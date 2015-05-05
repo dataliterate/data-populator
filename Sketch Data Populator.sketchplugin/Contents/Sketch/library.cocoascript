@@ -1,0 +1,170 @@
+//===============================================
+// sketch data binding - library
+//===============================================
+
+var Library = {};
+(function(self) {
+
+
+	//array conversion
+	self.jsArray = jsArray;
+
+	//file system
+	self.askForJSON = askForJSON;
+	self.readFileAsText = readFileAsText;
+
+	//find layers
+	self.findLayersInLayer = findLayersInLayer;
+	self.findLayerInLayer = findLayerInLayer;
+	self.resizeTextLayer = resizeTextLayer;
+
+	//check layer type
+	self.isLayerGroup = isLayerGroup;
+	self.isLayerText = isLayerText;
+
+	//other
+	self.mergeStringWithValues = mergeStringWithValues;
+
+
+	//===============================================
+
+
+	function jsArray(array) {
+		var length = [array count];
+        var jsArray = [];
+
+        while (length--) {
+            jsArray.push([array objectAtIndex: length]);
+        }
+        return jsArray;
+	}
+
+
+	function askForJSON() {
+		var panel = [NSOpenPanel openPanel];
+
+		[panel setTitle: "Select JSON"];
+		[panel setMessage: "Please select the JSON file you'd like to use."];
+		[panel setPrompt: "Select"];
+
+		[panel setCanCreateDirectories: false];
+  		[panel setCanChooseFiles: true];
+  		[panel setCanChooseDirectories: false];
+  		[panel setAllowsMultipleSelection: false];
+  		[panel setShowsHiddenFiles: false];
+  		[panel setExtensionHidden: false];
+
+  		[panel setDirectoryURL: [NSURL fileURLWithPath: '/Users/' + NSUserName()]];
+
+  		var pressedButton = [panel runModal];
+  		if(pressedButton == NSOKButton) {
+  			return [[panel URL] path];
+  		}
+	}
+
+
+	function readFileAsText(path) {
+        return [NSString stringWithContentsOfFile: path encoding: NSUTF8StringEncoding error: false];
+    }
+
+
+    function findLayersInLayer(name, exactMatch, type, rootLayer, subLayersOnly, layersToExclude) {
+
+    	//create predicate format
+    	var formatRules = ['(name != NULL)'];
+    	var arguments = [];
+
+    	//name
+    	if(name) {
+    		if(exactMatch) {
+    			formatRules.push('(name == %@)');
+    		}
+    		else {
+    			formatRules.push('(name like %@)');
+    		}
+    		arguments.push(name);
+    	}
+
+    	//type
+    	if(type) {
+    		formatRules.push('(className == %@)');
+    		arguments.push(type);
+    	}
+    	else {
+    		formatRules.push('(className == "MSLayerGroup" OR className == "MSShapeGroup" OR className == "MSArtboardGroup" OR className == "MSTextLayer")');
+    	}
+
+    	//layers to exclude
+    	if(layersToExclude) {
+    		formatRules.push('NOT (SELF IN %@)');
+    		arguments.push(excludedLayers);
+    	}
+
+    	//prepare format string
+    	var formatString = formatRules.join(' AND ');
+
+    	//create predicate
+        predicate = [NSPredicate predicateWithFormat: formatString argumentArray: arguments];
+
+        //get layers to filter
+        var layers;
+        if (subLayersOnly) {
+            layers = [[rootLayer layers] array];
+        } else {
+            layers = [rootLayer children];
+        }
+
+        //perform query
+        var queryResult = [layers filteredArrayUsingPredicate: predicate];
+
+        //return result as js array
+        return jsArray(queryResult);
+    }
+
+
+    function findLayerInLayer(name, exactMatch, type, rootLayer, subLayersOnly, layersToExclude) {
+        var result = findLayersInLayer(name, exactMatch, type, rootLayer, subLayersOnly, layersToExclude);
+
+        //return first layer in result
+        if (result.length) return result[0];
+    }
+
+
+	function resizeTextLayer(layer) {
+	    [layer adjustFrameToFit];
+	    [layer select: true byExpandingSelection: false];
+	    [layer setIsEditingText: true];
+	    [layer setIsEditingText: false];
+	    [layer select: false byExpandingSelection: false];
+	}
+
+
+    function isLayerGroup(layer) {
+        return ([layer isKindOfClass: [MSLayerGroup class]] && ![layer isKindOfClass: [MSShapeGroup class]]);
+    }
+
+
+    function isLayerText(layer) {
+        return ([layer isKindOfClass: [MSTextLayer class]]);
+    }
+
+
+	function mergeStringWithValues(string, values) {
+
+		//get properties in values
+	    var properties = Object.keys(values);
+
+	    properties.forEach(function(property) {
+
+	        //build regex
+	        var exp = RegExp('{' + property + '}', 'g');
+
+	        //replace instances of property placeholder with value
+	        string = string.replace(exp, values[property]);
+	    });
+
+	    return string;
+	}
+
+
+})(Library);

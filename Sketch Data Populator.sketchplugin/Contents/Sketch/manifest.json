@@ -1,0 +1,19 @@
+{
+    "name": "Sketch Data Populator",
+    "description": "Bind JSON data to your designs.",
+    "identifier": "com.precious.sketch.datapopulator",
+    "version": "1.0",
+    "commands": [{
+        "name": "Populate with Data",
+        "identifier": "bind",
+        "script": "plugin.cocoascript",
+        "handler": "bindHandler",
+        "shortcut": "",
+    }],
+    "menu": {
+        "isRoot": false,
+        "items": [
+            "bind"
+        ],
+    }
+}
