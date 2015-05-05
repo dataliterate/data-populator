@@ -16,9 +16,9 @@ The **Sketch Data Populator** plugin replaces text and image placeholders with R
 
 Here's how it works:
 
-1. Create a Layer Group that contains at least one Text Layer. In these Text Layers, use placeholders for you data fields in curly brackets – such as ```{first_name}``` or ```{last_name}```. Within a Text Layer, you can do arbitrary string concatenation such as ```{last_name}, {first_name}```. The plugin will replace all these placeholders with respective data.
+1. Create a Layer Group that contains at least one Text Layer. In these Text Layers, use placeholders for you data fields in curly brackets – such as ```{first_name}``` or ```{last_name}```. Within a Text Layer, you can do arbitrary string concatenation such as ```{last_name}, {first_name}```. The plugin's "Populate with Data" command will replace all these placeholders with respective data.
 
-2. In the same Layer Group, create a Rectangle Layer (this is your image placeholder). Give the Rectangle Layer a placeholder name in curly brackets – such as ```{avatar_image}```. The plugin will replace this placeholders with respective image data.
+2. In the same Layer Group, create a Rectangle Layer (this is your image placeholder). Give the Rectangle Layer a placeholder name in curly brackets – such as ```{avatar_image}```. The plugin's "Populate with Data" command will replace this placeholders with respective image data.
 
 Check out the _demo.sketch_ and _demo-population.sketch_ files in the _demo_ folder to get an idea.
 
