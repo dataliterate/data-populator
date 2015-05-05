@@ -10,9 +10,11 @@ Please report bugs, observations and ideas as [issues](https://github.com/precio
 
 This is another collaboration between [Lukas Ondrej](https://github.com/lukas77me) from Brighton, United Kingdom and [precious design studio](http://precious-forever.com/) in Hamburg, Germany.
 
-## What the Plugin does
+## How to use …
  
-The plugin replaces text and image placeholders with "real" data. Here's how it works:
+The **Sketch Data Populator** plugin replaces text and image placeholders with RealMockData™. 
+
+Here's how it works:
 
 1. Create a Layer Group that contains at least one Text Layer. In these Text Layers, use placeholders for you data fields in curly brackets – such as ```{first_name}``` or ```{last_name}```. Within a Text Layer, you can do arbitrary string concatenation such as ```{last_name}, {first_name}```. The plugin will replace all these placeholders with respective data.
 
