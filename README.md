@@ -12,7 +12,7 @@ This is another collaboration between [Lukas Ondrej](https://github.com/lukas77m
 
 ## How to use …
  
-The **Sketch Data Populator** plugin replaces text and image placeholders with data: 
+The **Sketch Data Populator** plugin replaces text and image {placeholders} with data: 
 
 ![Sketch Data Populator](sketch-data-populator.gif)
 
@@ -22,7 +22,7 @@ Here's how it works:
 
 2. In the same Layer Group, create a Rectangle Layer (this is your image placeholder). Give the Rectangle Layer a placeholder name in curly brackets – such as ```{avatar_image}```. The plugin's "Populate with Data" command will replace this placeholders with respective image data.
 
-Check out the _demo.sketch_ and _demo-population.sketch_ files in the _demo_ folder to get an idea.
+Check out the **demo.sketch** and **demo-population.sketch** files in the **demo** folder to get an idea.
 
 The data need to be stored in JSON files that can be loaded by the plugin from any folder on your computer. The data in JSON need to be in an array like in this example:
 
@@ -55,6 +55,6 @@ The data need to be stored in JSON files that can be loaded by the plugin from a
   }, …
 ```
   
-Note that the image files are referenced from a folder called _assets_. This means all your image data must be placed inside a folder that sits on the same level as your JSON file. The images folder as well as your images can be named anything you like, you just need to reference them accordingly within the JSON file.
+Note that in the example the image files are referenced from a folder called _assets_. This means all your image data must be placed inside a folder that sits on the same level as your JSON file. The images folder as well as your images can be named anything you like, you just need to reference them accordingly within the JSON file.
 
-The mock data in "demo" were created with https://www.mockaroo.com, which is a pretty powerful tool to generate all kinds of data. The "products" images are from apple.com, the "contacts" images are from https://randomuser.me/.
+<sup>The mock data in "demo" were created with https://www.mockaroo.com, which is a pretty powerful tool to generate all kinds of data. The "products" images are from apple.com, the "contacts" images from https://randomuser.me/.</sup>
