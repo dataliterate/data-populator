@@ -12,7 +12,9 @@ This is another collaboration between [Lukas Ondrej](https://github.com/lukas77m
 
 ## How to use …
  
-The **Sketch Data Populator** plugin replaces text and image placeholders with RealMockData™. 
+The **Sketch Data Populator** plugin replaces text and image placeholders with data: 
+
+![Sketch Data Populator](sketch-data-populator.gif)
 
 Here's how it works:
 
@@ -50,19 +52,6 @@ The data need to be stored in JSON files that can be loaded by the plugin from a
     "city": "Santiago",
     "country": "Philippines",
     "avatar_image": "assets/2.jpg"
-  },
-  {
-    "id": 3,
-    "first_name": "Rachel",
-    "last_name": "Hamilton",
-    "company_name": "Riffwire",
-    "job_title": "Librarian",
-    "email": "rhamilton2@tamu.edu",
-    "phone": "7-(881)710-0983",
-    "street_address": "90833 5th Terrace",
-    "city": "Semanding",
-    "country": "Indonesia",
-    "avatar_image": "assets/3.jpg"
   }, …
 ```
   
