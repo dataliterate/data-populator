@@ -8,7 +8,7 @@
 
 Please report bugs, observations and ideas as [issues](https://github.com/preciousforever/sketch-data-populator/issues). Also, please don't share the plugin at the moment. We're going to release it but we would like to adjust a few things first.
 
-This is another collaboration between [Lukas Ondrej](https://github.com/lukas77me) from Brighton, United Kingdom and [precious design studio](http://precious-forever.com/) in Hamburg, Germany.
+This is another precious collaboration between [Lukas Ondrej](https://github.com/lukas77me) from ~~Brighton~~ Eastbourne, UK and [precious design studio](http://precious-forever.com/) in Hamburg, Germany.
 
 ## How to use …
  
