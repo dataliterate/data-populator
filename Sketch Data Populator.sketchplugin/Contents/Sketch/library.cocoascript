@@ -1,5 +1,5 @@
 //===============================================
-// sketch data binding - library
+// sketch data populator - library
 //===============================================
 
 var Library = {};
@@ -12,6 +12,8 @@ var Library = {};
 	//file system
 	self.askForJSON = askForJSON;
 	self.readFileAsText = readFileAsText;
+    self.getPresetsDir = getPresetsDir;
+    self.loadPresets = loadPresets;
 
 	//find layers
 	self.findLayersInLayer = findLayersInLayer;
@@ -24,6 +26,12 @@ var Library = {};
 
 	//other
 	self.mergeStringWithValues = mergeStringWithValues;
+
+    //ui elements
+    self.createAlert = createAlert;
+    self.createLabel = createLabel;
+    self.createCheckbox = createCheckbox;
+    self.createSelect = createSelect;
 
 
 	//===============================================
@@ -65,6 +73,59 @@ var Library = {};
 
 	function readFileAsText(path) {
         return [NSString stringWithContentsOfFile: path encoding: NSUTF8StringEncoding error: false];
+    }
+
+
+    function getPresetsDir() {
+
+        //get script path
+        var scriptPath = context.scriptPath;
+
+        //get presets dir path
+        var presetsDirPath = [scriptPath stringByAppendingPathComponent: '/../../../Presets/'];
+        presetsDirPath = [presetsDirPath stringByStandardizingPath];
+
+        return presetsDirPath;
+    }
+
+
+    function loadPresets() {
+
+        //get presets path
+        var presetsPath = getPresetsDir();
+
+        //create file enumerator for presetsPath
+        var url = [NSURL fileURLWithPath: presetsPath];
+        var enumerator = [[NSFileManager defaultManager] enumeratorAtURL:url includingPropertiesForKeys:[NSURLIsDirectoryKey, NSURLNameKey, NSURLPathKey] options:NSDirectoryEnumerationSkipsHiddenFiles errorHandler: null];
+
+        var presets = [];
+        while(fileUrl = [enumerator nextObject]) {
+
+            //make sure that file is JSON
+            if([[fileUrl pathExtension] isEqualToString: 'json']) {
+
+                //make sure it's a file
+                var isDir = MOPointer.alloc().init();
+                [fileUrl getResourceValue: isDir forKey: NSURLIsDirectoryKey error: null];
+                if(!Number(isDir.value())) {
+                    
+                    //get relative path for preset
+                    var presetPath = [fileUrl path];
+                    var presetDisplayPath = [presetPath stringByReplacingOccurrencesOfString: presetsPath + '/' withString: ''];
+
+                    //create preset structure
+                    var preset = {
+                        name: String([presetDisplayPath stringByDeletingPathExtension]),
+                        path: String([fileUrl path])
+                    };
+
+                    //add item
+                    presets.push(preset);
+                }   
+            } 
+        }
+
+        return presets;
     }
 
 
@@ -165,6 +226,65 @@ var Library = {};
 
 	    return string;
 	}
+
+
+    function createLabel(text, fontSize, bold, frame) {
+
+        var label = [[NSTextField alloc] initWithFrame:frame];
+        [label setStringValue:text];
+        if(bold) {
+            [label setFont:[NSFont boldSystemFontOfSize:fontSize]];
+        }
+        else {
+            [label setFont:[NSFont systemFontOfSize:fontSize]];
+        }
+        [label setBezeled:false];
+        [label setDrawsBackground:false];
+        [label setEditable:false];
+        [label setSelectable:false];
+
+        return label;
+    }
+
+
+    function createCheckbox(text, checked, frame) {
+
+        checked = (checked == false) ? NSOffState : NSOnState;
+
+        var checkbox = [[NSButton alloc] initWithFrame: frame];
+        [checkbox setButtonType: NSSwitchButton];
+        [checkbox setBezelStyle: 0];
+        [checkbox setTitle: text];
+        [checkbox setState: checked];
+
+        return checkbox;
+    }
+
+
+    function createSelect(items, selectedIndex, frame) {
+
+        var select = [[NSPopUpButton alloc] initWithFrame: frame pullsDown: false];
+        [select addItemsWithTitles: items];
+        [select selectItemAtIndex: selectedIndex];
+
+        return select;
+    }
+
+
+    function createAlert(title, message, iconFileName) {
+
+        var alert = [COSAlertWindow new];
+        [alert setMessageText: title];
+        [alert setInformativeText: message];
+
+        if(iconFileName) {
+            var scriptPath = context.scriptPath;
+            var iconPath = [[NSImage alloc] initByReferencingFile: [scriptPath stringByAppendingPathComponent: iconFileName]];
+            [alert setIcon: icon];
+        }
+
+        return alert;
+    }
 
 
 })(Library);

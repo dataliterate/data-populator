@@ -1,19 +1,33 @@
 {
     "name": "Sketch Data Populator",
-    "description": "Bind JSON data to your designs.",
+    "description": "Populate your designs with data.",
     "identifier": "com.precious.sketch.datapopulator",
     "version": "1.0",
     "commands": [{
-        "name": "Populate with Data",
-        "identifier": "bind",
+        "name": "Populate with Preset",
+        "identifier": "populateWithPreset",
         "script": "plugin.cocoascript",
-        "handler": "bindHandler",
-        "shortcut": "",
+        "handler": "populateWithPresetHandler",
+        "shortcut": ""
+    }, {
+        "name": "Populate with JSON",
+        "identifier": "populateWithJSON",
+        "script": "plugin.cocoascript",
+        "handler": "populateWithJSONHandler",
+        "shortcut": ""
+    }, {
+        "name": "Reveal Presets",
+        "identifier": "revealPresets",
+        "script": "plugin.cocoascript",
+        "handler": "revealPresetsHandler",
+        "shortcut": ""
     }],
     "menu": {
         "isRoot": false,
         "items": [
-            "bind"
+            "populateWithJSON",
+            "populateWithPreset",
+            "revealPresets"
         ],
     }
 }
