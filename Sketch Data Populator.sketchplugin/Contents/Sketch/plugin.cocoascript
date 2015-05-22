@@ -11,9 +11,10 @@ var context;
 
 
 function populateWithPresetHandler(_context) {
-	
-	//assing global context reference
 	context = _context;
+
+	//get user defaults
+	var defaults = [NSUserDefaults standardUserDefaults];
 
 	//load presets
 	var presets = Library.loadPresets();
@@ -23,8 +24,8 @@ function populateWithPresetHandler(_context) {
 	}
 
 	//get selected layers
-	var selectedLayers = getSelectedLayers();
-	if(!selectedLayers) {
+	var selectedLayers = Library.getSelectedLayers();
+	if(!selectedLayers.length) {
 		context.document.showMessage('Please select the layers you would like to bind data to.');
 		return;
 	}
@@ -36,7 +37,7 @@ function populateWithPresetHandler(_context) {
 	});
 
 	//create alert
-	var alert = Library.createAlert("Populate with Preset", "Please select the preset you'd like to use to populate your design.");
+	var alert = Library.createAlert("Populate with Preset", "Please select the preset you'd like to use to populate your design and configure the options.");
 
 	//create list view
 	var listView = [[NSView alloc] initWithFrame: NSMakeRect(0, 0, 300, 50)];
@@ -50,17 +51,19 @@ function populateWithPresetHandler(_context) {
 	var presetList = Library.createSelect(presetNames, 0, NSMakeRect(0, 0, 300, 25)];
 	[listView addSubview: presetList];
 
+	//select last selected preset
+	var lastSelectedPresetIndex = [defaults objectForKey:'selectedPresetIndex'];
+	if(lastSelectedPresetIndex && lastSelectedPresetIndex < presetNames.length) {
+		[presetList selectItemAtIndex: lastSelectedPresetIndex];
+	}
+
+	//add space
+	var spacerView = [[NSView alloc] initWithFrame: NSMakeRect(0, 0, 300, 5)];
+	[alert addAccessoryView: spacerView];
+
     //create options view
-    var optionsView = [[NSView alloc] initWithFrame: NSMakeRect(0, 0, 300, 100)];
-	[alert addAccessoryView: optionsView];
-
-	//create options view title
-	var optionsViewTitle = Library.createLabel('Options', 12, true, NSMakeRect(0, 60, 300, 20));
-	[optionsView addSubview: optionsViewTitle];
-
-    //create checkbox
-	var checkbox = Library.createCheckbox('Randomize data order', false, NSMakeRect(0, 35, 300, 20));
-	[optionsView addSubview: checkbox];
+    var optionsView = createOptionsView();
+    [alert addAccessoryView: optionsView.view];
 
 	//add bottom buttons
 	[alert addButtonWithTitle:"Populate"];
@@ -74,41 +77,214 @@ function populateWithPresetHandler(_context) {
 		var selectedPresetIndex = [presetList indexOfSelectedItem];
 
 		//get randomize checkbox state
-		var randomizeData = Number([checkbox state]);
+		var randomizeCheckbox = optionsView.randomizeCheckbox;
+		var randomizeData = Number([randomizeCheckbox state]);
 
-		//load preset contents
-		var presetFileContent = Library.readFileAsText(presets[selectedPresetIndex].path);
+		//get trim checkbox state
+		var trimCheckbox = optionsView.trimCheckbox;
+		var trimText = Number([trimCheckbox state]);
 
-		//get preset data
-		var presetData = JSON.parse(presetFileContent);
+		//get ellipsis checkbox state
+		var ellipsisCheckbox = optionsView.ellipsisCheckbox;
+		var insertEllipsis = Number([ellipsisCheckbox state]);
+
+		//get preset paths
+		var presetPath = [NSString stringWithString: presets[selectedPresetIndex].path];
+		var presetParentDir = [presetPath stringByDeletingLastPathComponent];
+
+		//save state
+		[defaults setObject: selectedPresetIndex forKey: 'selectedPresetIndex'];
+		[defaults setObject: presetPath forKey: 'dataPath'];
+		[defaults setObject: 'preset' forKey: 'populateMethod'];
+		[defaults setObject: randomizeData forKey: 'randomizeData'];
+		[defaults setObject: trimText forKey: 'trimText'];
+		[defaults setObject: insertEllipsis forKey: 'insertEllipsis'];
+		[defaults synchronize];
+
+		//load data
+		var presetData = loadData(presetPath);
 
 		//populate design with data
 		populate(presetData, selectedLayers, {
-			rootDir: Library.getPresetsDir(),
-			randomizeData: randomizeData
+			rootDir: presetParentDir,
+			randomizeData: randomizeData,
+			trimText: trimText,
+			insertEllipsis: insertEllipsis
 		});
 	}
 }
 
 
-function getSelectedLayers() {
+function populateWithJSONHandler(_context) {
+	context = _context;
 
-	var selectedLayers;
-	if(context.selection.count() > 0) {
-		selectedLayers = Library.jsArray(context.selection);
+	//get selected layers
+	var selectedLayers = Library.getSelectedLayers();
+	if(!selectedLayers.length) {
+		context.document.showMessage('Please select the layers you would like to bind data to.');
+		return;
 	}
 
-	return selectedLayers;
+	//get JSON file path
+	var filePath = Library.askForJSON();
+	if(!filePath) return;
+
+	//get root dir
+	var rootDir = [filePath stringByDeletingLastPathComponent];
+	if(!Sandbox.authoriseDir(rootDir)) return;
+
+	//create alert
+	var alert = Library.createAlert("Populate with JSON", "Please configure the options below.");
+
+    //create options view
+    var optionsView = createOptionsView();
+    [alert addAccessoryView: optionsView.view];
+
+	//add bottom buttons
+	[alert addButtonWithTitle:"Populate"];
+	[alert addButtonWithTitle:"Cancel"];
+
+	//show alert
+	var responseCode = [alert runModal];
+	if(responseCode == '1000') {
+
+		//get randomize checkbox state
+		var randomizeCheckbox = optionsView.randomizeCheckbox;
+		var randomizeData = Number([randomizeCheckbox state]);
+
+		//get trim checkbox state
+		var trimCheckbox = optionsView.trimCheckbox;
+		var trimText = Number([trimCheckbox state]);
+
+		//get ellipsis checkbox state
+		var ellipsisCheckbox = optionsView.ellipsisCheckbox;
+		var insertEllipsis = Number([ellipsisCheckbox state]);
+
+		//save state
+		var defaults = [NSUserDefaults standardUserDefaults];
+		[defaults setObject: filePath forKey: 'dataPath'];
+		[defaults setObject: 'JSON' forKey: 'populateMethod'];
+		[defaults setObject: randomizeData forKey: 'randomizeData'];
+		[defaults setObject: trimText forKey: 'trimText'];
+		[defaults setObject: insertEllipsis forKey: 'insertEllipsis'];
+		[defaults synchronize];
+
+		//load data
+		var data = loadData(filePath);
+
+		//populate design with data
+		populate(data, selectedLayers, {
+			rootDir: rootDir,
+			randomizeData: randomizeData,
+			trimText: trimText,
+			insertEllipsis: insertEllipsis
+		});
+	}
+}
+
+
+function populateAgainHandler(_context) {
+	context = _context;
+
+	//get defaults
+	var defaults = [NSUserDefaults standardUserDefaults];
+
+	//get selected layers
+	var selectedLayers = Library.getSelectedLayers();
+	if(!selectedLayers.length) {
+		context.document.showMessage('Please select the layers you would like to bind data to.');
+		return;
+	}
+
+	//get last used data path
+	var lastDataPath = [defaults objectForKey: 'dataPath'];
+	if(!lastDataPath) {
+		context.document.showMessage('You must first use \'Populate with Preset\' or \'Populate with JSON\'.');
+		return;
+	}
+
+	//get root dir
+	var rootDir = [lastDataPath stringByDeletingLastPathComponent];
+
+	//get options
+	var randomizeData = Number([defaults objectForKey: 'randomizeData']);
+	var trimText = Number([defaults objectForKey: 'trimText']);
+	var insertEllipsis = Number([defaults objectForKey: 'insertEllipsis']);
+
+	//check how last population was done
+	var lastPopulateMethod = [defaults objectForKey: 'populateMethod'];
+	
+	//authorise rootDir if JSON method
+	if(lastPopulateMethod == 'JSON') {
+		if(!Sandbox.authoriseDir(rootDir)) return;
+	}
+
+	//load data
+	var data = loadData(lastDataPath);
+
+	//populate design with data
+	populate(data, selectedLayers, {
+		rootDir: rootDir,
+		randomizeData: randomizeData,
+		trimText: trimText,
+		insertEllipsis: insertEllipsis
+	});
 }
 
 
 function populate(data, selectedLayers, opt) {
 
+	//keep track of already selected random indexes
+	var randomIndexes = [];
+	var lastRandomIndex = 0;
+
 	//process each selected layer
 	for(var i = 0; i < selectedLayers.length; i++) {
 			
 		//get data row
-		var dataRow = data[i % data.length];
+		var dataRow;
+		if(opt.randomizeData) {
+
+			//reset random index tracking
+			if(randomIndexes.length == data.length) {
+				randomIndexes = [];
+			}
+
+			//get random index
+			var randomIndex;
+			while(!randomIndex && randomIndex !== 0) {
+
+				//get random in range
+				var random = Library.randomInteger(0, data.length);
+
+				//make sure index doesn't exist in already chosen random indexes
+				if(randomIndexes.indexOf(random) == -1) {
+
+					//make sure it's not the same as the last chosen random index
+					if(data.length > 1) {
+						if(random != lastRandomIndex) {
+							randomIndex = random;
+						}
+					}
+					else {
+						randomIndex = random;
+					}
+				}
+			}
+
+			//store selected random index
+			lastRandomIndex = randomIndex;
+			randomIndexes.push(randomIndex);
+			
+			//get data row for random index
+			dataRow = data[randomIndex];
+
+			//reset random index (so next iteration generates a new one)
+			randomIndex = null;
+		} 
+		else {
+			dataRow = data[i % data.length];
+		}
 
 		//check type of selected layer
 		var selectedLayer = selectedLayers[i];
@@ -158,7 +334,60 @@ function populate(data, selectedLayers, opt) {
 		textLayer.setStringValue(mergedText);
 
 		//resize text layer to fit text
-		Library.resizeTextLayer(textLayer);
+		Library.refreshTextLayer(textLayer);
+
+		//check if text layer has fixed size and trimming activated
+		if(textLayer.textBehaviour() == 1 && opt.trimText) {
+
+			//get original text layer height
+			var textLayerFrame = textLayer.frame();
+			var originalHeight = textLayerFrame.height();
+			
+			//resize to fit and get new height
+			Library.resizeTextLayer(textLayer);
+			var newHeight = textLayerFrame.height();
+
+			//shorten text to fit
+			var didTrim = (newHeight > originalHeight);
+			while(newHeight > originalHeight) {
+
+				//trim last character
+				mergedText = mergedText.substring(0, mergedText.length - 1);
+
+				//set trimmed text and re-evaluate height
+				textLayer.setStringValue(mergedText);
+				Library.resizeTextLayer(textLayer);
+				newHeight = textLayerFrame.height();
+			}
+
+			//if trimmed add ellipsis
+			if(didTrim && opt.insertEllipsis) {
+				
+				//add ellipsis
+				mergedText += '…';
+				textLayer.setStringValue(mergedText);
+				Library.resizeTextLayer(textLayer);
+				newHeight = textLayerFrame.height();
+
+				//make sure that ellipsis fits in the text layer
+				while(newHeight > originalHeight) {
+
+					//remove character before ellipsis
+					mergedText = mergedText.substring(0, mergedText.length - 2);
+					mergedText += '…';
+
+					//set new text with ellipsis
+					textLayer.setStringValue(mergedText);
+					Library.resizeTextLayer(textLayer);
+					newHeight = textLayerFrame.height();
+				}
+			}
+		}
+		else {
+			
+			//resize to fit
+			Library.resizeTextLayer(textLayer);
+		}
 	}
 
 
@@ -215,144 +444,72 @@ function populate(data, selectedLayers, opt) {
 }
 
 
-//original handler to populate directly from JSON
-function populateWithJSONHandler(context) {
+function createOptionsView() {
 
-	//get selection
-	var selectedLayers;
-	if(context.selection.count() > 0) {
-		selectedLayers = Library.jsArray(context.selection);
+	//create options view
+    var optionsView = [[NSView alloc] initWithFrame: NSMakeRect(0, 0, 300, 85)];
+
+	//create options view title
+	var optionsViewTitle = Library.createLabel('Options', 12, true, NSMakeRect(0, 65, 300, 20));
+	[optionsView addSubview: optionsViewTitle];
+
+    //create randomize checkbox
+	var randomizeCheckbox = Library.createCheckbox('Randomize data order', false, NSMakeRect(0, 40, 300, 20));
+	[optionsView addSubview: randomizeCheckbox];
+
+	//set randomize checkbox state
+	[randomizeCheckbox setState: [[NSUserDefaults standardUserDefaults] objectForKey:'randomizeData']];
+
+	//create trim checkbox
+	var trimCheckbox = Library.createCheckbox('Trim overflowing text (fixed width text layers)', false, NSMakeRect(0, 20, 300, 20));
+	[optionsView addSubview: trimCheckbox];
+
+	//set trim checkbox state
+	[trimCheckbox setState: [[NSUserDefaults standardUserDefaults] objectForKey:'trimText']];
+
+	//create ellipsis checkbox
+	var ellipsisCheckbox = Library.createCheckbox('Insert ellipsis after trimmed text', false, NSMakeRect(0, 0, 300, 20));
+	[optionsView addSubview: ellipsisCheckbox];
+
+	//set ellipsis checkbox state
+	[ellipsisCheckbox setState: [[NSUserDefaults standardUserDefaults] objectForKey:'insertEllipsis']];
+
+	//return configured view
+	return {
+		view: optionsView,
+		randomizeCheckbox: randomizeCheckbox,
+		trimCheckbox: trimCheckbox,
+		ellipsisCheckbox: ellipsisCheckbox
+	};
+}
+
+
+function loadData(path) {
+
+	//load contents
+	var contents = Library.readFileAsText(path);
+
+	//get data from JSON
+	var data;
+	try {
+		data = JSON.parse(contents);
 	}
-
-	//make sure there are selected layers
-	if(!selectedLayers) {
-		context.document.showMessage('Please select the layers you would like to bind data to.');
+	catch(e) {
+		context.document.showMessage("There was an error parsing data. Please make sure it's valid.");
 		return;
 	}
 
-	//get color palette json
-	var filePath = Library.askForJSON();
-	if(!filePath) return;
-
-	//get root dir
-	var rootDir = [filePath stringByDeletingLastPathComponent] + '/';
-	if(!Sandbox.authoriseDir(rootDir)) return;
-
-	//load contents
-	var fileContent = Library.readFileAsText(filePath);
-
-	//create data structure
-	var data = JSON.parse(fileContent);
-
-	//process each selected layer
-	for(var i = 0; i < selectedLayers.length; i++) {
-			
-		//get data row
-		var dataRow = data[i % data.length];
-
-		//check type of selected layer
-		var selectedLayer = selectedLayers[i];
-		if(Library.isLayerGroup(selectedLayer)) {
-
-			//get all text layers in selected layer
-			var textLayers = Library.findLayersInLayer(false, false, 'MSTextLayer', selectedLayer, false, false);
-			
-			//process all text layers
-			textLayers.forEach(function(textLayer) {
-				processTextLayer(textLayer, dataRow);
-			});
-
-			//get all shape groups in selected layer
-			var shapeGroups = Library.findLayersInLayer('{*}', false, 'MSShapeGroup', selectedLayer, false, false);
-
-			//process all shape groups
-			shapeGroups.forEach(function(shapeGroup) {
-				processShapeGroup(shapeGroup, dataRow, rootDir);
-			});
-
-		}
-		else if(Library.isLayerText(selectedLayer)) {
-			processTextLayer(selectedLayer, dataRow);
-		}
+	//make sure that there is at least one row of data
+	if(!data.length) {
+		context.document.showMessage("There must be at least one row of data.");
+		return;
 	}
 
-
-	function processTextLayer(textLayer, dataRow) {
-
-		//get text from text layer
-		var text = [textLayer stringValue];
-
-		//get placeholders in text
-		var placeholders = getPlaceholders(text);
-
-		//assign values to placeholders
-		var values = {};
-		placeholders.forEach(function(placeholder) {
-			values[placeholder] = dataRow[placeholder];
-		});
-
-		//merge text with values
-		var mergedText = Library.mergeStringWithValues(text, values);
-
-		//set text layer text
-		textLayer.setStringValue(mergedText);
-
-		//resize text layer to fit text
-		Library.resizeTextLayer(textLayer);
-	}
-
-
-	function processShapeGroup(shapeGroup, dataRow, rootDir) {
-		
-		//get shape group name
-		var shapeGroupName = [shapeGroup name].toString();
-
-		//get placeholder name
-		var placeholder = shapeGroupName.substring(1, [shapeGroupName length] - 1);
-
-		//get image url for placeholder from data row
-		var imageUrl = dataRow[placeholder];
-		if(!imageUrl) return;
-		if(imageUrl[0] == '/') imageUrl = imageUrl.substring(1);
-
-		//build full image url
-		var fullImageUrl = rootDir + imageUrl;
-
-		//load image
-		var fileManager = [NSFileManager defaultManager];
-		if ([fileManager fileExistsAtPath: fullImageUrl]) {				
-			var image = [[NSImage alloc] initWithContentsOfFile: fullImageUrl];
-
-			//get shape group fill
-			var fill = [[[shapeGroup style] fills] firstObject];
-
-			//set pattern fill
-            fill.setFillType(4);
-
-            //set image as pattern fill
-            var imageCollection = fill.documentData().images();
-            [fill setPatternImage: image collection: imageCollection];
-            fill.setPatternFillType(1);
-		}
-	}
-
-
-	function getPlaceholders(str) {
-		
-		//collect placeholders
-		var results = []; 
-
-		//regex matching
-		var re = /{([^}]+)}/g;
-		var text;
-
-		//find placeholders
-	  	while(text = re.exec(str)) {
-	    	results.push(text[1]);
-	  	}
-	  	return results;
-	}
+	return data;
 }
+
+
+//===============================================
 
 
 function revealPresetsHandler(_context) {

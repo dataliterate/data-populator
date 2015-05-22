@@ -19,6 +19,8 @@ var Library = {};
 	self.findLayersInLayer = findLayersInLayer;
 	self.findLayerInLayer = findLayerInLayer;
 	self.resizeTextLayer = resizeTextLayer;
+    self.refreshTextLayer = refreshTextLayer;
+    self.getSelectedLayers = getSelectedLayers;
 
 	//check layer type
 	self.isLayerGroup = isLayerGroup;
@@ -26,6 +28,7 @@ var Library = {};
 
 	//other
 	self.mergeStringWithValues = mergeStringWithValues;
+    self.randomInteger = randomInteger;
 
     //ui elements
     self.createAlert = createAlert;
@@ -200,6 +203,25 @@ var Library = {};
 	}
 
 
+    function refreshTextLayer(layer) {
+        [layer select: true byExpandingSelection: false];
+        [layer setIsEditingText: true];
+        [layer setIsEditingText: false];
+        [layer select: false byExpandingSelection: false];
+    }
+
+
+    function getSelectedLayers() {
+
+        var selectedLayers = [];
+        if(context.selection.count() > 0) {
+            selectedLayers = jsArray(context.selection);
+        }
+
+        return selectedLayers;
+    }
+
+
     function isLayerGroup(layer) {
         return ([layer isKindOfClass: [MSLayerGroup class]] && ![layer isKindOfClass: [MSShapeGroup class]]);
     }
@@ -226,6 +248,11 @@ var Library = {};
 
 	    return string;
 	}
+
+
+    function randomInteger(min, max) {
+        return Math.floor(Math.random() * (max - min)) + min;
+    }
 
 
     function createLabel(text, fontSize, bold, frame) {

@@ -16,6 +16,12 @@
         "handler": "populateWithJSONHandler",
         "shortcut": ""
     }, {
+        "name": "Populate Again",
+        "identifier": "populateAgain",
+        "script": "plugin.cocoascript",
+        "handler": "populateAgainHandler",
+        "shortcut": ""
+    }, {
         "name": "Reveal Presets",
         "identifier": "revealPresets",
         "script": "plugin.cocoascript",
@@ -27,6 +33,7 @@
         "items": [
             "populateWithJSON",
             "populateWithPreset",
+            "populateAgain",
             "revealPresets"
         ],
     }
