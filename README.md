@@ -24,9 +24,13 @@ Here's how it works:
 
 All available Commands:
 
-**Populate with JSON** will ask you to choose a JSON file that can sit anywhere on your Computer. After picking a JSON, you can choose the following options: _Randomize data order_, _Trim overflowing Text (fixed width text layers)_ and _Inser ellipsis after trimmed text_ (selected options will be preserved).
+**Populate with JSON** will ask you to choose a JSON file that can sit anywhere on your Computer. After picking a JSON, you can choose the following options: _Randomize data order_, _Trim overflowing Text (fixed width text layers)_ and _Inser ellipsis after trimmed text_ (selected options will be preserved):
 
-**Populate with Preset** will display a dialog that allows you to select one of your Presets as well as the aforementioned options.
+![Populate with JSON](populate-with-json-dialog.png)
+
+**Populate with Preset** will display a dialog that allows you to select one of your Presets as well as the aforementioned options:
+
+![Populate with Preset](populate-with-preset-dialog.png)
 
 **Reveal Presets** will point you into the plugin's location for its Presets. Presets are simply JSON files and folders with image assets that live inside the plugin bundle. In there, you can use any desired folder structure.
 
