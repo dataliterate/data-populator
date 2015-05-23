@@ -18,13 +18,24 @@ The **Sketch Data Populator** plugin replaces text and image {placeholders} with
 
 Here's how it works:
 
-1. Create a Layer Group that contains at least one Text Layer. In these Text Layers, use placeholders for you data fields in curly brackets – such as ```{first_name}``` or ```{last_name}```. Within a Text Layer, you can do arbitrary string concatenation such as ```{last_name}, {first_name}```. The plugin's "Populate with Data" command will replace all these placeholders with respective data.
+1. Create a Layer Group that contains at least one Text Layer. In these Text Layers, use placeholders for you data fields in curly brackets – such as ```{first_name}``` or ```{last_name}```. Within a Text Layer, you can do arbitrary string concatenation such as ```{last_name}, {first_name}```. The plugin's "Populate with …" command will replace all these placeholders with respective data.
 
-2. In the same Layer Group, create a Rectangle Layer (this is your image placeholder). Give the Rectangle Layer a placeholder name in curly brackets – such as ```{avatar_image}```. The plugin's "Populate with Data" command will replace this placeholders with respective image data.
+2. In the same Layer Group, create a Rectangle Layer (this is your image placeholder). Give the Rectangle Layer a placeholder name in curly brackets – such as ```{avatar_image}```. The plugin's "Populate with …" command will replace this placeholders with respective image data.
+
+All available Commands:
+
+**Populate with JSON** will ask you to choose a JSON file that can sit anywhere on your Computer. After picking a JSON, you can choose the following options: _Randomize data order_, _Trim overflowing Text (fixed width text layers)_ and _Inser ellipsis after trimmed text_ (selected options will be preserved).
+
+**Populate with Preset** will display a dialog that allows you to select one of your Presets as well as the aforementioned options.
+
+**Reveal Presets** will point you into the plugin's location for its Presets. Presets are simply JSON files and folders with image assets that live inside the plugin bundle. In there, you can use any desired folder structure.
+
+**Populate again** populates the selection with the last used
+Preset/JSON and options configuration.
 
 Check out the **demo.sketch** and **demo-population.sketch** files in the **demo** folder to get an idea.
 
-The data need to be stored in JSON files that can be loaded by the plugin from any folder on your computer. The data in JSON need to be in an array like in this example:
+The data need to be stored in JSON files that can be loaded by the plugin from either the Presets Folder (Populate with Preset) or from any folder on your computer (Populate with JSON). The data in JSON need to be in an array like in this example:
 
 ```[
   {
@@ -55,6 +66,6 @@ The data need to be stored in JSON files that can be loaded by the plugin from a
   }, …
 ```
   
-Note that in the example the image files are referenced from a folder called _assets_. This means all your image data must be placed inside a folder that sits on the same level as your JSON file. The images folder as well as your images can be named anything you like, you just need to reference them accordingly within the JSON file.
+Note that in the example the image files are referenced from a folder called _assets_. This means all your image data should be placed inside a folder that sits on the same level as your JSON file. The images folder as well as your images can be named anything you like, you just need to reference them relative to your JSON file.
 
 <sup>The mock data in "demo" were created with https://www.mockaroo.com, which is a pretty powerful tool to generate all kinds of data. The "products" images are from apple.com, the "contacts" images from https://randomuser.me/.</sup>
