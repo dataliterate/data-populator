@@ -25,7 +25,7 @@ Here's how it works:
 All available Commands:
 
 #### Populate with JSON
-will ask you to choose a JSON file that can sit anywhere on your Computer. After picking a JSON, you can choose the following options: _Randomize data order_, _Trim overflowing Text (fixed width text layers)_ and _Inser ellipsis after trimmed text_ (selected options will be preserved):
+will ask you to choose a JSON file that can sit anywhere on your Computer. After picking a JSON, you can choose the following options: _Randomize data order_, _Trim overflowing Text (fixed width text layers)_ and _Insert ellipsis after trimmed text_ (selected options will be preserved):
 
 ![Populate with JSON](populate-with-json-dialog.png)
 
@@ -40,6 +40,7 @@ will point you into the plugin's location for its Presets. Presets are simply JS
 #### Populate again
 populates the selection with the last used
 Preset/JSON and options configuration.
+
 
 ---
 
