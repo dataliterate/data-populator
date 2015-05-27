@@ -1,7 +1,7 @@
 {
     "name": "Sketch Data Populator",
     "description": "Say goodbye to Lorem Ipsum: populate your Sketch documents with meaningful data.",
-    "identifier": "com.precious.sketch.datapopulator",
+    "identifier": "com.precious-forever.sketch.datapopulator",
     "version": "1.0",
     "commands": [{
         "name": "Populate with Preset",
