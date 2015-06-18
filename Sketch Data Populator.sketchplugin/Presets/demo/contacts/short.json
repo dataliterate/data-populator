@@ -11,7 +11,8 @@
         "job_title": "Senior Financial Analyst",
         "last_name": "Carter",
         "phone": "2-(017)772-7449",
-        "street_address": "31296 Calypso Parkway"
+        "street_address": "31296 Calypso Parkway",
+        "sample_icon": "../contacts/assets/Icons/f.svg"
     },
     {
         "avatar_image": "../contacts/assets/Female/Heather-Morales.jpg",
@@ -25,7 +26,8 @@
         "job_title": "Analyst Programmer",
         "last_name": "Morales",
         "phone": "7-(897)249-9830",
-        "street_address": "42604 Scofield Center"
+        "street_address": "42604 Scofield Center",
+        "sample_icon": "../contacts/assets/Icons/f.svg"
     },
     {
         "avatar_image": "../contacts/assets/Male/Sean-Jackson.jpg",
@@ -39,6 +41,7 @@
         "job_title": "Structural Engineer",
         "last_name": "Jackson",
         "phone": "6-(527)389-6219",
-        "street_address": "66529 Eagle Crest Junction"
+        "street_address": "66529 Eagle Crest Junction",
+        "sample_icon": "../contacts/assets/Icons/m.svg"
     }
 ]

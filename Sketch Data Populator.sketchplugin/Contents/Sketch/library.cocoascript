@@ -18,17 +18,23 @@ var Library = {};
 	//find layers
 	self.findLayersInLayer = findLayersInLayer;
 	self.findLayerInLayer = findLayerInLayer;
+    self.findPageWithName = findPageWithName;
 	self.resizeTextLayer = resizeTextLayer;
     self.refreshTextLayer = refreshTextLayer;
     self.getSelectedLayers = getSelectedLayers;
 
 	//check layer type
 	self.isLayerGroup = isLayerGroup;
+    self.isLayerShapeGroup = isLayerShapeGroup;
 	self.isLayerText = isLayerText;
+    self.addPage = addPage;
 
 	//other
 	self.mergeStringWithValues = mergeStringWithValues;
     self.randomInteger = randomInteger;
+    self.delay = delay;
+    self.scaleToBoundingBox = scaleToBoundingBox;
+    // self.importSVG = importSVG;
 
     //ui elements
     self.createAlert = createAlert;
@@ -194,13 +200,37 @@ var Library = {};
     }
 
 
-	function resizeTextLayer(layer) {
-	    [layer adjustFrameToFit];
-	    [layer select: true byExpandingSelection: false];
-	    [layer setIsEditingText: true];
-	    [layer setIsEditingText: false];
-	    [layer select: false byExpandingSelection: false];
-	}
+    function findPageWithName(name, fullMatch) {
+
+        var doc = context.document;
+        var pages = jsArray([doc pages]);
+        for(var i = 0; i < pages.length; i++) {
+            var currentPage = pages[i];
+
+            //if page matches name
+            if(fullMatch) {
+                if([currentPage name] == name) {
+                    return currentPage;
+                }
+            }
+            else {
+                if([currentPage name].indexOf(name) > -1) {
+                return currentPage;
+                }
+            }
+        }
+
+        return;
+    }
+
+
+  	function resizeTextLayer(layer) {
+  	    [layer adjustFrameToFit];
+  	    [layer select: true byExpandingSelection: false];
+  	    [layer setIsEditingText: true];
+  	    [layer setIsEditingText: false];
+  	    [layer select: false byExpandingSelection: false];
+  	}
 
 
     function refreshTextLayer(layer) {
@@ -227,8 +257,32 @@ var Library = {};
     }
 
 
+    function isLayerShapeGroup(layer) {
+        return ([layer isKindOfClass: [MSShapeGroup class]]);
+    }
+
+
     function isLayerText(layer) {
         return ([layer isKindOfClass: [MSTextLayer class]]);
+    }
+
+
+    function addPage(name) {
+
+        //get doc
+        var doc = context.document;
+
+        //get current page
+        var currentPage = doc.currentPage();
+
+        //create new page
+        var page = doc.addBlankPage();
+        page.setName(name);
+
+        //make current page active again
+        doc.setCurrentPage(currentPage);
+
+        return page;
     }
 
 
@@ -252,6 +306,41 @@ var Library = {};
 
     function randomInteger(min, max) {
         return Math.floor(Math.random() * (max - min)) + min;
+    }
+
+
+    function delay(callback, delay, opt) {
+        [coscript setShouldKeepAround:true];
+        var cosi = [coscript scheduleWithInterval:delay jsFunction:function(cinterval) {
+              callback(opt); 
+        }];
+    }
+
+
+    function scaleToBoundingBox(boundingFrame, contentFrame) {
+
+        //prepare final frame
+        var finalFrame = {};
+
+        //get ratio
+        var boundingShortestSide = (boundingFrame.width < boundingFrame.height) ? boundingFrame.width : boundingFrame.height;
+        var contentLongestSide = (contentFrame.width > contentFrame.height) ? contentFrame.width : contentFrame.height;
+        var ratio = boundingShortestSide / contentLongestSide;
+
+        //set final frame size
+        finalFrame.width = contentFrame.width * ratio;
+        finalFrame.height = contentFrame.height * ratio;
+
+        //set final frame position
+        finalFrame.x = boundingFrame.x + ((boundingFrame.width - finalFrame.width) / 2);
+        finalFrame.y = boundingFrame.y + ((boundingFrame.height - finalFrame.height) / 2);
+
+        return finalFrame;
+    }
+
+
+    function importSVG(path, callback) {
+        
     }
 
 

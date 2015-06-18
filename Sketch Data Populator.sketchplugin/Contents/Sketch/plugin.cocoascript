@@ -238,77 +238,122 @@ function populate(data, selectedLayers, opt) {
 	var randomIndexes = [];
 	var lastRandomIndex = 0;
 
-	//process each selected layer
+	//import state
+	var numberOfSelectedLayers = selectedLayers.length;
+	var currentLayerIndex = 0;
+	var svgIconCount = 0;
+	var svgIconsImported = 0;
+	var svgIconsStartedImport = 0;
+
+	//remove existing temp page
+	var existingTempPage = Library.findPageWithName('__TEMP_DATA_POPULATOR__', true);
+	if(existingTempPage) {
+		var doc = context.document;
+		doc.removePage(existingTempPage);
+	}
+
+	//prepare temporary page
+	var tempIconPage = Library.addPage('__TEMP_DATA_POPULATOR__');
+
+	//count svg icon placeholders in selection
 	for(var i = 0; i < selectedLayers.length; i++) {
-			
-		//get data row
-		var dataRow;
-		if(opt.randomizeData) {
+		var iconPlaceholders = Library.findLayersInLayer('{{*}}', false, 'MSShapeGroup', selectedLayers[i], false, false);
+		svgIconCount += iconPlaceholders.length;
+	}
 
-			//reset random index tracking
-			if(randomIndexes.length == data.length) {
-				randomIndexes = [];
-			}
+	//populate population process
+	populateSelection();
 
-			//get random index
-			var randomIndex;
-			while(!randomIndex && randomIndex !== 0) {
 
-				//get random in range
-				var random = Library.randomInteger(0, data.length);
+	function populateSelection() {
 
-				//make sure index doesn't exist in already chosen random indexes
-				if(randomIndexes.indexOf(random) == -1) {
+		//process each selected layer
+		for(var i = 0; i < selectedLayers.length; i++) {
+			currentLayerIndex = i;
 
-					//make sure it's not the same as the last chosen random index
-					if(data.length > 1) {
-						if(random != lastRandomIndex) {
+			//get data row
+			var dataRow;
+			if(opt.randomizeData) {
+
+				//reset random index tracking
+				if(randomIndexes.length == data.length) {
+					randomIndexes = [];
+				}
+
+				//get random index
+				var randomIndex;
+				while(!randomIndex && randomIndex !== 0) {
+
+					//get random in range
+					var random = Library.randomInteger(0, data.length);
+
+					//make sure index doesn't exist in already chosen random indexes
+					if(randomIndexes.indexOf(random) == -1) {
+
+						//make sure it's not the same as the last chosen random index
+						if(data.length > 1) {
+							if(random != lastRandomIndex) {
+								randomIndex = random;
+							}
+						}
+						else {
 							randomIndex = random;
 						}
 					}
-					else {
-						randomIndex = random;
-					}
 				}
+
+				//store selected random index
+				lastRandomIndex = randomIndex;
+				randomIndexes.push(randomIndex);
+				
+				//get data row for random index
+				dataRow = data[randomIndex];
+
+				//reset random index (so next iteration generates a new one)
+				randomIndex = null;
+			} 
+			else {
+				dataRow = data[i % data.length];
 			}
 
-			//store selected random index
-			lastRandomIndex = randomIndex;
-			randomIndexes.push(randomIndex);
-			
-			//get data row for random index
-			dataRow = data[randomIndex];
+			//check type of selected layer
+			var selectedLayer = selectedLayers[i];
+			if(Library.isLayerGroup(selectedLayer)) {
 
-			//reset random index (so next iteration generates a new one)
-			randomIndex = null;
-		} 
-		else {
-			dataRow = data[i % data.length];
-		}
+				//get all text layers in selected layer
+				var textLayers = Library.findLayersInLayer(false, false, 'MSTextLayer', selectedLayer, false, false);
+				
+				//process all text layers
+				textLayers.forEach(function(textLayer) {
+					processTextLayer(textLayer, dataRow);
+				});
 
-		//check type of selected layer
-		var selectedLayer = selectedLayers[i];
-		if(Library.isLayerGroup(selectedLayer)) {
+				//process all image placeholders
+				var imagePlaceholders = Library.findLayersInLayer('{*}', false, 'MSShapeGroup', selectedLayer, false, false);
+				imagePlaceholders.forEach(function(shapeGroup) {
+					processImagePlaceholder(shapeGroup, dataRow, opt.rootDir);
+				});
 
-			//get all text layers in selected layer
-			var textLayers = Library.findLayersInLayer(false, false, 'MSTextLayer', selectedLayer, false, false);
-			
-			//process all text layers
-			textLayers.forEach(function(textLayer) {
-				processTextLayer(textLayer, dataRow);
-			});
+				//process all icon placeholders
+				var iconPlaceholders = Library.findLayersInLayer('{{*}}', false, 'MSShapeGroup', selectedLayer, false, false);
+				iconPlaceholders.forEach(function(shapeGroup) {
+					processIconPlaceholder(shapeGroup, dataRow, opt.rootDir);
+					svgIconsStartedImport++;
+				});
+			}
+			else if(Library.isLayerText(selectedLayer)) {
+				processTextLayer(selectedLayer, dataRow);
+			}
+			else if(Library.isLayerShapeGroup(selectedLayer)) {
 
-			//get all shape groups in selected layer
-			var shapeGroups = Library.findLayersInLayer('{*}', false, 'MSShapeGroup', selectedLayer, false, false);
-
-			//process all shape groups
-			shapeGroups.forEach(function(shapeGroup) {
-				processShapeGroup(shapeGroup, dataRow, opt.rootDir);
-			});
-
-		}
-		else if(Library.isLayerText(selectedLayer)) {
-			processTextLayer(selectedLayer, dataRow);
+				//check if image or icon placeholder
+				if([selectedLayer name].indexOf('{{') > -1) {
+					processIconPlaceholder(selectedLayer, dataRow, opt.rootDir);
+				}
+				else if([selectedLayer name].indexOf('{') > -1) {
+					processImagePlaceholder(selectedLayer, dataRow, opt.rootDir);
+				}
+			}
 		}
 	}
 
@@ -391,7 +436,7 @@ function populate(data, selectedLayers, opt) {
 	}
 
 
-	function processShapeGroup(shapeGroup, dataRow, rootDir) {
+	function processImagePlaceholder(shapeGroup, dataRow, rootDir) {
 		
 		//get shape group name
 		var shapeGroupName = [shapeGroup name].toString();
@@ -422,6 +467,161 @@ function populate(data, selectedLayers, opt) {
             var imageCollection = fill.documentData().images();
             [fill setPatternImage: image collection: imageCollection];
             fill.setPatternFillType(1);
+		}
+	}
+
+
+	function processIconPlaceholder(shapeGroup, dataRow, rootDir) {
+
+		//get shape group name
+		var shapeGroupName = [shapeGroup name].toString();
+
+		//get placeholder name
+		var placeholder = shapeGroupName.substring(2, [shapeGroupName length] - 2);
+
+		//get icon url for placeholder from data row
+		var iconUrl = dataRow[placeholder];
+		if(!iconUrl) {
+			svgIconsImported++;
+			return;
+		}
+		if(iconUrl[0] == '/') iconUrl = iconUrl.substring(1);
+
+		//build full icon url
+		var fullIconUrl = [rootDir stringByAppendingPathComponent: iconUrl];
+
+		//import icon
+		var fileManager = [NSFileManager defaultManager];
+		if ([fileManager fileExistsAtPath: fullIconUrl]) {				
+
+			//get original placeholder icon frame
+			var placeholderFrame = {
+				x: shapeGroup.frame().x(),
+				y: shapeGroup.frame().y(),
+				width: shapeGroup.frame().width(),
+				height: shapeGroup.frame().height()
+			};
+
+			//get shape group layers
+			var placeholderSubLayers = Library.jsArray([shapeGroup layers]);
+
+			//get file NSURL
+	        var fileUrl = [NSURL fileURLWithPath:fullIconUrl];
+
+	        //set up importer
+	        var SVGImporter = [MSSVGImporter svgImporter];
+
+	        //create temporary group for import
+	        var container = tempIconPage.addLayerOfType('group');
+	        container.setName('__IMPORTED_SVG__');
+
+	        //import svg into the container
+	        [MSImportInsert importFromURL: fileUrl inGroup: container importer: SVGImporter completion: nil];
+			
+			//continue after delay to make sure import is complete
+	        Library.delay(function() {
+	        	attemptImport();
+	        }, 0.01);
+
+
+			function attemptImport() {
+				
+				//get container layers
+				var containerLayers = Library.jsArray([container layers]);
+
+				//there should only ever be one layer inside the container
+				if(containerLayers.length >= 1) {
+
+					//get layer
+					var layer = containerLayers[0];
+
+					//layer is a single shape group
+					if([layer isKindOfClass: [MSShapeGroup class]]) {
+
+						//get shape group layers
+						var subLayers = Library.jsArray([layer layers]);
+
+						//remove sub layers from imported shape group
+						subLayers.forEach(function(subLayer) {
+							subLayer.removeFromParent();
+						});
+
+						//add sub layers to original shape group
+						shapeGroup.addLayers(subLayers);
+					}
+
+					//layer is a layer group containing more layers
+					if([layer isKindOfClass: [MSLayerGroup class]] && ![layer isKindOfClass: [MSShapeGroup class]]) {
+
+						//get group layers
+						var subLayers = Library.jsArray([layer layers]);
+
+						//create root shape
+						var rootShape = [[MSShapeGroup alloc] init];
+
+						//merge layers using union boolean operation
+						[MSBooleanOperations mergeShapes:subLayers withShape:rootShape usingBooleanOp: 3];
+
+						//get union shape group layers
+						var unionSubLayers = Library.jsArray([rootShape layers]);
+
+						//remove sub layers from imported shape group
+						unionSubLayers.forEach(function(unionedSubLayer) {
+							unionedSubLayer.removeFromParent();
+						});
+
+						//add sub layers to original shape group
+						shapeGroup.addLayers(unionSubLayers);
+					}
+
+					//delete original placeholder sub layers from shape group
+					placeholderSubLayers.forEach(function(placeholderSubLayer) {
+						placeholderSubLayer.removeFromParent();
+					});
+
+					//resize
+					[shapeGroup resizeRoot: true];
+
+					//get imported icon size
+					var iconFrame = {
+						x: shapeGroup.frame().x(),
+						y: shapeGroup.frame().y(),
+						width: shapeGroup.frame().width(),
+						height: shapeGroup.frame().height()
+					};
+
+					//configure final frame
+					var finalFrame = Library.scaleToBoundingBox(placeholderFrame, iconFrame);
+
+					//set shape group frame
+					shapeGroup.frame().setX(finalFrame.x);
+					shapeGroup.frame().setY(finalFrame.y);
+					shapeGroup.frame().setWidth(finalFrame.width);
+					shapeGroup.frame().setHeight(finalFrame.height);
+
+					//remove container
+					container.removeFromParent();
+
+					//count the imported icon
+					svgIconsImported++;
+
+					//check if all icons for selection are imported now
+					if(svgIconsImported == svgIconCount) {
+						var doc = context.document;
+						doc.removePage(tempIconPage);
+					}
+				}
+				else {
+
+					//try again later
+					Library.delay(function() {
+			        	attemptImport();
+			        }, 0.01);
+				}
+			}
+		}
+		else {
+			svgIconsImported++;
 		}
 	}
 
