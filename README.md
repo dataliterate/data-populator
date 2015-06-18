@@ -20,7 +20,9 @@ The **Sketch Data Populator** plugin replaces text and image {placeholders} with
 
 1. Create a Layer Group that contains at least one Text Layer. In these Text Layers, use placeholders for you data fields in curly brackets – such as ```{first_name}``` or ```{last_name}```. Within a Text Layer, you can do arbitrary string concatenation such as ```{last_name}, {first_name}```. The plugin's "Populate with …" command will replace all these placeholders with respective data.
 
-2. In the same Layer Group, create a Rectangle Layer (this is your image placeholder). Give the Rectangle Layer a placeholder name in curly brackets – such as ```{avatar_image}```. The plugin's "Populate with …" command will replace this placeholders with respective image data.
+2. In the same Layer Group, create a Rectangle Layer (this is your image placeholder). Give the Rectangle Layer a placeholder name in curly brackets – such as ```{avatar_image}```. The plugin's "Populate with …" command will replace this placeholder with respective image data (PNG, JPG).
+
+3. Create another Rectangle Layer as your icon placeholder. Give it a placeholder name in double curly brackets, something like ```{{icon}}```. Set any of its properties like size, fill color or shadow as desired – all properties will apply to the final icon once populated. The plugin's "Populate with …" command will replace this placeholder with respective icon vector data (SVG).
 
 ### All available Commands:
 
@@ -58,7 +60,8 @@ The data need to be stored in JSON files that can be loaded by the plugin from e
     "street_address": "99 Hallows Terrace",
     "city": "Outeiro",
     "country": "Portugal",
-    "avatar_image": "assets/1.jpg"
+    "avatar_image": "assets/1.jpg",
+	"icon": "assets/vip.svg"
   },
   {
     "id": 2,
@@ -71,10 +74,11 @@ The data need to be stored in JSON files that can be loaded by the plugin from e
     "street_address": "46 Acker Trail",
     "city": "Santiago",
     "country": "Philippines",
-    "avatar_image": "assets/2.jpg"
+    "avatar_image": "assets/2.jpg",
+	"icon": "assets/vip.svg"
   }, …
 ```
 
-Note that in the example the image files are referenced from a folder called _assets_. This means all your image data should be placed inside a folder that sits on the same level as your JSON file. The images folder as well as your images can be named anything you like, you just need to reference them relative to your JSON file.
+Note that in the example the image file (JPG and the icon (SVG) are referenced from a folder called _assets_. This means all your image and icon data should be placed inside a folder that sits on the same level as your JSON file. The images/icons folders as well as your images and icons can be named anything you like, you just need to reference them relative to your JSON file.
 
 <sup>The mock data in "demo" were created with https://www.mockaroo.com, which is a pretty powerful tool to generate all kinds of data. The "products" images are from apple.com, the "contacts" images from https://randomuser.me/.</sup>
