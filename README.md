@@ -1,5 +1,13 @@
 # Sketch Data Populator
 
+## Why Sketch Data Populator
+We believe every designer should work with _real_ data as early as possible in the design process for the folloing two reasons:
+
+1. Content informs design decisions and helps you convey your purpose
+2. Data are relentless, so you better design your UI components for robustness
+ 
+_Sketch Data Populator_ not only makes you more productive, it changes the way you design user interfaces (at least that's what happened to us).
+
 ## Installation
 1. Download the ZIP file (or clone repository)
 2. Move the file ```Sketch Data Populator.sketchplugin``` into your Sketch Plugins folder. In Sketch 3, choose **Plugins › Reveal Plugins Folder…** to open it.
