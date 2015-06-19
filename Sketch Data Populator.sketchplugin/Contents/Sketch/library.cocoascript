@@ -375,7 +375,7 @@ var Library = {};
     }
 
 
-    function scaleToBoundingBox(boundingFrame, contentFrame) {
+    function scaleToBoundingBox(boundingFrame, contentFrame, roundPos) {
 
         //prepare final frame
         var finalFrame = {};
@@ -392,7 +392,13 @@ var Library = {};
         //set final frame position
         finalFrame.x = boundingFrame.x + ((boundingFrame.width - finalFrame.width) / 2);
         finalFrame.y = boundingFrame.y + ((boundingFrame.height - finalFrame.height) / 2);
-
+        
+        //rounding
+        if(roundPos) {
+            finalFrame.x = Math.round(finalFrame.x);
+            finalFrame.y = Math.round(finalFrame.y);
+        }
+        
         return finalFrame;
     }
 

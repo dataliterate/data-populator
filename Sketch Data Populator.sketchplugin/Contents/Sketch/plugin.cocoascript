@@ -590,7 +590,7 @@ function populate(data, selectedLayers, opt) {
 					};
 
 					//configure final frame
-					var finalFrame = Library.scaleToBoundingBox(placeholderFrame, iconFrame);
+					var finalFrame = Library.scaleToBoundingBox(placeholderFrame, iconFrame, true);
 
 					//set shape group frame
 					shapeGroup.frame().setX(finalFrame.x);
@@ -914,7 +914,7 @@ function insertSVGHandler(_context) {
 						};
 
 						//configure final frame
-						var finalFrame = Library.scaleToBoundingBox(placeholderFrame, iconFrame);
+						var finalFrame = Library.scaleToBoundingBox(placeholderFrame, iconFrame, true);
 
 						//set shape group frame
 						shapeGroup.frame().setX(finalFrame.x);
