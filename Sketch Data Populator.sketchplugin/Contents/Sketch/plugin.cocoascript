@@ -9,7 +9,6 @@
 //store global context reference
 var context;
 
-
 function populateWithPresetHandler(_context) {
 	context = _context;
 
@@ -725,3 +724,225 @@ function revealPresetsHandler(_context) {
 	[[NSWorkspace sharedWorkspace] openURL: url];
 }
 
+
+//===============================================
+
+
+function insertImageHandler(_context) {
+	context = _context;
+	var doc = context.document;
+
+	//get selection
+	var selection = Library.getSelectedLayers();
+	if(selection.length == 1) {
+		var layer = selection[0];
+
+		//make sure it's a shape group
+		if(Library.isLayerShapeGroup(layer)) {
+
+			//get last used location
+			var defaults = [NSUserDefaults standardUserDefaults];
+			var lastLocation = [defaults objectForKey: 'LastImageFilePickerLocation'];
+
+			//ask for image
+			var imageUrl = Library.askForImage(lastLocation);
+			if(!imageUrl) return;
+
+			//save last used location
+			[defaults setObject: imageUrl forKey: 'LastImageFilePickerLocation'];
+			[defaults synchronize];
+
+			//load image
+			var fileManager = [NSFileManager defaultManager];
+			if ([fileManager fileExistsAtPath: imageUrl]) {				
+				var image = [[NSImage alloc] initWithContentsOfFile: imageUrl];
+
+				//get shape group fill
+				var fill = [[[layer style] fills] firstObject];
+
+				//set pattern fill
+	            fill.setFillType(4);
+
+	            //set image as pattern fill
+	            var imageCollection = fill.documentData().images();
+	            [fill setPatternImage: image collection: imageCollection];
+	            fill.setPatternFillType(1);
+			}
+
+		}
+		else {
+			[doc showMessage: 'The selected layer is not a shape layer.'];
+		}
+	}
+	else {
+		[doc showMessage: 'Please select a single shape layer.'];
+	}
+}
+
+
+function insertSVGHandler(_context) {
+	context = _context;
+	var doc = context.document;
+
+	//get selection
+	var selection = Library.getSelectedLayers();
+	if(selection.length == 1) {
+		var shapeGroup = selection[0];
+
+		//make sure it's a shape group
+		if(Library.isLayerShapeGroup(shapeGroup)) {
+
+			//get last used location
+			var defaults = [NSUserDefaults standardUserDefaults];
+			var lastLocation = [defaults objectForKey: 'LastSVGFilePickerLocation'];
+
+			//ask for image
+			var svgUrl = Library.askForSVG(lastLocation);
+			if(!svgUrl) return;
+
+			//save last used location
+			[defaults setObject: svgUrl forKey: 'LastSVGFilePickerLocation'];
+			[defaults synchronize];
+
+			//load image
+			var fileManager = [NSFileManager defaultManager];
+			if ([fileManager fileExistsAtPath: svgUrl]) {				
+				
+				//remove existing temp page
+				var existingTempPage = Library.findPageWithName('__TEMP_DATA_POPULATOR__', true);
+				if(existingTempPage) {
+					doc.removePage(existingTempPage);
+				}
+
+				//prepare temporary page
+				var tempIconPage = Library.addPage('__TEMP_DATA_POPULATOR__');
+
+				//get original placeholder icon frame
+				var placeholderFrame = {
+					x: shapeGroup.frame().x(),
+					y: shapeGroup.frame().y(),
+					width: shapeGroup.frame().width(),
+					height: shapeGroup.frame().height()
+				};
+
+				//get shape group layers
+				var placeholderSubLayers = Library.jsArray([shapeGroup layers]);
+
+				//get file NSURL
+		        var fileUrl = [NSURL fileURLWithPath:svgUrl];
+
+		        //set up importer
+		        var SVGImporter = [MSSVGImporter svgImporter];
+
+		        //create temporary group for import
+		        var container = tempIconPage.addLayerOfType('group');
+		        container.setName('__IMPORTED_SVG__');
+
+		        //import svg into the container
+		        [MSImportInsert importFromURL: fileUrl inGroup: container importer: SVGImporter completion: nil];
+				
+				//continue after delay to make sure import is complete
+		        Library.delay(function() {
+		        	attemptImport();
+		        }, 0.01);
+
+
+				function attemptImport() {
+					
+					//get container layers
+					var containerLayers = Library.jsArray([container layers]);
+
+					//there should only ever be one layer inside the container
+					if(containerLayers.length >= 1) {
+
+						//get layer
+						var layer = containerLayers[0];
+
+						//layer is a single shape group
+						if([layer isKindOfClass: [MSShapeGroup class]]) {
+
+							//get shape group layers
+							var subLayers = Library.jsArray([layer layers]);
+
+							//remove sub layers from imported shape group
+							subLayers.forEach(function(subLayer) {
+								subLayer.removeFromParent();
+							});
+
+							//add sub layers to original shape group
+							shapeGroup.addLayers(subLayers);
+						}
+
+						//layer is a layer group containing more layers
+						if([layer isKindOfClass: [MSLayerGroup class]] && ![layer isKindOfClass: [MSShapeGroup class]]) {
+
+							//get group layers
+							var subLayers = Library.jsArray([layer layers]);
+
+							//create root shape
+							var rootShape = [[MSShapeGroup alloc] init];
+
+							//merge layers using union boolean operation
+							[MSBooleanOperations mergeShapes:subLayers withShape:rootShape usingBooleanOp: 3];
+
+							//get union shape group layers
+							var unionSubLayers = Library.jsArray([rootShape layers]);
+
+							//remove sub layers from imported shape group
+							unionSubLayers.forEach(function(unionedSubLayer) {
+								unionedSubLayer.removeFromParent();
+							});
+
+							//add sub layers to original shape group
+							shapeGroup.addLayers(unionSubLayers);
+						}
+
+						//delete original placeholder sub layers from shape group
+						placeholderSubLayers.forEach(function(placeholderSubLayer) {
+							placeholderSubLayer.removeFromParent();
+						});
+
+						//resize
+						[shapeGroup resizeRoot: true];
+
+						//get imported icon size
+						var iconFrame = {
+							x: shapeGroup.frame().x(),
+							y: shapeGroup.frame().y(),
+							width: shapeGroup.frame().width(),
+							height: shapeGroup.frame().height()
+						};
+
+						//configure final frame
+						var finalFrame = Library.scaleToBoundingBox(placeholderFrame, iconFrame);
+
+						//set shape group frame
+						shapeGroup.frame().setX(finalFrame.x);
+						shapeGroup.frame().setY(finalFrame.y);
+						shapeGroup.frame().setWidth(finalFrame.width);
+						shapeGroup.frame().setHeight(finalFrame.height);
+
+						//remove container
+						container.removeFromParent();
+
+						//remove temp page
+						doc.removePage(tempIconPage);
+					}
+					else {
+
+						//try again later
+						Library.delay(function() {
+				        	attemptImport();
+				        }, 0.01);
+					}
+				}
+			}
+		}
+		else {
+			[doc showMessage: 'The selected layer is not a shape layer.'];
+		}
+	}
+	else {
+		[doc showMessage: 'Please select a single shape layer.'];
+	}
+}

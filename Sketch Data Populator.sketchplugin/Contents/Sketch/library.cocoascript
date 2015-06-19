@@ -11,6 +11,8 @@ var Library = {};
 
 	//file system
 	self.askForJSON = askForJSON;
+    self.askForImage = askForImage;
+    self.askForSVG = askForSVG;
 	self.readFileAsText = readFileAsText;
     self.getPresetsDir = getPresetsDir;
     self.loadPresets = loadPresets;
@@ -78,6 +80,62 @@ var Library = {};
   			return [[panel URL] path];
   		}
 	}
+
+
+    function askForImage(path) {
+        var panel = [NSOpenPanel openPanel];
+
+        [panel setTitle: "Select Image"];
+        [panel setMessage: "Please select the image file you'd like to use."];
+        [panel setPrompt: "Select"];
+
+        [panel setCanCreateDirectories: false];
+        [panel setCanChooseFiles: true];
+        [panel setCanChooseDirectories: false];
+        [panel setAllowsMultipleSelection: false];
+        [panel setShowsHiddenFiles: false];
+        [panel setExtensionHidden: false];
+
+        if(path) {
+            [panel setDirectoryURL: [NSURL fileURLWithPath: path]];
+        }
+        else {
+            [panel setDirectoryURL: [NSURL fileURLWithPath: '/Users/' + NSUserName()]];
+        }
+
+        var pressedButton = [panel runModal];
+        if(pressedButton == NSOKButton) {
+            return [[panel URL] path];
+        }
+    }
+
+
+    function askForSVG(path) {
+        var panel = [NSOpenPanel openPanel];
+
+        [panel setTitle: "Select SVG Icon"];
+        [panel setMessage: "Please select the SVG file you'd like to use."];
+        [panel setPrompt: "Select"];
+
+        [panel setCanCreateDirectories: false];
+        [panel setCanChooseFiles: true];
+        [panel setCanChooseDirectories: false];
+        [panel setAllowsMultipleSelection: false];
+        [panel setShowsHiddenFiles: false];
+        [panel setExtensionHidden: false];
+
+        if(path) {
+            [panel setDirectoryURL: [NSURL fileURLWithPath: path]];
+        }
+        else {
+            [panel setDirectoryURL: [NSURL fileURLWithPath: '/Users/' + NSUserName()]];
+        }
+
+        var pressedButton = [panel runModal];
+        if(pressedButton == NSOKButton) {
+            return [[panel URL] path];
+        }
+    }
 
 
 	function readFileAsText(path) {

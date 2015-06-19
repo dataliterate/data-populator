@@ -27,6 +27,18 @@
         "script": "plugin.cocoascript",
         "handler": "revealPresetsHandler",
         "shortcut": ""
+    }, {
+        "name": "Place Image",
+        "identifier": "insertImage",
+        "script": "plugin.cocoascript",
+        "handler": "insertImageHandler",
+        "shortcut": ""
+    }, {
+        "name": "Place SVG",
+        "identifier": "insertSVG",
+        "script": "plugin.cocoascript",
+        "handler": "insertSVGHandler",
+        "shortcut": ""
     }],
     "menu": {
         "isRoot": false,
@@ -34,7 +46,9 @@
             "populateWithJSON",
             "populateWithPreset",
             "populateAgain",
-            "revealPresets"
+            "revealPresets",
+            "insertImage",
+            "insertSVG"
         ],
     }
 }
