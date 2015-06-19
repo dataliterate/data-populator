@@ -6,6 +6,7 @@ We believe designers should work with _meaningful_ data as early as possible in 
 
 1. **Content informs design decisions** (and helps you convey your purpose)
 2. **Data are relentless** (so UI components must be designed for robustness)
+3. **It's fun** (seeing your design evolve with meaningful data is motivating and rewarding)
  
 _Sketch Data Populator_ not only makes you more productive, it changes the way you design user interfaces (at least that's what happened to us).
 
