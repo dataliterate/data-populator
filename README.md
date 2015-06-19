@@ -2,10 +2,10 @@
 
 ## Why Data Populator
 
-We believe designers should work with _real_ data as early as possible in the design process for the following reasons:
+We believe designers should work with _meaningful_ data as early as possible in the design process for the following reasons:
 
 1. **Content informs design decisions** (and helps you convey your purpose)
-2. **Data are relentless** (so you better design your UI components for robustness)
+2. **Data are relentless** (so UI components must be designed for robustness)
  
 _Sketch Data Populator_ not only makes you more productive, it changes the way you design user interfaces (at least that's what happened to us).
 
