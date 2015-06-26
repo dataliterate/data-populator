@@ -46,7 +46,7 @@ The **Sketch Data Populator** plugin replaces text and image {placeholders} with
 
 **Reveal Presets** will point you into the plugin's location for its Presets. Presets are simply JSON files and folders with image assets that live inside the plugin bundle. In there, you can use any desired folder structure.
 
-**Populate again** populates the selection with the last used Preset/JSON and options configuration.
+**Populate again** (⌘⇧X) re-populates all selections with the last used Preset/JSON and options configuration. Great for "shuffling" through different data sets.
 
 ---
 
