@@ -8,6 +8,7 @@
 
 //store global context reference
 var context;
+var selection;
 
 function populateWithPresetHandler(_context) {
 	context = _context;
@@ -24,6 +25,7 @@ function populateWithPresetHandler(_context) {
 
 	//get selected layers
 	var selectedLayers = Library.getSelectedLayers();
+	selection = selectedLayers;
 	if(!selectedLayers.length) {
 		context.document.showMessage('Please select the layers you would like to bind data to.');
 		return;
@@ -119,6 +121,7 @@ function populateWithJSONHandler(_context) {
 
 	//get selected layers
 	var selectedLayers = Library.getSelectedLayers();
+	selection = selectedLayers;
 	if(!selectedLayers.length) {
 		context.document.showMessage('Please select the layers you would like to bind data to.');
 		return;
@@ -190,6 +193,7 @@ function populateAgainHandler(_context) {
 
 	//get selected layers
 	var selectedLayers = Library.getSelectedLayers();
+	selection = selectedLayers;
 	if(!selectedLayers.length) {
 		context.document.showMessage('Please select the layers you would like to bind data to.');
 		return;
@@ -354,14 +358,36 @@ function populate(data, selectedLayers, opt) {
 				}
 			}
 		}
+		
+		//if there were no svg icons, processing is now finished
+		if(svgIconCount == 0) {
+			
+			//select original layers
+			restoreSelection();
+		}
 	}
 
 
 	function processTextLayer(textLayer, dataRow) {
-
+		
+		//reference command
+		var command = context.command;
+		
+		//get stored text from layer
+		var storedText = [command valueForKey: 'textWithPlaceholders' onLayer: textLayer];
+		
 		//get text from text layer
-		var text = [textLayer stringValue];
-
+		var text;
+		if(storedText && storedText.length) {
+			text = storedText;
+		}
+		else {
+			text = [textLayer stringValue];	
+		}
+		
+		//store text on layer
+		[command setValue: String(text) forKey: 'textWithPlaceholders' onLayer: textLayer];
+		
 		//get placeholders in text
 		var placeholders = getPlaceholders(text);
 
@@ -606,8 +632,13 @@ function populate(data, selectedLayers, opt) {
 
 					//check if all icons for selection are imported now
 					if(svgIconsImported == svgIconCount) {
+						
+						//remove temp page
 						var doc = context.document;
 						doc.removePage(tempIconPage);
+						
+						//select original layers
+						restoreSelection();
 					}
 				}
 				else {
@@ -726,6 +757,18 @@ function revealPresetsHandler(_context) {
 
 
 //===============================================
+
+
+function restoreSelection() {
+	
+	//deselect current selection
+	var doc = context.document;
+    [[doc currentPage] deselectAllLayers];
+    
+    selection.forEach(function(layer) {
+    	[layer select:true byExpandingSelection:true];
+    });
+}
 
 
 function insertImageHandler(_context) {
