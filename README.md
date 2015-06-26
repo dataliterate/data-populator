@@ -30,7 +30,7 @@ The **Sketch Data Populator** plugin replaces text and image {placeholders} with
 
 1. Create a Layer Group that contains at least one Text Layer. In these Text Layers, use placeholders for you data fields in curly brackets – such as ```{first_name}``` or ```{last_name}```. Within a Text Layer, you can do arbitrary string concatenation such as ```{last_name}, {first_name}```. The plugin's "Populate with …" command will replace all these placeholders with respective data.
 
-2. In the same Layer Group, create a Rectangle Layer (this is your image placeholder). Give the Rectangle Layer a placeholder name in curly brackets – such as ```{avatar_image}```. The plugin's "Populate with …" command will replace this placeholder with respective image data (PNG, JPG).
+2. In the same Layer Group, create a Shape Layer (this is your image placeholder). Give the Shape Layer a placeholder name in curly brackets – such as ```{avatar_image}```. The plugin's "Populate with …" command will replace this placeholder with respective image data (PNG, JPG).
 
 3. Create another Rectangle Layer as your icon placeholder. Give it a placeholder name in double curly brackets, something like ```{{icon}}```. Set any of its properties like size, fill color or shadow as desired – all properties will apply to the final icon once populated. The plugin's "Populate with …" command will replace this placeholder with respective icon vector data (SVG).
 
@@ -44,9 +44,13 @@ The **Sketch Data Populator** plugin replaces text and image {placeholders} with
 
 ![Populate with Preset](populate-with-preset-dialog.png)
 
-**Reveal Presets** will point you into the plugin's location for its Presets. Presets are simply JSON files and folders with image assets that live inside the plugin bundle. In there, you can use any desired folder structure.
-
 **Populate again** (⌘⇧X) re-populates all selections with the last used Preset/JSON and options configuration. Great for "shuffling" through different data sets.
+
+**Place SVG** will prompt you for picking a SVG asset on your computer. It will replace the selected shape and adapt its properties (like size, color, shadow …).
+
+**Place image** will prompt you for picking an image on your computer and then use it as the background for the selected shape.
+
+**Reveal Presets** will point you into the plugin's location for its Presets. Presets are simply JSON files and folders with image assets that live inside the plugin bundle. In there, you can use any desired folder structure. To find the "Preset" folder inside the plugin bundle, right click _Sketch Data Populator.sketchplugin_ and select _Show Package Contents_.
 
 ---
 
