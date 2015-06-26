@@ -20,7 +20,7 @@
         "identifier": "populateAgain",
         "script": "plugin.cocoascript",
         "handler": "populateAgainHandler",
-        "shortcut": ""
+        "shortcut": "cmd shift x"
     }, {
         "name": "Reveal Presets",
         "identifier": "revealPresets",
