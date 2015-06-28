@@ -8,13 +8,13 @@ We believe designers should work with _meaningful_ data as early as possible in 
 2. **Data are relentless** (so UI components must be designed for robustness)
 3. **It's fun** (seeing your design evolve with meaningful data is motivating and rewarding)
  
-_Sketch Data Populator_ not only makes you more productive, it changes the way you design user interfaces (at least that's what happened to us).
+_Sketch Data Populator_ not only makes you more productive (probably around [60x faster](https://vimeo.com/131896485)), it changes the way you design user interfaces (at least that's what happened to us).
 
 ## Testing & Credits
 
 Please report bugs, observations, ideas & feature requests as [issues](https://github.com/preciousforever/sketch-data-populator/issues).
 
-We conceived _Sketch Data Populator_ to improve our design with data process at [precious design studio](http://precious-forever.com/) and developed the plugin in collaboration with [Lukas Ondrej](https://github.com/lukas77me). Please get in touch if you have questions or comments via [@preciousforever](https://twitter.com/preciousforever) or [our website](http://precious-forever.com/contact).
+We conceived _Sketch Data Populator_ to improve our design process for working with meaningful at [precious design studio](http://precious-forever.com/) and developed the plugin in collaboration with [Lukas Ondrej](https://github.com/lukas77me). Please get in touch if you have questions or comments via [@preciousforever](https://twitter.com/preciousforever) or [our website](http://precious-forever.com/contact).
 
 ## Installation
 1. Download the ZIP file (or clone repository)
