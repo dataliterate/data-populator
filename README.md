@@ -46,6 +46,8 @@ The **Sketch Data Populator** plugin replaces text and image {placeholders} with
 
 **Populate again** (⌘⇧X) re-populates all selections with the last used Preset/JSON and options configuration. Great for "shuffling" through different data sets.
 
+**Restore Placeholders** restores populated Text Layers to their initial {placeholders}. An example: you used the placeholders "{firstname} {lastname}" in a Text Layer, they became "John Doe" after populating. "Restore Placeholders" will restore to "{firstname} {lastname}". This is useful because populating a Text Layer means the initially used {placeholders} will be persisted – so without restoring, it would always try to populate the initial {placeholders}, no matter what you type into the field.
+
 **Place SVG** will prompt you for picking a SVG asset on your computer. It will replace the selected shape and adapt its properties (like size, color, shadow …).
 
 **Place image** will prompt you for picking an image on your computer and then use it as the background for the selected shape.
