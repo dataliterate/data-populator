@@ -30,13 +30,13 @@ var Library = {};
     self.isLayerShapeGroup = isLayerShapeGroup;
 	self.isLayerText = isLayerText;
     self.addPage = addPage;
+    self.removePage = removePage;
 
 	//other
 	self.mergeStringWithValues = mergeStringWithValues;
     self.randomInteger = randomInteger;
     self.delay = delay;
     self.scaleToBoundingBox = scaleToBoundingBox;
-    // self.importSVG = importSVG;
 
     //ui elements
     self.createAlert = createAlert;
@@ -342,6 +342,22 @@ var Library = {};
 
         return page;
     }
+    
+    
+    function removePage(page) {
+        
+        //get doc
+        var doc = context.document;
+            
+        //get current page
+        var currentPage = doc.currentPage();
+        
+        //remove page
+        doc.removePage(page);
+        
+        //make current page active again
+        doc.setCurrentPage(currentPage);
+    }
 
 
 	function mergeStringWithValues(string, values) {
@@ -400,11 +416,6 @@ var Library = {};
         }
         
         return finalFrame;
-    }
-
-
-    function importSVG(path, callback) {
-        
     }
 
 
