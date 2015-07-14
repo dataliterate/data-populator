@@ -362,6 +362,9 @@ function populate(data, selectedLayers, opt) {
 		//if there were no svg icons, processing is now finished
 		if(svgIconCount == 0) {
 			
+			//remove temp page
+			Library.removePage(tempIconPage);
+			
 			//select original layers
 			restoreSelection();
 		}
@@ -634,8 +637,7 @@ function populate(data, selectedLayers, opt) {
 					if(svgIconsImported == svgIconCount) {
 						
 						//remove temp page
-						var doc = context.document;
-						doc.removePage(tempIconPage);
+						Library.removePage(tempIconPage);
 						
 						//select original layers
 						restoreSelection();
