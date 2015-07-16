@@ -369,7 +369,7 @@ var Library = {};
 	    properties.forEach(function(property) {
             
             //escape | and add {}
-            var sanitisedProperty = property.replace('||', '\\|\\|');
+            var sanitisedProperty = property.replace('?', '\\?');
             sanitisedProperty = '{' + sanitisedProperty + '}';
             
 	        //build regex

@@ -77,7 +77,11 @@ function populateWithPresetHandler(_context) {
 	//add bottom buttons
 	[alert addButtonWithTitle:"Populate"];
 	[alert addButtonWithTitle:"Cancel"];
-
+	
+	//set preset dropdown as first responder
+	var alertWindow = [[alert alert] window];
+	[alertWindow setInitialFirstResponder: presetList];
+	
 	//show alert
 	var responseCode = [alert runModal];
 	if(responseCode == '1000') {
@@ -532,7 +536,7 @@ function populate(data, selectedLayers, opt) {
 				else {
 					
 					//use default substitute
-					value = opt.defaultSubstitute;
+					value = '';
 				}
 			}
 			
@@ -842,7 +846,7 @@ function populate(data, selectedLayers, opt) {
 	  		
 	  		//get inside of placeholder (between {})
 	  		var placeholderText = text[1];
-	  		var placeholderComponents = placeholderText.split('||');
+	  		var placeholderComponents = placeholderText.split('?');
 	  		
 	  		//check if has substitute
 	  		var hasSubstitute = (placeholderComponents.length == 2);
@@ -851,6 +855,9 @@ function populate(data, selectedLayers, opt) {
 	  			//get key and substitute
 	  			var key = placeholderComponents[0].trim();
 	  			var substitute = placeholderComponents[1].trim();
+	  			
+	  			//set default substitute
+	  			if(!substitute.length) substitute = opt.defaultSubstitute;
 	  			
 	  			results.push({
 		    		string: placeholderText,
