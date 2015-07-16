@@ -64,7 +64,8 @@ Check out the **demo.sketch** and **demo-population.sketch** files in the **demo
 
 The data need to be stored in JSON files that can be loaded by the plugin from either the Presets Folder (Populate with Preset) or from any folder on your computer (Populate with JSON). The data in JSON need to be in an array like in this example:
 
-```[
+```json
+[
   {
     "id": 1,
     "first_name": "Willie",
@@ -92,7 +93,8 @@ The data need to be stored in JSON files that can be loaded by the plugin from e
     "country": "Philippines",
     "avatar_image": "assets/2.jpg",
 	"icon": "assets/vip.svg"
-  }, …
+  }
+]
 ```
 
 Note that in the example the image file (JPG) and the icon (SVG) are referenced from a folder called _assets_. This means all your image and icon data should be placed inside a folder that sits on the same level as your JSON file. The images/icons folders as well as your images and icons can be named anything you like, you just need to reference them relative to your JSON file.
