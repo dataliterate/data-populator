@@ -1,6 +1,5 @@
 [
     {
-        "avatar_image": "../contacts/assets/Female/Cheryl-Carter.jpg",
         "city": "M\u0101d\u0101r\u012bpur",
         "company_name": "Skyble",
         "country": "Bangladesh",
@@ -11,8 +10,7 @@
         "job_title": "Senior Financial Analyst",
         "last_name": "Carter",
         "phone": "2-(017)772-7449",
-        "street_address": "31296 Calypso Parkway",
-        "sample_icon": "../contacts/assets/Icons/f.svg"
+        "street_address": "31296 Calypso Parkway"
     },
     {
         "avatar_image": "../contacts/assets/Female/Heather-Morales.jpg",
@@ -20,14 +18,12 @@
         "company_name": "Yambee",
         "country": "Russia",
         "email": "hmorales1@un.org",
-        "first_name": "Heather",
         "gender": "Female",
         "id": 2,
         "job_title": "Analyst Programmer",
         "last_name": "Morales",
         "phone": "7-(897)249-9830",
-        "street_address": "42604 Scofield Center",
-        "sample_icon": "../contacts/assets/Icons/f.svg"
+        "street_address": "42604 Scofield Center"
     },
     {
         "avatar_image": "../contacts/assets/Male/Sean-Jackson.jpg",

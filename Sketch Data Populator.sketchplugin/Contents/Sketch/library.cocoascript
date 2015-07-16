@@ -37,6 +37,7 @@ var Library = {};
     self.randomInteger = randomInteger;
     self.delay = delay;
     self.scaleToBoundingBox = scaleToBoundingBox;
+    self.copyLayer = copyLayer;
 
     //ui elements
     self.createAlert = createAlert;
@@ -225,7 +226,7 @@ var Library = {};
     	//layers to exclude
     	if(layersToExclude) {
     		formatRules.push('NOT (SELF IN %@)');
-    		arguments.push(excludedLayers);
+    		arguments.push(layersToExclude);
     	}
 
     	//prepare format string
@@ -366,9 +367,13 @@ var Library = {};
 	    var properties = Object.keys(values);
 
 	    properties.forEach(function(property) {
-
+            
+            //escape | and add {}
+            var sanitisedProperty = property.replace('||', '\\|\\|');
+            sanitisedProperty = '{' + sanitisedProperty + '}';
+            
 	        //build regex
-	        var exp = RegExp('{' + property + '}', 'g');
+	        var exp = RegExp(sanitisedProperty, 'g');
 
 	        //replace instances of property placeholder with value
 	        string = string.replace(exp, values[property]);
@@ -416,6 +421,18 @@ var Library = {};
         }
         
         return finalFrame;
+    }
+    
+    
+    function copyLayer(layer) {
+
+        //create duplicate
+        var layerCopy = [layer duplicate];
+
+        //remove duplicate from parent
+        layerCopy.removeFromParent();
+
+        return layerCopy;
     }
 
 
