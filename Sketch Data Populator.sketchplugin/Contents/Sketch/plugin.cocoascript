@@ -62,14 +62,27 @@ function populateWithPresetHandler(_context) {
 	var spacerView = [[NSView alloc] initWithFrame: NSMakeRect(0, 0, 300, 5)];
 	[alert addAccessoryView: spacerView];
 
-    //create options view
-    var optionsView = createOptionsView();
-    [alert addAccessoryView: optionsView.view];
+    //create data options view
+    var dataOptionsView = createDataOptionsView();
+    [alert addAccessoryView: dataOptionsView.view];
+    
+    //add space
+	var spacerView2 = [[NSView alloc] initWithFrame: NSMakeRect(0, 0, 300, 5)];
+	[alert addAccessoryView: spacerView2];
+	
+	//create layout options view
+    var layoutOptionsView = createLayoutOptionsView();
+    [alert addAccessoryView: layoutOptionsView.view];
 
 	//add bottom buttons
 	[alert addButtonWithTitle:"Populate"];
 	[alert addButtonWithTitle:"Cancel"];
-
+	
+	//set rows textfield as first responder
+	var alertWindow = [[alert alert] window];
+	[alertWindow setInitialFirstResponder: layoutOptionsView.rowsCountTextField];
+	[alertWindow setAutorecalculatesKeyViewLoop: true];
+	
 	//show alert
 	var responseCode = [alert runModal];
 	if(responseCode == '1000') {
@@ -77,40 +90,89 @@ function populateWithPresetHandler(_context) {
 		//get selected preset index
 		var selectedPresetIndex = [presetList indexOfSelectedItem];
 
-		//get randomize checkbox state
-		var randomizeCheckbox = optionsView.randomizeCheckbox;
-		var randomizeData = Number([randomizeCheckbox state]);
-
-		//get trim checkbox state
-		var trimCheckbox = optionsView.trimCheckbox;
-		var trimText = Number([trimCheckbox state]);
-
-		//get ellipsis checkbox state
-		var ellipsisCheckbox = optionsView.ellipsisCheckbox;
-		var insertEllipsis = Number([ellipsisCheckbox state]);
-
 		//get preset paths
 		var presetPath = [NSString stringWithString: presets[selectedPresetIndex].path];
 		var presetParentDir = [presetPath stringByDeletingLastPathComponent];
 
-		//save state
+		//== data options =======================
+
+		//get randomize checkbox state
+		var randomizeCheckbox = dataOptionsView.randomizeCheckbox;
+		var randomizeData = Number([randomizeCheckbox state]);
+
+		//get trim checkbox state
+		var trimCheckbox = dataOptionsView.trimCheckbox;
+		var trimText = Number([trimCheckbox state]);
+
+		//get ellipsis checkbox state
+		var ellipsisCheckbox = dataOptionsView.ellipsisCheckbox;
+		var insertEllipsis = Number([ellipsisCheckbox state]);
+		
+		//get default substitute
+		var substituteTextField = dataOptionsView.substituteTextField;
+		var defaultSubstitute = [substituteTextField stringValue];
+
+		//== layout options =====================
+		
+		//get create grid checkbox state
+		var createGridCheckbox = layoutOptionsView.createGridCheckbox;
+		var isCreateGrid = Number([createGridCheckbox state]);
+		
+		//get grid config
+		var rowsCountTextField = layoutOptionsView.rowsCountTextField;
+		var rowsCount = Number([rowsCountTextField stringValue]);
+		var rowsMarginTextField = layoutOptionsView.rowsMarginTextField;
+		var rowsMargin = Number([rowsMarginTextField stringValue]);
+		var columnsCountTextField = layoutOptionsView.columnsCountTextField;
+		var columnsCount = Number([columnsCountTextField stringValue]);
+		var columnsMarginTextField = layoutOptionsView.columnsMarginTextField;
+		var columnsMargin = Number([columnsMarginTextField stringValue]);
+
+		//save data options
 		[defaults setObject: selectedPresetIndex forKey: 'selectedPresetIndex'];
 		[defaults setObject: presetPath forKey: 'dataPath'];
 		[defaults setObject: 'preset' forKey: 'populateMethod'];
 		[defaults setObject: randomizeData forKey: 'randomizeData'];
 		[defaults setObject: trimText forKey: 'trimText'];
 		[defaults setObject: insertEllipsis forKey: 'insertEllipsis'];
+		[defaults setObject: defaultSubstitute forKey: 'defaultSubstitute'];
+		
+		//save layout options
+		[defaults setObject: isCreateGrid forKey: 'createGrid'];
+		[defaults setObject: rowsCount forKey: 'rowsCount'];
+		[defaults setObject: rowsMargin forKey: 'rowsMargin'];
+		[defaults setObject: columnsCount forKey: 'columnsCount'];
+		[defaults setObject: columnsMargin forKey: 'columnsMargin'];
+		
+		//sync defaults
 		[defaults synchronize];
 
 		//load data
 		var presetData = loadData(presetPath);
-
+		
+		//create grid
+		if(isCreateGrid) {
+			selectedLayers = createGrid(selectedLayers, {
+				rowsCount: rowsCount,
+				rowsMargin: rowsMargin,
+				columnsCount: columnsCount,
+				columnsMargin: columnsMargin
+			});
+			selection = selectedLayers;
+			
+			//make sure that grid creation was successful
+			if(!selectedLayers) {
+				return;
+			}
+		}
+		
 		//populate design with data
 		populate(presetData, selectedLayers, {
 			rootDir: presetParentDir,
 			randomizeData: randomizeData,
 			trimText: trimText,
-			insertEllipsis: insertEllipsis
+			insertEllipsis: insertEllipsis,
+			defaultSubstitute: defaultSubstitute
 		});
 	}
 }
@@ -118,6 +180,9 @@ function populateWithPresetHandler(_context) {
 
 function populateWithJSONHandler(_context) {
 	context = _context;
+
+	//get user defaults
+	var defaults = [NSUserDefaults standardUserDefaults];
 
 	//get selected layers
 	var selectedLayers = Library.getSelectedLayers();
@@ -138,48 +203,109 @@ function populateWithJSONHandler(_context) {
 	//create alert
 	var alert = Library.createAlert("Populate with JSON", "Please configure the options below.");
 
-    //create options view
-    var optionsView = createOptionsView();
-    [alert addAccessoryView: optionsView.view];
+    //create data options view
+    var dataOptionsView = createDataOptionsView();
+    [alert addAccessoryView: dataOptionsView.view];
+    
+    //add space
+	var spacerView2 = [[NSView alloc] initWithFrame: NSMakeRect(0, 0, 300, 5)];
+	[alert addAccessoryView: spacerView2];
+	
+	//create layout options view
+    var layoutOptionsView = createLayoutOptionsView();
+    [alert addAccessoryView: layoutOptionsView.view];
 
 	//add bottom buttons
 	[alert addButtonWithTitle:"Populate"];
 	[alert addButtonWithTitle:"Cancel"];
+	
+	//set rows textfield as first responder
+	var alertWindow = [[alert alert] window];
+	[alertWindow setInitialFirstResponder: layoutOptionsView.rowsCountTextField];
+	[alertWindow setAutorecalculatesKeyViewLoop: true];
 
 	//show alert
 	var responseCode = [alert runModal];
 	if(responseCode == '1000') {
 
+		//== data options =======================
+		
 		//get randomize checkbox state
-		var randomizeCheckbox = optionsView.randomizeCheckbox;
+		var randomizeCheckbox = dataOptionsView.randomizeCheckbox;
 		var randomizeData = Number([randomizeCheckbox state]);
 
 		//get trim checkbox state
-		var trimCheckbox = optionsView.trimCheckbox;
+		var trimCheckbox = dataOptionsView.trimCheckbox;
 		var trimText = Number([trimCheckbox state]);
 
 		//get ellipsis checkbox state
-		var ellipsisCheckbox = optionsView.ellipsisCheckbox;
+		var ellipsisCheckbox = dataOptionsView.ellipsisCheckbox;
 		var insertEllipsis = Number([ellipsisCheckbox state]);
+		
+		//get default substitute
+		var substituteTextField = dataOptionsView.substituteTextField;
+		var defaultSubstitute = [substituteTextField stringValue];
 
-		//save state
-		var defaults = [NSUserDefaults standardUserDefaults];
+		//== layout options =====================
+		
+		//get create grid checkbox state
+		var createGridCheckbox = layoutOptionsView.createGridCheckbox;
+		var isCreateGrid = Number([createGridCheckbox state]);
+		
+		//get grid config
+		var rowsCountTextField = layoutOptionsView.rowsCountTextField;
+		var rowsCount = Number([rowsCountTextField stringValue]);
+		var rowsMarginTextField = layoutOptionsView.rowsMarginTextField;
+		var rowsMargin = Number([rowsMarginTextField stringValue]);
+		var columnsCountTextField = layoutOptionsView.columnsCountTextField;
+		var columnsCount = Number([columnsCountTextField stringValue]);
+		var columnsMarginTextField = layoutOptionsView.columnsMarginTextField;
+		var columnsMargin = Number([columnsMarginTextField stringValue]);
+
+		//save data options
 		[defaults setObject: filePath forKey: 'dataPath'];
 		[defaults setObject: 'JSON' forKey: 'populateMethod'];
 		[defaults setObject: randomizeData forKey: 'randomizeData'];
 		[defaults setObject: trimText forKey: 'trimText'];
 		[defaults setObject: insertEllipsis forKey: 'insertEllipsis'];
+		[defaults setObject: defaultSubstitute forKey: 'defaultSubstitute'];
+		
+		//save layout options
+		[defaults setObject: isCreateGrid forKey: 'createGrid'];
+		[defaults setObject: rowsCount forKey: 'rowsCount'];
+		[defaults setObject: rowsMargin forKey: 'rowsMargin'];
+		[defaults setObject: columnsCount forKey: 'columnsCount'];
+		[defaults setObject: columnsMargin forKey: 'columnsMargin'];
+		
+		//sync defaults
 		[defaults synchronize];
 
 		//load data
 		var data = loadData(filePath);
+
+		//create grid
+		if(isCreateGrid) {
+			selectedLayers = createGrid(selectedLayers, {
+				rowsCount: rowsCount,
+				rowsMargin: rowsMargin,
+				columnsCount: columnsCount,
+				columnsMargin: columnsMargin
+			});
+			selection = selectedLayers;
+			
+			//make sure that grid creation was successful
+			if(!selectedLayers) {
+				return;
+			}
+		}
 
 		//populate design with data
 		populate(data, selectedLayers, {
 			rootDir: rootDir,
 			randomizeData: randomizeData,
 			trimText: trimText,
-			insertEllipsis: insertEllipsis
+			insertEllipsis: insertEllipsis,
+			defaultSubstitute: defaultSubstitute
 		});
 	}
 }
@@ -213,6 +339,7 @@ function populateAgainHandler(_context) {
 	var randomizeData = Number([defaults objectForKey: 'randomizeData']);
 	var trimText = Number([defaults objectForKey: 'trimText']);
 	var insertEllipsis = Number([defaults objectForKey: 'insertEllipsis']);
+	var defaultSubstitute = [defaults objectForKey: 'defaultSubstitute'];
 
 	//check how last population was done
 	var lastPopulateMethod = [defaults objectForKey: 'populateMethod'];
@@ -230,7 +357,8 @@ function populateAgainHandler(_context) {
 		rootDir: rootDir,
 		randomizeData: randomizeData,
 		trimText: trimText,
-		insertEllipsis: insertEllipsis
+		insertEllipsis: insertEllipsis,
+		defaultSubstitute: defaultSubstitute
 	});
 }
 
@@ -330,15 +458,17 @@ function populate(data, selectedLayers, opt) {
 				textLayers.forEach(function(textLayer) {
 					processTextLayer(textLayer, dataRow);
 				});
-
+				
+				//find icon and image placeholders
+				var iconPlaceholders = Library.findLayersInLayer('{{*}}', false, 'MSShapeGroup', selectedLayer, false, false);
+				var imagePlaceholders = Library.findLayersInLayer('{*}', false, 'MSShapeGroup', selectedLayer, false, iconPlaceholders);
+				
 				//process all image placeholders
-				var imagePlaceholders = Library.findLayersInLayer('{*}', false, 'MSShapeGroup', selectedLayer, false, false);
 				imagePlaceholders.forEach(function(shapeGroup) {
 					processImagePlaceholder(shapeGroup, dataRow, opt.rootDir);
 				});
-
+				
 				//process all icon placeholders
-				var iconPlaceholders = Library.findLayersInLayer('{{*}}', false, 'MSShapeGroup', selectedLayer, false, false);
 				iconPlaceholders.forEach(function(shapeGroup) {
 					processIconPlaceholder(shapeGroup, dataRow, opt.rootDir);
 					svgIconsStartedImport++;
@@ -397,11 +527,39 @@ function populate(data, selectedLayers, opt) {
 		//assign values to placeholders
 		var values = {};
 		placeholders.forEach(function(placeholder) {
-			values[placeholder] = dataRow[placeholder];
+			
+			//get value
+			var value = dataRow[placeholder.key];
+			
+			//use substitute if value doesn't exist
+			if(!value) {
+				
+				if(placeholder.substitute) {
+					
+					//use in-line substitute
+					value = placeholder.substitute;
+				}
+				else {
+					
+					//use default substitute
+					value = '';
+				}
+			}
+			
+			values[placeholder.string] = value;
 		});
 
 		//merge text with values
 		var mergedText = Library.mergeStringWithValues(text, values);
+		
+		//prevent bug with empty text layer
+		if(!mergedText.length) {
+			mergedText = '-';
+			textLayer.setIsVisible(false);
+		}
+		else {
+			textLayer.setIsVisible(true);
+		}
 
 		//set text layer text
 		textLayer.setStringValue(mergedText);
@@ -468,13 +626,22 @@ function populate(data, selectedLayers, opt) {
 		
 		//get shape group name
 		var shapeGroupName = [shapeGroup name].toString();
-
+		
 		//get placeholder name
 		var placeholder = shapeGroupName.substring(1, [shapeGroupName length] - 1);
 
 		//get image url for placeholder from data row
 		var imageUrl = dataRow[placeholder];
-		if(!imageUrl) return;
+		if(!imageUrl) {
+			
+			//get shape group fill
+			var fill = [[[shapeGroup style] fills] firstObject];
+
+			//disable fill
+            fill.setIsEnabled(false);
+			
+			return;
+		}
 		if(imageUrl[0] == '/') imageUrl = imageUrl.substring(1);
 
 		//build full image url
@@ -487,6 +654,9 @@ function populate(data, selectedLayers, opt) {
 
 			//get shape group fill
 			var fill = [[[shapeGroup style] fills] firstObject];
+			
+			//enable fill
+			fill.setIsEnabled(true);
 
 			//set pattern fill
             fill.setFillType(4);
@@ -511,7 +681,26 @@ function populate(data, selectedLayers, opt) {
 		var iconUrl = dataRow[placeholder];
 		if(!iconUrl) {
 			svgIconsImported++;
+			
+			//hide placeholder
+			shapeGroup.setIsVisible(false);
+			
+			//check if all icons for selection are imported now
+			if(svgIconsImported == svgIconCount) {
+				
+				//remove temp page
+				Library.removePage(tempIconPage);
+				
+				//select original layers
+				restoreSelection();
+			}
+			
 			return;
+		}
+		else {
+			
+			//show placeholder
+			shapeGroup.setIsVisible(true);
 		}
 		if(iconUrl[0] == '/') iconUrl = iconUrl.substring(1);
 
@@ -669,49 +858,286 @@ function populate(data, selectedLayers, opt) {
 
 		//find placeholders
 	  	while(text = re.exec(str)) {
-	    	results.push(text[1]);
+	  		
+	  		//get inside of placeholder (between {})
+	  		var placeholderText = text[1];
+	  		var placeholderComponents = placeholderText.split('?');
+	  		
+	  		//check if has substitute
+	  		var hasSubstitute = (placeholderComponents.length == 2);
+	  		if(hasSubstitute) {
+	  			
+	  			//get key and substitute
+	  			var key = placeholderComponents[0].trim();
+	  			var substitute = placeholderComponents[1].trim();
+	  			
+	  			//set default substitute
+	  			if(!substitute.length) substitute = opt.defaultSubstitute;
+	  			
+	  			results.push({
+		    		string: placeholderText,
+		    		key: key,
+		    		substitute: substitute
+		    	});
+	  		}
+	  		else {
+	  			
+	  			results.push({
+		    		string: placeholderText,
+		    		key: placeholderText
+		    	});
+	  		}
 	  	}
+	  	
+	  	
 	  	return results;
 	}
 }
 
 
-function createOptionsView() {
+function createGrid(selectedLayers, opt) {
+	
+	//check rows count
+	if(!opt.rowsCount || opt.rowsCount < 0) {
+		context.document.showMessage('Number of grid rows must be at least 1.');
+		return;
+	}
+	
+	//check rows margin
+	if((!opt.rowsMargin && opt.rowsMargin != 0) || opt.rowsMargin < 0) {
+		context.document.showMessage('Grid row margin is invalid.');
+		return;
+	}
+	
+	//check column count
+	if(!opt.columnsCount || opt.columnsCount < 0) {
+		context.document.showMessage('Number of grid columns must be at least 1.');
+		return;
+	}
+	
+	//check columns margin
+	if((!opt.columnsMargin && opt.columnsMargin != 0) || opt.columnsMargin < 0) {
+		context.document.showMessage('Grid column margin is invalid.');
+		return;
+	}
+	
+	//get first layer (most top left)
+	var layer = selectedLayers[0];
+	var smallestX = selectedLayers[0].frame().x();
+	var smallestY = selectedLayers[0].frame().y();
+	for(var i = 0; i < selectedLayers.length; i++) {
+		var tempLayer = selectedLayers[i];
+		if(tempLayer.frame().x() < smallestX || tempLayer.frame().y() < smallestY) {
+			smallestX = tempLayer.frame().x();
+			smallestY = tempLayer.frame().y();
+			layer = tempLayer;
+		}
+	}
+	
+	//arrange copies of the first layer
+	var layerWidth = layer.frame().width();
+	var layerHeight = layer.frame().height();
+	var layerParent = [layer parentGroup];
+	if(!layerParent) layerParent = [layer parentArtboard];
+	if(!layerParent) layerParent = [layer parentPage];
+	
+	//remove selected layers from parent
+	selectedLayers.forEach(function(tempLayer) {
+		tempLayer.removeFromParent();
+	});
+	
+	//keep track of original position
+	var startX = layer.frame().x();
+	var startY = layer.frame().y();
+	
+	//store new selected layers
+	var newSelectedLayers = [];
+	
+	//create rows
+	for(var i = 0; i < opt.rowsCount; i++) {
+		
+		//set row y
+		var y = startY + (i * (layerHeight + opt.rowsMargin));
+		
+		//create columns
+		for(var j = 0; j < opt.columnsCount; j++) {
+		
+			//create layer copy
+			var copy = Library.copyLayer(layer);
+		
+			//add to parent layer
+			layerParent.addLayers([copy]);
+			
+			//add to selected layers
+			newSelectedLayers.push(copy);
+		
+			//set column x
+			var x = startX + (j * (layerWidth + opt.columnsMargin));
+			
+			//position copy
+			copy.frame().setX(x);
+			copy.frame().setY(y);
+		}
+	}
+	
+	//adjust parent layer
+	[layerParent resizeRoot: true];
+	
+	return newSelectedLayers;
+}
+
+
+function createDataOptionsView() {
 
 	//create options view
-    var optionsView = [[NSView alloc] initWithFrame: NSMakeRect(0, 0, 300, 85)];
+    var optionsView = [[NSView alloc] initWithFrame: NSMakeRect(0, 0, 300, 110)];
 
 	//create options view title
-	var optionsViewTitle = Library.createLabel('Options', 12, true, NSMakeRect(0, 65, 300, 20));
+	var optionsViewTitle = Library.createLabel('Data options', 12, true, NSMakeRect(0, 90, 300, 20));
 	[optionsView addSubview: optionsViewTitle];
 
     //create randomize checkbox
-	var randomizeCheckbox = Library.createCheckbox('Randomize data order', false, NSMakeRect(0, 40, 300, 20));
+	var randomizeCheckbox = Library.createCheckbox('Randomize data order', false, NSMakeRect(0, 65, 300, 20));
 	[optionsView addSubview: randomizeCheckbox];
 
 	//set randomize checkbox state
 	[randomizeCheckbox setState: [[NSUserDefaults standardUserDefaults] objectForKey:'randomizeData']];
 
 	//create trim checkbox
-	var trimCheckbox = Library.createCheckbox('Trim overflowing text (fixed width text layers)', false, NSMakeRect(0, 20, 300, 20));
+	var trimCheckbox = Library.createCheckbox('Trim overflowing text (fixed width text layers)', false, NSMakeRect(0, 45, 300, 20));
 	[optionsView addSubview: trimCheckbox];
 
 	//set trim checkbox state
 	[trimCheckbox setState: [[NSUserDefaults standardUserDefaults] objectForKey:'trimText']];
 
 	//create ellipsis checkbox
-	var ellipsisCheckbox = Library.createCheckbox('Insert ellipsis after trimmed text', false, NSMakeRect(0, 0, 300, 20));
+	var ellipsisCheckbox = Library.createCheckbox('Insert ellipsis after trimmed text', false, NSMakeRect(0, 25, 300, 20));
 	[optionsView addSubview: ellipsisCheckbox];
 
 	//set ellipsis checkbox state
 	[ellipsisCheckbox setState: [[NSUserDefaults standardUserDefaults] objectForKey:'insertEllipsis']];
-
+	
+	//create substitute label
+	var substituteLabel = Library.createLabel('Default substitute:', 12, false, NSMakeRect(0, 0, 110, 20));
+	[optionsView addSubview: substituteLabel];
+	
+	//create substitute text field
+	var substituteTextField = [[NSTextField alloc] initWithFrame:NSMakeRect(110, 0, 120, 22)];
+    [optionsView addSubview: substituteTextField];
+    
+    //set substitute
+    if([[NSUserDefaults standardUserDefaults] objectForKey:'defaultSubstitute']) {
+    	[substituteTextField setStringValue:[[NSUserDefaults standardUserDefaults] objectForKey:'defaultSubstitute']];
+    }
+    else {
+    	[substituteTextField setStringValue:''];
+    }
+	
+	
 	//return configured view
 	return {
 		view: optionsView,
 		randomizeCheckbox: randomizeCheckbox,
 		trimCheckbox: trimCheckbox,
-		ellipsisCheckbox: ellipsisCheckbox
+		ellipsisCheckbox: ellipsisCheckbox,
+		substituteTextField: substituteTextField
+	};
+}
+
+
+function createLayoutOptionsView() {
+
+	//create options view
+    var optionsView = [[NSView alloc] initWithFrame: NSMakeRect(0, 0, 300, 104)];
+
+	//create options view title
+	var optionsViewTitle = Library.createLabel('Layout options', 12, true, NSMakeRect(0, 84, 300, 20));
+	[optionsView addSubview: optionsViewTitle];
+
+    //create create grid checkbox
+	var createGridCheckbox = Library.createCheckbox('Create grid', false, NSMakeRect(0, 59, 300, 20));
+	[optionsView addSubview: createGridCheckbox];
+
+	//set randomize checkbox state
+	[createGridCheckbox setState: [[NSUserDefaults standardUserDefaults] objectForKey:'createGrid']];
+
+	
+	
+	//create rows count label
+	var rowsCountLabel = Library.createLabel('Rows:', 12, false, NSMakeRect(0, 27, 60, 20));
+	[optionsView addSubview: rowsCountLabel];
+	
+	//create rows count text field
+	var rowsCountTextField = [[NSTextField alloc] initWithFrame:NSMakeRect(60, 27, 70, 22)];
+    [optionsView addSubview: rowsCountTextField];
+    
+    //set rows count
+    if([[NSUserDefaults standardUserDefaults] objectForKey:'rowsCount']) {
+    	[rowsCountTextField setStringValue:[[NSUserDefaults standardUserDefaults] objectForKey:'rowsCount']];
+    }
+    else {
+    	[rowsCountTextField setStringValue:'1'];
+    }
+    
+    
+    //create rows margin label
+	var rowsMarginLabel = Library.createLabel('Margin:', 12, false, NSMakeRect(142, 27, 50, 20));
+	[optionsView addSubview: rowsMarginLabel];
+	
+	//create rows margin text field
+	var rowsMarginTextField = [[NSTextField alloc] initWithFrame:NSMakeRect(190, 27, 70, 22)];
+    [optionsView addSubview: rowsMarginTextField];
+    
+    //set rows margin
+    if([[NSUserDefaults standardUserDefaults] objectForKey:'rowsMargin']) {
+    	[rowsMarginTextField setStringValue:[[NSUserDefaults standardUserDefaults] objectForKey:'rowsMargin']];
+    }
+    else {
+    	[rowsMarginTextField setStringValue:'10'];
+    }
+    
+    
+    //create columns count label
+	var columnsCountLabel = Library.createLabel('Columns:', 12, false, NSMakeRect(0, 0, 60, 20));
+	[optionsView addSubview: columnsCountLabel];
+	
+	//create columns count text field
+	var columnsCountTextField = [[NSTextField alloc] initWithFrame:NSMakeRect(60, 0, 70, 22)];
+    [optionsView addSubview: columnsCountTextField];
+    
+    //set columns count
+    if([[NSUserDefaults standardUserDefaults] objectForKey:'columnsCount']) {
+    	[columnsCountTextField setStringValue:[[NSUserDefaults standardUserDefaults] objectForKey:'columnsCount']];
+    }
+    else {
+    	[columnsCountTextField setStringValue:'1'];
+    }
+    
+    //create columns margin label
+	var columnsMarginLabel = Library.createLabel('Margin:', 12, false, NSMakeRect(142, 0, 50, 20));
+	[optionsView addSubview: columnsMarginLabel];
+	
+	//create columns margin text field
+	var columnsMarginTextField = [[NSTextField alloc] initWithFrame:NSMakeRect(190, 0, 70, 22)];
+    [optionsView addSubview: columnsMarginTextField];
+	
+	
+	//set columns margin
+    if([[NSUserDefaults standardUserDefaults] objectForKey:'columnsMargin']) {
+    	[columnsMarginTextField setStringValue:[[NSUserDefaults standardUserDefaults] objectForKey:'columnsMargin']];
+    }
+    else {
+    	[columnsMarginTextField setStringValue:'10'];
+    }
+
+	//return configured view
+	return {
+		view: optionsView,
+		createGridCheckbox: createGridCheckbox,
+		rowsCountTextField: rowsCountTextField,
+		rowsMarginTextField: rowsMarginTextField,
+		columnsCountTextField: columnsCountTextField,
+		columnsMarginTextField: columnsMarginTextField
 	};
 }
 
