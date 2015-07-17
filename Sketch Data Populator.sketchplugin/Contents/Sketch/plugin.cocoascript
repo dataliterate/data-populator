@@ -78,9 +78,10 @@ function populateWithPresetHandler(_context) {
 	[alert addButtonWithTitle:"Populate"];
 	[alert addButtonWithTitle:"Cancel"];
 	
-	//set preset dropdown as first responder
+	//set rows textfield as first responder
 	var alertWindow = [[alert alert] window];
-	[alertWindow setInitialFirstResponder: presetList];
+	[alertWindow setInitialFirstResponder: layoutOptionsView.rowsCountTextField];
+	[alertWindow setAutorecalculatesKeyViewLoop: true];
 	
 	//show alert
 	var responseCode = [alert runModal];
@@ -217,6 +218,11 @@ function populateWithJSONHandler(_context) {
 	//add bottom buttons
 	[alert addButtonWithTitle:"Populate"];
 	[alert addButtonWithTitle:"Cancel"];
+	
+	//set rows textfield as first responder
+	var alertWindow = [[alert alert] window];
+	[alertWindow setInitialFirstResponder: layoutOptionsView.rowsCountTextField];
+	[alertWindow setAutorecalculatesKeyViewLoop: true];
 
 	//show alert
 	var responseCode = [alert runModal];
@@ -545,6 +551,15 @@ function populate(data, selectedLayers, opt) {
 
 		//merge text with values
 		var mergedText = Library.mergeStringWithValues(text, values);
+		
+		//prevent bug with empty text layer
+		if(!mergedText.length) {
+			mergedText = '-';
+			textLayer.setIsVisible(false);
+		}
+		else {
+			textLayer.setIsVisible(true);
+		}
 
 		//set text layer text
 		textLayer.setStringValue(mergedText);
