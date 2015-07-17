@@ -29,13 +29,11 @@
         "job": "Programmer Analyst IV",
         "lastname": "Smith",
         "name": "Earl Smith",
-        "phone": "3-(362)315-4635",
-        "address": "0 Loeprich Avenue"
+        "phone": "3-(362)315-4635"
     },
     {
         "city": "Qiaolin",
         "company": "Riffpath",
-        "country": "China",
         "description": "Technical Writer, Riffpath",
         "email": "dmorris2@stanford.edu",
         "firstname": "Dorothy",
@@ -87,14 +85,12 @@
         "country": "China",
         "description": "Environmental Specialist, Buzzshare",
         "email": "calexander5@techcrunch.com",
-        "firstname": "Chris",
         "gender": "Male",
         "id": 6,
         "image": "assets/Male/3.jpg",
         "job": "Environmental Specialist",
         "lastname": "Alexander",
         "name": "Chris Alexander",
-        "phone": "5-(648)257-9612",
         "address": "94 Crest Line Avenue"
     },
     {
@@ -109,10 +105,8 @@
         "image": "assets/Female/4.jpg",
         "icon": "assets/Icons/new.svg",
         "job": "Graphic Designer",
-        "lastname": "Rodriguez",
         "name": "Diane Rodriguez",
-        "phone": "0-(917)919-5676",
-        "address": "98 Roth Trail"
+        "phone": "0-(917)919-5676"
     },
     {
         "city": "Fauske",
@@ -131,7 +125,6 @@
         "address": "3853 Novick Street"
     },
     {
-        "city": "Reforma",
         "icon": "assets/Icons/new.svg",
         "country": "Mexico",
         "description": ", ",
@@ -139,9 +132,7 @@
         "gender": "Male",
         "id": 9,
         "lastname": "Riley",
-        "name": " Riley",
-        "phone": "2-(544)262-0807",
-        "address": "58398 Mifflin Avenue"
+        "name": " Riley"
     },
     {
         "city": "Huanggangshan",
@@ -172,7 +163,6 @@
         "job": "Actuary",
         "lastname": "George",
         "name": "Frank George",
-        "phone": "6-(184)665-0869",
         "address": "37 Moland Trail"
     },
     {
@@ -194,8 +184,6 @@
     },
     {
         "city": "Bijeli",
-        "company": "Rhynyx",
-        "country": "Indonesia",
         "description": "Research Assistant III, Rhynyx",
         "email": "lgeorgec@businessweek.com",
         "firstname": "Lillian",
@@ -211,7 +199,6 @@
     {
         "city": "La Francia",
         "company": "Rhynoodle",
-        "country": "Argentina",
         "description": "Staff Accountant I, Rhynoodle",
         "email": "sgilbertd@godaddy.com",
         "firstname": "Shawn",
@@ -288,7 +275,6 @@
     {
         "city": "Golubac",
         "company": "Quimm",
-        "country": "Serbia",
         "description": "Senior Editor, Quimm",
         "email": "skelleyi@wired.com",
         "firstname": "Sarah",
@@ -296,7 +282,6 @@
         "id": 19,
         "image": "assets/Female/11.jpg",
         "icon": "assets/Icons/new.svg",
-        "job": "Senior Editor",
         "lastname": "Kelley",
         "name": "Sarah Kelley",
         "phone": "4-(870)191-1695",
@@ -315,7 +300,6 @@
         "job": "Account Coordinator",
         "lastname": "Sanders",
         "name": "Carol Sanders",
-        "phone": "3-(855)918-8065",
         "address": "38 Glendale Junction"
     },
     {
@@ -359,8 +343,7 @@
         "id": 23,
         "lastname": "Perkins",
         "name": " Perkins",
-        "phone": "2-(670)583-6994",
-        "address": "6 Eliot Center"
+        "phone": "2-(670)583-6994"
     },
     {
         "city": "Manzanillo",
@@ -370,9 +353,7 @@
         "gender": "Female",
         "id": 24,
         "lastname": "Spencer",
-        "name": " Spencer",
-        "phone": "8-(025)072-5507",
-        "address": "8224 Delaware Alley"
+        "name": " Spencer"
     },
     {
         "city": "Panyarang",
@@ -402,9 +383,7 @@
         "image": "assets/Female/13.jpg",
         "job": "VP Product Management",
         "lastname": "Warren",
-        "name": "Kathleen Warren",
-        "phone": "3-(108)900-0798",
-        "address": "740 Grasskamp Plaza"
+        "name": "Kathleen Warren"
     },
     {
         "city": "Randudongkal",
@@ -489,7 +468,6 @@
     {
         "city": "Z\u00e1tor",
         "country": "Czech Republic",
-        "description": ", ",
         "email": "dnicholsv@reuters.com",
         "gender": "Female",
         "id": 32,
@@ -508,7 +486,6 @@
         "gender": "Male",
         "id": 33,
         "image": "assets/Male/13.jpg",
-        "job": "Web Developer I",
         "lastname": "Warren",
         "name": "Christopher Warren",
         "phone": "4-(048)246-2533",
@@ -544,13 +521,11 @@
         "job": "Teacher",
         "lastname": "Hayes",
         "name": "Arthur Hayes",
-        "phone": "1-(748)610-4099",
-        "address": "8802 Mendota Place"
+        "phone": "1-(748)610-4099"
     },
     {
         "city": "Krasnorechenskiy",
         "country": "Russia",
-        "description": ", ",
         "email": "mmorrisonz@wufoo.com",
         "gender": "Female",
         "id": 36,
@@ -562,7 +537,6 @@
     {
         "city": "Yanmen",
         "company": "Bubblemix",
-        "country": "China",
         "description": "Structural Engineer, Bubblemix",
         "email": "lcampbell10@vistaprint.com",
         "firstname": "Louise",
@@ -615,7 +589,6 @@
         "image": "assets/Female/18.jpg",
         "icon": "assets/Icons/new.svg",
         "job": "Software Test Engineer II",
-        "lastname": "Adams",
         "name": "Margaret Adams",
         "phone": "1-(627)801-2763",
         "address": "104 Farmco Crossing"
