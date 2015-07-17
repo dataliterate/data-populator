@@ -9,7 +9,9 @@
     {
         "description": "Media Streaming to your TV",
         "id": 2,
-        "price": "€ 79,90",
+        "price": "€ 71,91",
+        "oldprice": "€ 79,90",
+        "discount": "-10%",
         "image": "assets/Apple TV incl. Apple Remote.jpg",
         "name": "Apple TV incl. Apple Remote"
     },
@@ -51,7 +53,9 @@
     {
         "description": "27-inch: 3.5GHz with Retina 5K display",
         "id": 8,
-        "price": "€ 2.499,00",
+        "price": "€ 1.999,20",
+        "oldprice": "€ 2.499,00",
+        "discount": "-20%",
         "image": "assets/Apple iMac with Retina 5K display.jpg",
         "name": "Apple iMac with Retina 5K display"
     },
