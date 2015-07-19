@@ -19,7 +19,7 @@ function populateWithPresetHandler(_context) {
 	//load presets
 	var presets = Library.loadPresets();
 	if(!presets.length) {
-		context.document.showMessage('There are no presets.');
+		context.document.showMessage('There are no Presets.');
 		return;
 	}
 
@@ -27,7 +27,7 @@ function populateWithPresetHandler(_context) {
 	var selectedLayers = Library.getSelectedLayers();
 	selection = selectedLayers;
 	if(!selectedLayers.length) {
-		context.document.showMessage('Please select the layers you would like to bind data to.');
+		context.document.showMessage('Please select the layers you would like to populate.');
 		return;
 	}
 
@@ -38,14 +38,14 @@ function populateWithPresetHandler(_context) {
 	});
 
 	//create alert
-	var alert = Library.createAlert("Populate with Preset", "Please select the preset you'd like to use to populate your design and configure the options.");
+	var alert = Library.createAlert("Populate with Preset", "Please select the Preset you'd like to use to populate your design and configure the options.");
 
 	//create list view
 	var listView = [[NSView alloc] initWithFrame: NSMakeRect(0, 0, 300, 50)];
 	[alert addAccessoryView: listView];
 
 	//create preset list title
-	var presetListTitle = Library.createLabel('Select preset', 12, true, NSMakeRect(0, 30, 300, 20));
+	var presetListTitle = Library.createLabel('Select Preset', 12, true, NSMakeRect(0, 30, 300, 20));
 	[listView addSubview: presetListTitle];
 
 	//create preset list
@@ -65,11 +65,11 @@ function populateWithPresetHandler(_context) {
     //create data options view
     var dataOptionsView = createDataOptionsView();
     [alert addAccessoryView: dataOptionsView.view];
-    
+
     //add space
 	var spacerView2 = [[NSView alloc] initWithFrame: NSMakeRect(0, 0, 300, 5)];
 	[alert addAccessoryView: spacerView2];
-	
+
 	//create layout options view
     var layoutOptionsView = createLayoutOptionsView();
     [alert addAccessoryView: layoutOptionsView.view];
@@ -77,12 +77,12 @@ function populateWithPresetHandler(_context) {
 	//add bottom buttons
 	[alert addButtonWithTitle:"Populate"];
 	[alert addButtonWithTitle:"Cancel"];
-	
+
 	//set rows textfield as first responder
 	var alertWindow = [[alert alert] window];
 	[alertWindow setInitialFirstResponder: layoutOptionsView.rowsCountTextField];
 	[alertWindow setAutorecalculatesKeyViewLoop: true];
-	
+
 	//show alert
 	var responseCode = [alert runModal];
 	if(responseCode == '1000') {
@@ -107,17 +107,17 @@ function populateWithPresetHandler(_context) {
 		//get ellipsis checkbox state
 		var ellipsisCheckbox = dataOptionsView.ellipsisCheckbox;
 		var insertEllipsis = Number([ellipsisCheckbox state]);
-		
+
 		//get default substitute
 		var substituteTextField = dataOptionsView.substituteTextField;
 		var defaultSubstitute = [substituteTextField stringValue];
 
 		//== layout options =====================
-		
+
 		//get create grid checkbox state
 		var createGridCheckbox = layoutOptionsView.createGridCheckbox;
 		var isCreateGrid = Number([createGridCheckbox state]);
-		
+
 		//get grid config
 		var rowsCountTextField = layoutOptionsView.rowsCountTextField;
 		var rowsCount = Number([rowsCountTextField stringValue]);
@@ -136,20 +136,20 @@ function populateWithPresetHandler(_context) {
 		[defaults setObject: trimText forKey: 'trimText'];
 		[defaults setObject: insertEllipsis forKey: 'insertEllipsis'];
 		[defaults setObject: defaultSubstitute forKey: 'defaultSubstitute'];
-		
+
 		//save layout options
 		[defaults setObject: isCreateGrid forKey: 'createGrid'];
 		[defaults setObject: rowsCount forKey: 'rowsCount'];
 		[defaults setObject: rowsMargin forKey: 'rowsMargin'];
 		[defaults setObject: columnsCount forKey: 'columnsCount'];
 		[defaults setObject: columnsMargin forKey: 'columnsMargin'];
-		
+
 		//sync defaults
 		[defaults synchronize];
 
 		//load data
 		var presetData = loadData(presetPath);
-		
+
 		//create grid
 		if(isCreateGrid) {
 			selectedLayers = createGrid(selectedLayers, {
@@ -159,13 +159,13 @@ function populateWithPresetHandler(_context) {
 				columnsMargin: columnsMargin
 			});
 			selection = selectedLayers;
-			
+
 			//make sure that grid creation was successful
 			if(!selectedLayers) {
 				return;
 			}
 		}
-		
+
 		//populate design with data
 		populate(presetData, selectedLayers, {
 			rootDir: presetParentDir,
@@ -188,7 +188,7 @@ function populateWithJSONHandler(_context) {
 	var selectedLayers = Library.getSelectedLayers();
 	selection = selectedLayers;
 	if(!selectedLayers.length) {
-		context.document.showMessage('Please select the layers you would like to bind data to.');
+		context.document.showMessage('Please select the layers you would like to populate.');
 		return;
 	}
 
@@ -206,11 +206,11 @@ function populateWithJSONHandler(_context) {
     //create data options view
     var dataOptionsView = createDataOptionsView();
     [alert addAccessoryView: dataOptionsView.view];
-    
+
     //add space
 	var spacerView2 = [[NSView alloc] initWithFrame: NSMakeRect(0, 0, 300, 5)];
 	[alert addAccessoryView: spacerView2];
-	
+
 	//create layout options view
     var layoutOptionsView = createLayoutOptionsView();
     [alert addAccessoryView: layoutOptionsView.view];
@@ -218,7 +218,7 @@ function populateWithJSONHandler(_context) {
 	//add bottom buttons
 	[alert addButtonWithTitle:"Populate"];
 	[alert addButtonWithTitle:"Cancel"];
-	
+
 	//set rows textfield as first responder
 	var alertWindow = [[alert alert] window];
 	[alertWindow setInitialFirstResponder: layoutOptionsView.rowsCountTextField];
@@ -229,7 +229,7 @@ function populateWithJSONHandler(_context) {
 	if(responseCode == '1000') {
 
 		//== data options =======================
-		
+
 		//get randomize checkbox state
 		var randomizeCheckbox = dataOptionsView.randomizeCheckbox;
 		var randomizeData = Number([randomizeCheckbox state]);
@@ -241,17 +241,17 @@ function populateWithJSONHandler(_context) {
 		//get ellipsis checkbox state
 		var ellipsisCheckbox = dataOptionsView.ellipsisCheckbox;
 		var insertEllipsis = Number([ellipsisCheckbox state]);
-		
+
 		//get default substitute
 		var substituteTextField = dataOptionsView.substituteTextField;
 		var defaultSubstitute = [substituteTextField stringValue];
 
 		//== layout options =====================
-		
+
 		//get create grid checkbox state
 		var createGridCheckbox = layoutOptionsView.createGridCheckbox;
 		var isCreateGrid = Number([createGridCheckbox state]);
-		
+
 		//get grid config
 		var rowsCountTextField = layoutOptionsView.rowsCountTextField;
 		var rowsCount = Number([rowsCountTextField stringValue]);
@@ -269,14 +269,14 @@ function populateWithJSONHandler(_context) {
 		[defaults setObject: trimText forKey: 'trimText'];
 		[defaults setObject: insertEllipsis forKey: 'insertEllipsis'];
 		[defaults setObject: defaultSubstitute forKey: 'defaultSubstitute'];
-		
+
 		//save layout options
 		[defaults setObject: isCreateGrid forKey: 'createGrid'];
 		[defaults setObject: rowsCount forKey: 'rowsCount'];
 		[defaults setObject: rowsMargin forKey: 'rowsMargin'];
 		[defaults setObject: columnsCount forKey: 'columnsCount'];
 		[defaults setObject: columnsMargin forKey: 'columnsMargin'];
-		
+
 		//sync defaults
 		[defaults synchronize];
 
@@ -292,7 +292,7 @@ function populateWithJSONHandler(_context) {
 				columnsMargin: columnsMargin
 			});
 			selection = selectedLayers;
-			
+
 			//make sure that grid creation was successful
 			if(!selectedLayers) {
 				return;
@@ -321,7 +321,7 @@ function populateAgainHandler(_context) {
 	var selectedLayers = Library.getSelectedLayers();
 	selection = selectedLayers;
 	if(!selectedLayers.length) {
-		context.document.showMessage('Please select the layers you would like to bind data to.');
+		context.document.showMessage('Please select the layers you would like to populate.');
 		return;
 	}
 
@@ -343,7 +343,7 @@ function populateAgainHandler(_context) {
 
 	//check how last population was done
 	var lastPopulateMethod = [defaults objectForKey: 'populateMethod'];
-	
+
 	//authorise rootDir if JSON method
 	if(lastPopulateMethod == 'JSON') {
 		if(!Sandbox.authoriseDir(rootDir)) return;
@@ -436,13 +436,13 @@ function populate(data, selectedLayers, opt) {
 				//store selected random index
 				lastRandomIndex = randomIndex;
 				randomIndexes.push(randomIndex);
-				
+
 				//get data row for random index
 				dataRow = data[randomIndex];
 
 				//reset random index (so next iteration generates a new one)
 				randomIndex = null;
-			} 
+			}
 			else {
 				dataRow = data[i % data.length];
 			}
@@ -453,21 +453,21 @@ function populate(data, selectedLayers, opt) {
 
 				//get all text layers in selected layer
 				var textLayers = Library.findLayersInLayer(false, false, 'MSTextLayer', selectedLayer, false, false);
-				
+
 				//process all text layers
 				textLayers.forEach(function(textLayer) {
 					processTextLayer(textLayer, dataRow);
 				});
-				
+
 				//find icon and image placeholders
 				var iconPlaceholders = Library.findLayersInLayer('{{*}}', false, 'MSShapeGroup', selectedLayer, false, false);
 				var imagePlaceholders = Library.findLayersInLayer('{*}', false, 'MSShapeGroup', selectedLayer, false, iconPlaceholders);
-				
+
 				//process all image placeholders
 				imagePlaceholders.forEach(function(shapeGroup) {
 					processImagePlaceholder(shapeGroup, dataRow, opt.rootDir);
 				});
-				
+
 				//process all icon placeholders
 				iconPlaceholders.forEach(function(shapeGroup) {
 					processIconPlaceholder(shapeGroup, dataRow, opt.rootDir);
@@ -488,13 +488,13 @@ function populate(data, selectedLayers, opt) {
 				}
 			}
 		}
-		
+
 		//if there were no svg icons, processing is now finished
 		if(svgIconCount == 0) {
-			
+
 			//remove temp page
 			Library.removePage(tempIconPage);
-			
+
 			//select original layers
 			restoreSelection();
 		}
@@ -502,56 +502,56 @@ function populate(data, selectedLayers, opt) {
 
 
 	function processTextLayer(textLayer, dataRow) {
-		
+
 		//reference command
 		var command = context.command;
-		
+
 		//get stored text from layer
 		var storedText = [command valueForKey: 'textWithPlaceholders' onLayer: textLayer];
-		
+
 		//get text from text layer
 		var text;
 		if(storedText && storedText.length) {
 			text = storedText;
 		}
 		else {
-			text = [textLayer stringValue];	
+			text = [textLayer stringValue];
 		}
-		
+
 		//store text on layer
 		[command setValue: String(text) forKey: 'textWithPlaceholders' onLayer: textLayer];
-		
+
 		//get placeholders in text
 		var placeholders = getPlaceholders(text);
 
 		//assign values to placeholders
 		var values = {};
 		placeholders.forEach(function(placeholder) {
-			
+
 			//get value
 			var value = dataRow[placeholder.key];
-			
+
 			//use substitute if value doesn't exist
 			if(!value) {
-				
+
 				if(placeholder.substitute) {
-					
+
 					//use in-line substitute
 					value = placeholder.substitute;
 				}
 				else {
-					
+
 					//use default substitute
 					value = '';
 				}
 			}
-			
+
 			values[placeholder.string] = value;
 		});
 
 		//merge text with values
 		var mergedText = Library.mergeStringWithValues(text, values);
-		
+
 		//prevent bug with empty text layer
 		if(!mergedText.length) {
 			mergedText = '-';
@@ -573,7 +573,7 @@ function populate(data, selectedLayers, opt) {
 			//get original text layer height
 			var textLayerFrame = textLayer.frame();
 			var originalHeight = textLayerFrame.height();
-			
+
 			//resize to fit and get new height
 			Library.resizeTextLayer(textLayer);
 			var newHeight = textLayerFrame.height();
@@ -593,7 +593,7 @@ function populate(data, selectedLayers, opt) {
 
 			//if trimmed add ellipsis
 			if(didTrim && opt.insertEllipsis) {
-				
+
 				//add ellipsis
 				mergedText += '…';
 				textLayer.setStringValue(mergedText);
@@ -615,7 +615,7 @@ function populate(data, selectedLayers, opt) {
 			}
 		}
 		else {
-			
+
 			//resize to fit
 			Library.resizeTextLayer(textLayer);
 		}
@@ -623,23 +623,23 @@ function populate(data, selectedLayers, opt) {
 
 
 	function processImagePlaceholder(shapeGroup, dataRow, rootDir) {
-		
+
 		//get shape group name
 		var shapeGroupName = [shapeGroup name].toString();
-		
+
 		//get placeholder name
 		var placeholder = shapeGroupName.substring(1, [shapeGroupName length] - 1);
 
 		//get image url for placeholder from data row
 		var imageUrl = dataRow[placeholder];
 		if(!imageUrl) {
-			
+
 			//get shape group fill
 			var fill = [[[shapeGroup style] fills] firstObject];
 
 			//disable fill
             fill.setIsEnabled(false);
-			
+
 			return;
 		}
 		if(imageUrl[0] == '/') imageUrl = imageUrl.substring(1);
@@ -649,12 +649,12 @@ function populate(data, selectedLayers, opt) {
 
 		//load image
 		var fileManager = [NSFileManager defaultManager];
-		if ([fileManager fileExistsAtPath: fullImageUrl]) {				
+		if ([fileManager fileExistsAtPath: fullImageUrl]) {
 			var image = [[NSImage alloc] initWithContentsOfFile: fullImageUrl];
 
 			//get shape group fill
 			var fill = [[[shapeGroup style] fills] firstObject];
-			
+
 			//enable fill
 			fill.setIsEnabled(true);
 
@@ -681,24 +681,24 @@ function populate(data, selectedLayers, opt) {
 		var iconUrl = dataRow[placeholder];
 		if(!iconUrl) {
 			svgIconsImported++;
-			
+
 			//hide placeholder
 			shapeGroup.setIsVisible(false);
-			
+
 			//check if all icons for selection are imported now
 			if(svgIconsImported == svgIconCount) {
-				
+
 				//remove temp page
 				Library.removePage(tempIconPage);
-				
+
 				//select original layers
 				restoreSelection();
 			}
-			
+
 			return;
 		}
 		else {
-			
+
 			//show placeholder
 			shapeGroup.setIsVisible(true);
 		}
@@ -709,7 +709,7 @@ function populate(data, selectedLayers, opt) {
 
 		//import icon
 		var fileManager = [NSFileManager defaultManager];
-		if ([fileManager fileExistsAtPath: fullIconUrl]) {				
+		if ([fileManager fileExistsAtPath: fullIconUrl]) {
 
 			//get original placeholder icon frame
 			var placeholderFrame = {
@@ -734,7 +734,7 @@ function populate(data, selectedLayers, opt) {
 
 	        //import svg into the container
 	        [MSImportInsert importFromURL: fileUrl inGroup: container importer: SVGImporter completion: nil];
-			
+
 			//continue after delay to make sure import is complete
 	        Library.delay(function() {
 	        	attemptImport();
@@ -742,7 +742,7 @@ function populate(data, selectedLayers, opt) {
 
 
 			function attemptImport() {
-				
+
 				//get container layers
 				var containerLayers = Library.jsArray([container layers]);
 
@@ -824,10 +824,10 @@ function populate(data, selectedLayers, opt) {
 
 					//check if all icons for selection are imported now
 					if(svgIconsImported == svgIconCount) {
-						
+
 						//remove temp page
 						Library.removePage(tempIconPage);
-						
+
 						//select original layers
 						restoreSelection();
 					}
@@ -848,9 +848,9 @@ function populate(data, selectedLayers, opt) {
 
 
 	function getPlaceholders(str) {
-		
+
 		//collect placeholders
-		var results = []; 
+		var results = [];
 
 		//regex matching
 		var re = /{([^}]+)}/g;
@@ -858,22 +858,22 @@ function populate(data, selectedLayers, opt) {
 
 		//find placeholders
 	  	while(text = re.exec(str)) {
-	  		
+
 	  		//get inside of placeholder (between {})
 	  		var placeholderText = text[1];
 	  		var placeholderComponents = placeholderText.split('?');
-	  		
+
 	  		//check if has substitute
 	  		var hasSubstitute = (placeholderComponents.length == 2);
 	  		if(hasSubstitute) {
-	  			
+
 	  			//get key and substitute
 	  			var key = placeholderComponents[0].trim();
 	  			var substitute = placeholderComponents[1].trim();
-	  			
+
 	  			//set default substitute
 	  			if(!substitute.length) substitute = opt.defaultSubstitute;
-	  			
+
 	  			results.push({
 		    		string: placeholderText,
 		    		key: key,
@@ -881,46 +881,46 @@ function populate(data, selectedLayers, opt) {
 		    	});
 	  		}
 	  		else {
-	  			
+
 	  			results.push({
 		    		string: placeholderText,
 		    		key: placeholderText
 		    	});
 	  		}
 	  	}
-	  	
-	  	
+
+
 	  	return results;
 	}
 }
 
 
 function createGrid(selectedLayers, opt) {
-	
+
 	//check rows count
 	if(!opt.rowsCount || opt.rowsCount < 0) {
 		context.document.showMessage('Number of grid rows must be at least 1.');
 		return;
 	}
-	
+
 	//check rows margin
 	if((!opt.rowsMargin && opt.rowsMargin != 0) || opt.rowsMargin < 0) {
 		context.document.showMessage('Grid row margin is invalid.');
 		return;
 	}
-	
+
 	//check column count
 	if(!opt.columnsCount || opt.columnsCount < 0) {
 		context.document.showMessage('Number of grid columns must be at least 1.');
 		return;
 	}
-	
+
 	//check columns margin
 	if((!opt.columnsMargin && opt.columnsMargin != 0) || opt.columnsMargin < 0) {
 		context.document.showMessage('Grid column margin is invalid.');
 		return;
 	}
-	
+
 	//get first layer (most top left)
 	var layer = selectedLayers[0];
 	var smallestX = selectedLayers[0].frame().x();
@@ -933,56 +933,56 @@ function createGrid(selectedLayers, opt) {
 			layer = tempLayer;
 		}
 	}
-	
+
 	//arrange copies of the first layer
 	var layerWidth = layer.frame().width();
 	var layerHeight = layer.frame().height();
 	var layerParent = [layer parentGroup];
 	if(!layerParent) layerParent = [layer parentArtboard];
 	if(!layerParent) layerParent = [layer parentPage];
-	
+
 	//remove selected layers from parent
 	selectedLayers.forEach(function(tempLayer) {
 		tempLayer.removeFromParent();
 	});
-	
+
 	//keep track of original position
 	var startX = layer.frame().x();
 	var startY = layer.frame().y();
-	
+
 	//store new selected layers
 	var newSelectedLayers = [];
-	
+
 	//create rows
 	for(var i = 0; i < opt.rowsCount; i++) {
-		
+
 		//set row y
 		var y = startY + (i * (layerHeight + opt.rowsMargin));
-		
+
 		//create columns
 		for(var j = 0; j < opt.columnsCount; j++) {
-		
+
 			//create layer copy
 			var copy = Library.copyLayer(layer);
-		
+
 			//add to parent layer
 			layerParent.addLayers([copy]);
-			
+
 			//add to selected layers
 			newSelectedLayers.push(copy);
-		
+
 			//set column x
 			var x = startX + (j * (layerWidth + opt.columnsMargin));
-			
+
 			//position copy
 			copy.frame().setX(x);
 			copy.frame().setY(y);
 		}
 	}
-	
+
 	//adjust parent layer
 	[layerParent resizeRoot: true];
-	
+
 	return newSelectedLayers;
 }
 
@@ -1016,15 +1016,15 @@ function createDataOptionsView() {
 
 	//set ellipsis checkbox state
 	[ellipsisCheckbox setState: [[NSUserDefaults standardUserDefaults] objectForKey:'insertEllipsis']];
-	
+
 	//create substitute label
 	var substituteLabel = Library.createLabel('Default substitute:', 12, false, NSMakeRect(0, 0, 110, 20));
 	[optionsView addSubview: substituteLabel];
-	
+
 	//create substitute text field
 	var substituteTextField = [[NSTextField alloc] initWithFrame:NSMakeRect(110, 0, 120, 22)];
     [optionsView addSubview: substituteTextField];
-    
+
     //set substitute
     if([[NSUserDefaults standardUserDefaults] objectForKey:'defaultSubstitute']) {
     	[substituteTextField setStringValue:[[NSUserDefaults standardUserDefaults] objectForKey:'defaultSubstitute']];
@@ -1032,8 +1032,8 @@ function createDataOptionsView() {
     else {
     	[substituteTextField setStringValue:''];
     }
-	
-	
+
+
 	//return configured view
 	return {
 		view: optionsView,
@@ -1061,16 +1061,16 @@ function createLayoutOptionsView() {
 	//set randomize checkbox state
 	[createGridCheckbox setState: [[NSUserDefaults standardUserDefaults] objectForKey:'createGrid']];
 
-	
-	
+
+
 	//create rows count label
 	var rowsCountLabel = Library.createLabel('Rows:', 12, false, NSMakeRect(0, 27, 60, 20));
 	[optionsView addSubview: rowsCountLabel];
-	
+
 	//create rows count text field
 	var rowsCountTextField = [[NSTextField alloc] initWithFrame:NSMakeRect(60, 27, 70, 22)];
     [optionsView addSubview: rowsCountTextField];
-    
+
     //set rows count
     if([[NSUserDefaults standardUserDefaults] objectForKey:'rowsCount']) {
     	[rowsCountTextField setStringValue:[[NSUserDefaults standardUserDefaults] objectForKey:'rowsCount']];
@@ -1078,16 +1078,16 @@ function createLayoutOptionsView() {
     else {
     	[rowsCountTextField setStringValue:'1'];
     }
-    
-    
+
+
     //create rows margin label
 	var rowsMarginLabel = Library.createLabel('Margin:', 12, false, NSMakeRect(142, 27, 50, 20));
 	[optionsView addSubview: rowsMarginLabel];
-	
+
 	//create rows margin text field
 	var rowsMarginTextField = [[NSTextField alloc] initWithFrame:NSMakeRect(190, 27, 70, 22)];
     [optionsView addSubview: rowsMarginTextField];
-    
+
     //set rows margin
     if([[NSUserDefaults standardUserDefaults] objectForKey:'rowsMargin']) {
     	[rowsMarginTextField setStringValue:[[NSUserDefaults standardUserDefaults] objectForKey:'rowsMargin']];
@@ -1095,16 +1095,16 @@ function createLayoutOptionsView() {
     else {
     	[rowsMarginTextField setStringValue:'10'];
     }
-    
-    
+
+
     //create columns count label
 	var columnsCountLabel = Library.createLabel('Columns:', 12, false, NSMakeRect(0, 0, 60, 20));
 	[optionsView addSubview: columnsCountLabel];
-	
+
 	//create columns count text field
 	var columnsCountTextField = [[NSTextField alloc] initWithFrame:NSMakeRect(60, 0, 70, 22)];
     [optionsView addSubview: columnsCountTextField];
-    
+
     //set columns count
     if([[NSUserDefaults standardUserDefaults] objectForKey:'columnsCount']) {
     	[columnsCountTextField setStringValue:[[NSUserDefaults standardUserDefaults] objectForKey:'columnsCount']];
@@ -1112,16 +1112,16 @@ function createLayoutOptionsView() {
     else {
     	[columnsCountTextField setStringValue:'1'];
     }
-    
+
     //create columns margin label
 	var columnsMarginLabel = Library.createLabel('Margin:', 12, false, NSMakeRect(142, 0, 50, 20));
 	[optionsView addSubview: columnsMarginLabel];
-	
+
 	//create columns margin text field
 	var columnsMarginTextField = [[NSTextField alloc] initWithFrame:NSMakeRect(190, 0, 70, 22)];
     [optionsView addSubview: columnsMarginTextField];
-	
-	
+
+
 	//set columns margin
     if([[NSUserDefaults standardUserDefaults] objectForKey:'columnsMargin']) {
     	[columnsMarginTextField setStringValue:[[NSUserDefaults standardUserDefaults] objectForKey:'columnsMargin']];
@@ -1188,11 +1188,11 @@ function revealPresetsHandler(_context) {
 
 
 function restoreSelection() {
-	
+
 	//deselect current selection
 	var doc = context.document;
     [[doc currentPage] deselectAllLayers];
-    
+
     selection.forEach(function(layer) {
     	[layer select:true byExpandingSelection:true];
     });
@@ -1225,7 +1225,7 @@ function insertImageHandler(_context) {
 
 			//load image
 			var fileManager = [NSFileManager defaultManager];
-			if ([fileManager fileExistsAtPath: imageUrl]) {				
+			if ([fileManager fileExistsAtPath: imageUrl]) {
 				var image = [[NSImage alloc] initWithContentsOfFile: imageUrl];
 
 				//get shape group fill
@@ -1277,8 +1277,8 @@ function insertSVGHandler(_context) {
 
 			//load image
 			var fileManager = [NSFileManager defaultManager];
-			if ([fileManager fileExistsAtPath: svgUrl]) {				
-				
+			if ([fileManager fileExistsAtPath: svgUrl]) {
+
 				//remove existing temp page
 				var existingTempPage = Library.findPageWithName('__TEMP_DATA_POPULATOR__', true);
 				if(existingTempPage) {
@@ -1311,7 +1311,7 @@ function insertSVGHandler(_context) {
 
 		        //import svg into the container
 		        [MSImportInsert importFromURL: fileUrl inGroup: container importer: SVGImporter completion: nil];
-				
+
 				//continue after delay to make sure import is complete
 		        Library.delay(function() {
 		        	attemptImport();
@@ -1319,7 +1319,7 @@ function insertSVGHandler(_context) {
 
 
 				function attemptImport() {
-					
+
 					//get container layers
 					var containerLayers = Library.jsArray([container layers]);
 
@@ -1426,7 +1426,7 @@ function restoreTextPlaceholdersHandler(_context) {
 	context = _context;
 	var doc = context.document;
 	var command = context.command;
-	
+
 	//get selected layers
 	var selectedLayers = Library.getSelectedLayers();
 	selection = selectedLayers;
@@ -1434,39 +1434,39 @@ function restoreTextPlaceholdersHandler(_context) {
 		context.document.showMessage('Please select the text layers you would like to restore.');
 		return;
 	}
-	
+
 	//get all text layers in selection
 	var textLayers = [];
 	selectedLayers.forEach(function(layer) {
-		
+
 		//get text layers from group
 		if(Library.isLayerGroup(layer)) {
 			var nestedTextLayers = Library.findLayersInLayer(false, false, 'MSTextLayer', layer, false, false);
 			textLayers = textLayers.concat(nestedTextLayers);
 		}
-		
+
 		//add text layer
 		else if(Library.isLayerText(layer)) {
 			textLayers.push(layer);
 		}
 	});
-	
+
 	//restore text layers
 	textLayers.forEach(function(textLayer) {
-		
+
 		//get stored text from layer
 		var storedText = [command valueForKey: 'textWithPlaceholders' onLayer: textLayer];
-		
+
 		//replace text by original string including placeholders
 		if(storedText) {
-			
+
 			//set text layer text
 			textLayer.setStringValue(storedText);
 
 			//resize text layer to fit text
 			Library.refreshTextLayer(textLayer);
 		}
-		
+
 		//remove text stored on layer
 		[command setValue: nil forKey: 'textWithPlaceholders' onLayer: textLayer];
 	});
