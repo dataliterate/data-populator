@@ -38,7 +38,7 @@ function populateWithPresetHandler(_context) {
 	});
 
 	//create alert
-	var alert = Library.createAlert("Populate with Preset", "Please select the Preset you'd like to use to populate your design and configure the options.");
+	var alert = Library.createAlert("Populate with Preset", "Please select the Preset you'd like to use to populate your design and configure the options.", "icon.png");
 
 	//create list view
 	var listView = [[NSView alloc] initWithFrame: NSMakeRect(0, 0, 300, 50)];
@@ -201,7 +201,7 @@ function populateWithJSONHandler(_context) {
 	if(!Sandbox.authoriseDir(rootDir)) return;
 
 	//create alert
-	var alert = Library.createAlert("Populate with JSON", "Please configure the options below.");
+	var alert = Library.createAlert("Populate with JSON", "Please configure the options below.", "icon.png");
 
     //create data options view
     var dataOptionsView = createDataOptionsView();
