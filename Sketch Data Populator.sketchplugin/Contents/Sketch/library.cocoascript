@@ -486,8 +486,14 @@ var Library = {};
         [alert setInformativeText: message];
 
         if(iconFileName) {
-            var scriptPath = context.scriptPath;
-            var iconPath = [[NSImage alloc] initByReferencingFile: [scriptPath stringByAppendingPathComponent: iconFileName]];
+            
+            //get icon path
+            var scriptPath = [NSString stringWithString: context.scriptPath];
+            scriptPath = [scriptPath stringByDeletingLastPathComponent];
+            var iconPath = [scriptPath stringByAppendingPathComponent: iconFileName];
+            
+            //set icon
+            var icon = [[NSImage alloc] initByReferencingFile: iconPath];
             [alert setIcon: icon];
         }
 
