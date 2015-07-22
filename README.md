@@ -46,17 +46,18 @@ will display a dialog that allows you to select one of your Presets as well as c
 
 ![Populate with Preset](populate-with-preset-dialog.png)
 
-**Data options**
-_Randomize data order_: instead of going through the JSON array top down row by row, it will pick a random data set.
-_Trim overflowing text_: a Text Layer that has been set with a fixed width will trim overflowing text.
-_Insert ellipsis after trimmed text_: will insert a "…" after the trimmed text.
-_Default substitute_ (see below)
+**Data options**  
+_Randomize data order_: instead of going through the JSON array top down row by row, it will pick a random data set.  
+_Trim overflowing text_: a Text Layer that has been set with a fixed width will trim overflowing text.  
+_Insert ellipsis after trimmed text_: will insert a "…" after the trimmed text.  
+_Default substitute_ (see below)  
 
 **Handling missing data**  
+
 _Text Substitutes_  
 `{placeholder}` inserts an empty string if no data are available for placeholder  
-`{placeholder?}` uses the default substitute (can be set in plugin dialog)  
-`{placeholder?substitute}` uses the custom substitute you append  
+`{placeholder?}` uses the _Default substitute_  
+`{placeholder?substitute}` uses the custom substitute you append after the "?" 
 
 _Image & SVG Substitutes_  
 If there's no image or SVG available, it will turn off the fill of the placeholder shape and turn it on again once there's data available when re-populating. So for images, it's recommended to put a substitute image or pictogram behind the actual image. So this will be visible if there's no actual image data (see "demo.sketch" for examples).
