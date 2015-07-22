@@ -47,10 +47,10 @@ will display a dialog that allows you to select one of your Presets as well as c
 ![Populate with Preset](populate-with-preset-dialog.png)
 
 **Data options**  
-_Randomize data order_: instead of going through the JSON array top down row by row, it will pick a random data set.  
-_Trim overflowing text_: a Text Layer that has been set with a fixed width will trim overflowing text.  
-_Insert ellipsis after trimmed text_: will insert a "…" after the trimmed text.  
-_Default substitute_ (see below)  
+* _Randomize data order_: instead of going through the JSON top down row by row, it will pick a random data set.  
+* _Trim overflowing text_: a Text Layer that has been set with a fixed width will trim overflowing text.  
+* _Insert ellipsis after trimmed text_: will insert a "…" after the trimmed text.  
+* _Default substitute_ (see below)  
 
 **Handling missing data**  
 
