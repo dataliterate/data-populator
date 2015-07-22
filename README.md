@@ -1,4 +1,4 @@
-# Sketch Data Populator
+![Sketch Data Populator](sketch-data-populator.png)
 
 ## Why Data Populator
 
