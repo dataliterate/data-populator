@@ -22,7 +22,7 @@ We conceived _Sketch Data Populator_ to improve our design process for working w
 
 ## How to use …
  
-The **Sketch Data Populator** plugin replaces text and image {placeholders} with data: 
+The **Sketch Data Populator** plugin creates a grid from a selected element (Layer Group or Artboard) and replaces text and image {placeholders} with meaningful and realistic data (from a JSON source): 
 
 ![Sketch Data Populator](sketch-data-populator.gif)
 
