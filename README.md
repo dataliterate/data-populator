@@ -2,7 +2,7 @@
 
 ## Why Data Populator
 
-We believe designers should work with _meaningful_ data as early as possible in the design process for the following reasons:
+We believe designers should work with _meaningful_ and _realistic_ data as early as possible in the design process for the following reasons:
 
 1. **Content informs design decisions** (and helps you convey your purpose)
 2. **Data are relentless** (so UI components must be designed for robustness)
@@ -14,7 +14,7 @@ _Sketch Data Populator_ not only makes you more productive (probably around [60x
 
 Please report bugs, observations, ideas & feature requests as [issues](https://github.com/preciousforever/sketch-data-populator/issues).
 
-We conceived _Sketch Data Populator_ to improve our design process for working with meaningful at [precious design studio](http://precious-forever.com/) and developed the plugin in collaboration with [Lukas Ondrej](https://github.com/lukas77me). Please get in touch if you have questions or comments via [@preciousforever](https://twitter.com/preciousforever) or [our website](http://precious-forever.com/contact).
+We conceived _Sketch Data Populator_ to improve our design process for working with data at [precious design studio](http://precious-forever.com/) and developed the plugin in collaboration with [Lukas Ondrej](https://github.com/lukas77me). Please get in touch if you have questions or comments via [@preciousforever](https://twitter.com/preciousforever) or [our website](http://precious-forever.com/contact).
 
 ## Installation
 1. Download the ZIP file (or clone repository)
@@ -22,7 +22,7 @@ We conceived _Sketch Data Populator_ to improve our design process for working w
 
 ## How to use …
  
-The **Sketch Data Populator** plugin creates a grid from a selected element (Layer Group or Artboard) and replaces text and image {placeholders} with meaningful and realistic data (from a JSON source): 
+The **Sketch Data Populator** plugin creates a grid from a selected element (Layer Group or Artboard) and replaces text and image {placeholders} with data from a JSON source: 
 
 ![Sketch Data Populator](sketch-data-populator.gif)
 
@@ -32,7 +32,7 @@ The **Sketch Data Populator** plugin creates a grid from a selected element (Lay
 
 2. In the same Layer Group, create a Shape Layer (this is your image placeholder). Give the Shape Layer a placeholder name in curly brackets – such as ```{image}```. The plugin's "Populate with …" command will replace this placeholder with respective image data (PNG, JPG).
 
-3. Create another Rectangle Layer as your icon placeholder. Give it a placeholder name in double curly brackets, something like ```{{icon}}```. Set any of its properties like size, fill color or shadow as desired – all properties will apply to the final icon once populated. The plugin's "Populate with …" command will replace this placeholder with respective icon vector data (SVG).
+3. Create another Shape Layer as your icon placeholder. Give it a placeholder name in double curly brackets, something like ```{{icon}}```. Set any of its properties like size, fill color or shadow as desired – all properties will apply to the final icon once populated. The plugin's "Populate with …" command will replace this placeholder with respective icon vector data (SVG).
 
 ### All available Commands:
 
@@ -82,7 +82,7 @@ will point you into the plugin's location for its Presets. Presets are simply JS
 
 ---
 
-Check out the **demo.sketch** file in the **demo** folder to get an idea.
+Check out the **demo.sketch** file to get an idea.
 
 ---
 
