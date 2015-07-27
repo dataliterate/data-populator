@@ -120,13 +120,13 @@ function populateWithPresetHandler(_context) {
 
 		//get grid config
 		var rowsCountTextField = layoutOptionsView.rowsCountTextField;
-		var rowsCount = Number([rowsCountTextField stringValue]);
+		var rowsCount = Number([rowsCountTextField stringValue].split(/[\.\,]/g)[0]);
 		var rowsMarginTextField = layoutOptionsView.rowsMarginTextField;
-		var rowsMargin = Number([rowsMarginTextField stringValue]);
+		var rowsMargin = Number([rowsMarginTextField stringValue].replace(/\,/g, '.'));
 		var columnsCountTextField = layoutOptionsView.columnsCountTextField;
-		var columnsCount = Number([columnsCountTextField stringValue]);
+		var columnsCount = Number([columnsCountTextField stringValue].split(/[\.\,]/g)[0]);
 		var columnsMarginTextField = layoutOptionsView.columnsMarginTextField;
-		var columnsMargin = Number([columnsMarginTextField stringValue]);
+		var columnsMargin = Number([columnsMarginTextField stringValue].replace(/\,/g, '.'));
 
 		//save data options
 		[defaults setObject: selectedPresetIndex forKey: 'selectedPresetIndex'];
@@ -254,13 +254,13 @@ function populateWithJSONHandler(_context) {
 
 		//get grid config
 		var rowsCountTextField = layoutOptionsView.rowsCountTextField;
-		var rowsCount = Number([rowsCountTextField stringValue]);
+		var rowsCount = Number([rowsCountTextField stringValue].split(/[\.\,]/g)[0]);
 		var rowsMarginTextField = layoutOptionsView.rowsMarginTextField;
-		var rowsMargin = Number([rowsMarginTextField stringValue]);
+		var rowsMargin = Number([rowsMarginTextField stringValue].replace(/\,/g, '.'));
 		var columnsCountTextField = layoutOptionsView.columnsCountTextField;
-		var columnsCount = Number([columnsCountTextField stringValue]);
+		var columnsCount = Number([columnsCountTextField stringValue].split(/[\.\,]/g)[0]);
 		var columnsMarginTextField = layoutOptionsView.columnsMarginTextField;
-		var columnsMargin = Number([columnsMarginTextField stringValue]);
+		var columnsMargin = Number([columnsMarginTextField stringValue].replace(/\,/g, '.'));
 
 		//save data options
 		[defaults setObject: filePath forKey: 'dataPath'];
@@ -896,7 +896,7 @@ function populate(data, selectedLayers, opt) {
 
 
 function createGrid(selectedLayers, opt) {
-
+	
 	//check rows count
 	if(!opt.rowsCount || opt.rowsCount < 0) {
 		context.document.showMessage('Number of grid rows must be at least 1.');
