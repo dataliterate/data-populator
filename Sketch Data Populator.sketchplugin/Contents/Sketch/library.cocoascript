@@ -60,7 +60,7 @@ var Library = {};
 	}
 
 
-	function askForJSON() {
+	function askForJSON(path) {
 		var panel = [NSOpenPanel openPanel];
 
 		[panel setTitle: "Select JSON"];
@@ -74,7 +74,12 @@ var Library = {};
   		[panel setShowsHiddenFiles: false];
   		[panel setExtensionHidden: false];
 
-  		[panel setDirectoryURL: [NSURL fileURLWithPath: '/Users/' + NSUserName()]];
+        if(path) {
+            [panel setDirectoryURL: [NSURL fileURLWithPath: path]];
+        }
+        else {
+            [panel setDirectoryURL: [NSURL fileURLWithPath: '/Users/' + NSUserName()]];
+        }
 
   		var pressedButton = [panel runModal];
   		if(pressedButton == NSOKButton) {
@@ -368,8 +373,8 @@ var Library = {};
 
 	    properties.forEach(function(property) {
             
-            //escape | and add {}
-            var sanitisedProperty = property.replace('?', '\\?');
+            //escape regex
+            var sanitisedProperty = property.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
             sanitisedProperty = '{' + sanitisedProperty + '}';
             
 	        //build regex
