@@ -192,9 +192,17 @@ function populateWithJSONHandler(_context) {
 		return;
 	}
 
+	//get last used location
+	var defaults = [NSUserDefaults standardUserDefaults];
+	var lastLocation = [defaults objectForKey: 'LastJSONFilePickerLocation'];
+
 	//get JSON file path
-	var filePath = Library.askForJSON();
+	var filePath = Library.askForJSON(lastLocation);
 	if(!filePath) return;
+	
+	//save last used location
+	[defaults setObject: filePath forKey: 'LastJSONFilePickerLocation'];
+	[defaults synchronize];
 
 	//get root dir
 	var rootDir = [filePath stringByDeletingLastPathComponent];
@@ -527,26 +535,66 @@ function populate(data, selectedLayers, opt) {
 		//assign values to placeholders
 		var values = {};
 		placeholders.forEach(function(placeholder) {
+			
+			//solo/default placeholder
+			if(placeholder.type == 'solo') {
+				
+				//get value
+				var value = dataRow[placeholder.key];
 
-			//get value
-			var value = dataRow[placeholder.key];
+				//use substitute if value doesn't exist
+				if(!value) {
 
-			//use substitute if value doesn't exist
-			if(!value) {
+					if(placeholder.substitute) {
 
-				if(placeholder.substitute) {
+						//use in-line substitute
+						value = String(placeholder.substitute);
+					}
+					else {
 
-					//use in-line substitute
-					value = placeholder.substitute;
+						//use default substitute
+						value = '';
+					}
 				}
-				else {
 
-					//use default substitute
-					value = '';
-				}
+				values[placeholder.string] = value;
 			}
+			else if(placeholder.type == 'enum') {
+				
+				//get values for sub placeholders
+				var placeholderValues = [];
+				placeholder.placeholders.forEach(function(subPlaceholder) {
+					
+					//get value
+					var value = dataRow[subPlaceholder.key];
 
-			values[placeholder.string] = value;
+					//use substitute if value doesn't exist
+					if(!value) {
+
+						if(subPlaceholder.substitute) {
+
+							//use in-line substitute
+							value = String(subPlaceholder.substitute);
+						}
+						else {
+
+							//use default substitute
+							value = '';
+						}
+					}
+					
+					//make sure value is not empty
+					if(value.length) placeholderValues.push(value);
+				});
+				
+				//prepare enumerated value
+				var enumeratedValue = '';
+				if(placeholder.command == 'join') {
+					enumeratedValue = placeholderValues.join(placeholder.delimiter);
+				}
+				
+				values[placeholder.string] = enumeratedValue;
+			}
 		});
 
 		//merge text with values
@@ -861,7 +909,49 @@ function populate(data, selectedLayers, opt) {
 
 	  		//get inside of placeholder (between {})
 	  		var placeholderText = text[1];
-	  		var placeholderComponents = placeholderText.split('?');
+	  		
+	  		//check if placeholder uses enumeration syntax
+	  		if(placeholderText.indexOf('|&') > -1) {
+	  			
+	  			//split enum placeholder text into components
+	  			var placeholderComponents = placeholderText.split('|&');
+	  			
+	  			//get placeholders
+	  			var placeholdersString = placeholderComponents[0] || '';
+	  			var placeholderStrings = placeholdersString.split(',');
+	  			var placeholders = [];
+	  			placeholderStrings.forEach(function(placeholderString) {
+	  				
+	  				//process placeholder string
+	  				var placeholder = processPlaceholderString(placeholderString.trim());
+	  				placeholders.push(placeholder);
+	  			});
+	  			
+	  			//get delimiter
+	  			var delimiter = placeholderComponents[1] || '';
+	  			
+	  			//create object
+	  			results.push({
+	  				string: placeholderText,
+	  				type: 'enum',
+	  				command: 'join',
+	  				delimiter: delimiter,
+	  				placeholders: placeholders
+	  			});
+	  		}
+	  		else {
+	  			
+	  			//process placeholder text
+	  			var placeholder = processPlaceholderString(placeholderText);
+	  			results.push(placeholder);
+	  		}
+	  	}
+	  	
+	  	
+	  	function processPlaceholderString(placeholderString) {
+	  			
+  			//split into components
+  			var placeholderComponents = placeholderString.split('?');
 
 	  		//check if has substitute
 	  		var hasSubstitute = (placeholderComponents.length == 2);
@@ -874,21 +964,22 @@ function populate(data, selectedLayers, opt) {
 	  			//set default substitute
 	  			if(!substitute.length) substitute = opt.defaultSubstitute;
 
-	  			results.push({
-		    		string: placeholderText,
+	  			return {
+	  				type: 'solo',
+		    		string: placeholderString,
 		    		key: key,
 		    		substitute: substitute
-		    	});
+		    	};
 	  		}
 	  		else {
 
-	  			results.push({
-		    		string: placeholderText,
-		    		key: placeholderText
-		    	});
+	  			return {
+	  				type: 'solo',
+		    		string: placeholderString,
+		    		key: placeholderString
+		    	};
 	  		}
-	  	}
-
+  		}
 
 	  	return results;
 	}
