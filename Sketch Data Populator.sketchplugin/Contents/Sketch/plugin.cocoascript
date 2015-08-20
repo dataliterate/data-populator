@@ -468,7 +468,8 @@ function populate(data, selectedLayers, opt) {
 				});
 
 				//find icon and image placeholders
-				var iconPlaceholders = Library.findLayersInLayer('{{*}}', false, 'MSShapeGroup', selectedLayer, false, false);
+				var colorPlaceholders = Library.findLayersInLayer('{{{*}}}', false, 'MSShapeGroup', selectedLayer, false, false);
+				var iconPlaceholders = Library.findLayersInLayer('{{*}}', false, 'MSShapeGroup', selectedLayer, false, colorPlaceholders);
 				var imagePlaceholders = Library.findLayersInLayer('{*}', false, 'MSShapeGroup', selectedLayer, false, iconPlaceholders);
 
 				//process all image placeholders
@@ -480,6 +481,11 @@ function populate(data, selectedLayers, opt) {
 				iconPlaceholders.forEach(function(shapeGroup) {
 					processIconPlaceholder(shapeGroup, dataRow, opt.rootDir);
 					svgIconsStartedImport++;
+				});
+
+				//process all color placeholders
+				colorPlaceholders.forEach(function(shapeGroup) {
+					processColorPlaceholder(shapeGroup, dataRow, opt.rootDir);
 				});
 			}
 			else if(Library.isLayerText(selectedLayer)) {
@@ -892,6 +898,43 @@ function populate(data, selectedLayers, opt) {
 		else {
 			svgIconsImported++;
 		}
+	}
+
+	function processColorPlaceholder(shapeGroup, dataRow, rootDir) {
+
+		//get shape group name
+		var shapeGroupName = [shapeGroup name].toString();
+		log(shapeGroupName);
+
+		//get placeholder name
+		var placeholder = shapeGroupName.substring(3, [shapeGroupName length] - 3);
+		log(placeholder);
+
+		//get hex color for placeholder from data row
+		var hexColor = dataRow[placeholder];
+		log(hexColor);
+
+		if(!hexColor) {
+			//hide placeholder
+			shapeGroup.setIsVisible(false);
+			return;
+		}
+		else {
+			//show placeholder
+			shapeGroup.setIsVisible(true);
+		}
+
+		//get shape group fill
+		var fill = [[[shapeGroup style] fills] firstObject];
+
+		//enable fill
+		fill.setIsEnabled(true);
+
+		//set pattern fill
+		fill.setFillType(0);
+
+		// set the color
+		fill.color = [MSColor colorWithSVGString:hexColor];
 	}
 
 
