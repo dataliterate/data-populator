@@ -508,6 +508,22 @@ function populate(data, selectedLayers, opt) {
 		}
 	}
 
+	function findValueInDataRow(key, dataRow) {
+		
+		//get subkeys 
+		var subkeys = key.split('.');
+		
+		//get the value for the first subkey
+		var value = dataRow[subkeys.shift()];
+
+		//find the value in nested object if necessary
+		if(value !== null && typeof value === 'object') {
+			return findValueInDataRow(subkeys.join('.'), value);
+		}
+		else {
+			return value;
+		}
+	}
 
 	function processTextLayer(textLayer, dataRow) {
 
@@ -540,7 +556,7 @@ function populate(data, selectedLayers, opt) {
 			if(placeholder.type == 'solo') {
 				
 				//get value
-				var value = dataRow[placeholder.key];
+				var value = findValueInDataRow(placeholder.key, dataRow);
 
 				//use substitute if value doesn't exist
 				if(!value) {
@@ -566,7 +582,7 @@ function populate(data, selectedLayers, opt) {
 				placeholder.placeholders.forEach(function(subPlaceholder) {
 					
 					//get value
-					var value = dataRow[subPlaceholder.key];
+					var value = findValueInDataRow(subPlaceholder.key, dataRow);
 
 					//use substitute if value doesn't exist
 					if(!value) {
@@ -679,7 +695,7 @@ function populate(data, selectedLayers, opt) {
 		var placeholder = shapeGroupName.substring(1, [shapeGroupName length] - 1);
 
 		//get image url for placeholder from data row
-		var imageUrl = dataRow[placeholder];
+		var imageUrl = findValueInDataRow(placeholder, dataRow);
 		if(!imageUrl) {
 
 			//get shape group fill
@@ -726,7 +742,7 @@ function populate(data, selectedLayers, opt) {
 		var placeholder = shapeGroupName.substring(2, [shapeGroupName length] - 2);
 
 		//get icon url for placeholder from data row
-		var iconUrl = dataRow[placeholder];
+		var iconUrl = findValueInDataRow(placeholder, dataRow);
 		if(!iconUrl) {
 			svgIconsImported++;
 
