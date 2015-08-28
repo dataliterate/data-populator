@@ -509,17 +509,20 @@ function populate(data, selectedLayers, opt) {
 	}
 
 	function findValueInDataRow(key, dataRow) {
-		var subkeys = key.split(".");
 		
+		//get subkeys 
+		var subkeys = key.split('.');
+		
+		//get the value for the first subkey
 		var value = dataRow[subkeys.shift()];
 
+		//find the value in nested object if necessary
 		if(value !== null && typeof value === 'object') {
-			return findValueInDataRow(subkeys.join("."), value);
+			return findValueInDataRow(subkeys.join('.'), value);
 		}
 		else {
 			return value;
 		}
-
 	}
 
 	function processTextLayer(textLayer, dataRow) {
@@ -579,7 +582,7 @@ function populate(data, selectedLayers, opt) {
 				placeholder.placeholders.forEach(function(subPlaceholder) {
 					
 					//get value
-					var value = dataRow[subPlaceholder.key];
+					var value = findValueInDataRow(subPlaceholder.key, dataRow);
 
 					//use substitute if value doesn't exist
 					if(!value) {
