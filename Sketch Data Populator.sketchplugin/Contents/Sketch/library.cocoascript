@@ -445,12 +445,17 @@ var Library = {};
 
         var label = [[NSTextField alloc] initWithFrame:frame];
         [label setStringValue:text];
-        if(bold) {
-            [label setFont:[NSFont boldSystemFontOfSize:fontSize]];
+        
+        //only set font if sketch version is not 3.4 (due to a problem with NSFont instance)
+        if([[NSBundle mainBundle] objectForInfoDictionaryKey:"CFBundleShortVersionString"] != '3.4') {
+            if(bold) {
+                [label setFont:[NSFont boldSystemFontOfSize:fontSize]];
+            }
+            else {
+                [label setFont:[NSFont systemFontOfSize:fontSize]];
+            }
         }
-        else {
-            [label setFont:[NSFont systemFontOfSize:fontSize]];
-        }
+        
         [label setBezeled:false];
         [label setDrawsBackground:false];
         [label setEditable:false];
