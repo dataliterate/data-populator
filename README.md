@@ -7,7 +7,7 @@ We believe designers should work with _meaningful_ and _realistic_ data as early
 1. **Content informs design decisions** (and helps you convey your purpose)
 2. **Data are relentless** (so UI components must be designed for robustness)
 3. **It's fun** (seeing your design evolve with meaningful data is motivating and rewarding)
- 
+
 _Sketch Data Populator_ not only makes you more productive (probably around [60x faster](https://vimeo.com/131896485)), it changes the way you design user interfaces (at least that's what happened to us).
 
 ## Testing & Credits
@@ -21,8 +21,8 @@ We conceived _Sketch Data Populator_ to improve our design process for working w
 2. Move the file ```Sketch Data Populator.sketchplugin``` into your Sketch Plugins folder. In Sketch 3, choose **Plugins › Reveal Plugins Folder…** to open it.
 
 ## How to use …
- 
-The **Sketch Data Populator** plugin creates a grid from a selected element (Layer Group or Artboard) and replaces text and image {placeholders} with data from a JSON source: 
+
+The **Sketch Data Populator** plugin creates a grid from a selected element (Layer Group or Artboard) and replaces text and image {placeholders} with data from a JSON source:
 
 ![Sketch Data Populator](sketch-data-populator.gif)
 
@@ -57,7 +57,7 @@ will display a dialog that allows you to select one of your Presets as well as c
 _Text Substitutes_  
 `{placeholder}` inserts an empty string if no data are available for placeholder  
 `{placeholder?}` uses the _Default substitute_  
-`{placeholder?substitute}` uses the custom substitute you append after the "?" 
+`{placeholder?substitute}` uses the custom substitute you append after the "?"
 
 _Image & SVG Substitutes_  
 If there's no image or SVG available, it will turn off the fill of the placeholder shape and turn it on again once there's data available when re-populating. So for images, it's recommended to put a substitute image or pictogram behind the actual image. So this will be visible if there's no actual image data (see "demo.sketch" for examples).
@@ -124,5 +124,7 @@ The data need to be stored in JSON files that can be loaded by the plugin from e
 ```
 
 Note that in the example the image file (JPG) and the icon (SVG) are referenced from a folder called _assets_. This means all your image and icon data should be placed inside a folder that sits on the same level as your JSON file. The images/icons folders as well as your images and icons can be named anything you like, you just need to reference them relative to your JSON file.
+
+You can also use a full URL to reference your images if that is your preference.
 
 <sup>The mock data in "demo" were created with https://www.mockaroo.com, which is a pretty powerful tool to generate all kinds of data. The "products" images are from apple.com, the "contacts" images from https://randomuser.me/ and http://uifaces.com/</sup>
