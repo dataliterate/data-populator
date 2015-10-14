@@ -199,7 +199,7 @@ function populateWithJSONHandler(_context) {
 	//get JSON file path
 	var filePath = Library.askForJSON(lastLocation);
 	if(!filePath) return;
-	
+
 	//save last used location
 	[defaults setObject: filePath forKey: 'LastJSONFilePickerLocation'];
 	[defaults synchronize];
@@ -509,10 +509,10 @@ function populate(data, selectedLayers, opt) {
 	}
 
 	function findValueInDataRow(key, dataRow) {
-		
-		//get subkeys 
+
+		//get subkeys
 		var subkeys = key.split('.');
-		
+
 		//get the value for the first subkey
 		var value = dataRow[subkeys.shift()];
 
@@ -551,10 +551,10 @@ function populate(data, selectedLayers, opt) {
 		//assign values to placeholders
 		var values = {};
 		placeholders.forEach(function(placeholder) {
-			
+
 			//solo/default placeholder
 			if(placeholder.type == 'solo') {
-				
+
 				//get value
 				var value = findValueInDataRow(placeholder.key, dataRow);
 
@@ -576,11 +576,11 @@ function populate(data, selectedLayers, opt) {
 				values[placeholder.string] = value;
 			}
 			else if(placeholder.type == 'enum') {
-				
+
 				//get values for sub placeholders
 				var placeholderValues = [];
 				placeholder.placeholders.forEach(function(subPlaceholder) {
-					
+
 					//get value
 					var value = findValueInDataRow(subPlaceholder.key, dataRow);
 
@@ -598,17 +598,17 @@ function populate(data, selectedLayers, opt) {
 							value = '';
 						}
 					}
-					
+
 					//make sure value is not empty
 					if(value.length) placeholderValues.push(value);
 				});
-				
+
 				//prepare enumerated value
 				var enumeratedValue = '';
 				if(placeholder.command == 'join') {
 					enumeratedValue = placeholderValues.join(placeholder.delimiter);
 				}
-				
+
 				values[placeholder.string] = enumeratedValue;
 			}
 		});
@@ -715,6 +715,30 @@ function populate(data, selectedLayers, opt) {
 		var fileManager = [NSFileManager defaultManager];
 		if ([fileManager fileExistsAtPath: fullImageUrl]) {
 			var image = [[NSImage alloc] initWithContentsOfFile: fullImageUrl];
+
+			//get shape group fill
+			var fill = [[[shapeGroup style] fills] firstObject];
+
+			//enable fill
+			fill.setIsEnabled(true);
+
+			//set pattern fill
+            fill.setFillType(4);
+
+            //set image as pattern fill
+            var imageCollection = fill.documentData().images();
+            [fill setPatternImage: image collection: imageCollection];
+            fill.setPatternFillType(1);
+		}
+
+		// Regular expression to match URL images
+		var urlRegexp = new RegExp('(http)[s]?(://)');
+
+		// Conditional test for image
+		if (urlRegexp.test(imageUrl)) {
+			var imageData = get(imageUrl);
+
+			var image = [[NSImage alloc] initWithData: imageData];
 
 			//get shape group fill
 			var fill = [[[shapeGroup style] fills] firstObject];
@@ -925,27 +949,27 @@ function populate(data, selectedLayers, opt) {
 
 	  		//get inside of placeholder (between {})
 	  		var placeholderText = text[1];
-	  		
+
 	  		//check if placeholder uses enumeration syntax
 	  		if(placeholderText.indexOf('|&') > -1) {
-	  			
+
 	  			//split enum placeholder text into components
 	  			var placeholderComponents = placeholderText.split('|&');
-	  			
+
 	  			//get placeholders
 	  			var placeholdersString = placeholderComponents[0] || '';
 	  			var placeholderStrings = placeholdersString.split(',');
 	  			var placeholders = [];
 	  			placeholderStrings.forEach(function(placeholderString) {
-	  				
+
 	  				//process placeholder string
 	  				var placeholder = processPlaceholderString(placeholderString.trim());
 	  				placeholders.push(placeholder);
 	  			});
-	  			
+
 	  			//get delimiter
 	  			var delimiter = placeholderComponents[1] || '';
-	  			
+
 	  			//create object
 	  			results.push({
 	  				string: placeholderText,
@@ -956,16 +980,16 @@ function populate(data, selectedLayers, opt) {
 	  			});
 	  		}
 	  		else {
-	  			
+
 	  			//process placeholder text
 	  			var placeholder = processPlaceholderString(placeholderText);
 	  			results.push(placeholder);
 	  		}
 	  	}
-	  	
-	  	
+
+
 	  	function processPlaceholderString(placeholderString) {
-	  			
+
   			//split into components
   			var placeholderComponents = placeholderString.split('?');
 
@@ -1003,7 +1027,7 @@ function populate(data, selectedLayers, opt) {
 
 
 function createGrid(selectedLayers, opt) {
-	
+
 	//check rows count
 	if(!opt.rowsCount || opt.rowsCount < 0) {
 		context.document.showMessage('Number of grid rows must be at least 1.');
@@ -1577,4 +1601,10 @@ function restoreTextPlaceholdersHandler(_context) {
 		//remove text stored on layer
 		[command setValue: nil forKey: 'textWithPlaceholders' onLayer: textLayer];
 	});
+}
+
+function get(url) {
+	var request = NSURLRequest.requestWithURL(NSURL.URLWithString(url));
+	var response = NSURLConnection.sendSynchronousRequest_returningResponse_error(request, null, null);
+	return response;
 }
