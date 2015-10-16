@@ -470,7 +470,7 @@ function populate(data, selectedLayers, opt) {
 				//find icon and image placeholders
 				var colorPlaceholders = Library.findLayersInLayer('{{{*}}}', false, 'MSShapeGroup', selectedLayer, false, false);
 				var iconPlaceholders = Library.findLayersInLayer('{{*}}', false, 'MSShapeGroup', selectedLayer, false, colorPlaceholders);
-				var imagePlaceholders = Library.findLayersInLayer('{*}', false, 'MSShapeGroup', selectedLayer, false, iconPlaceholders);
+				var imagePlaceholders = Library.findLayersInLayer('{*}', false, 'MSShapeGroup', selectedLayer, false, colorPlaceholders.concat(iconPlaceholders));
 
 				//process all image placeholders
 				imagePlaceholders.forEach(function(shapeGroup) {
