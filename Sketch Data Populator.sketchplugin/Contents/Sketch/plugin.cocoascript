@@ -406,7 +406,6 @@ function populate(data, selectedLayers, opt) {
 
 	function populateSelection() {
 
-		log("asd");
 
 		//process each selected layer
 		for(var i = 0; i < selectedLayers.length; i++) {
@@ -473,6 +472,7 @@ function populate(data, selectedLayers, opt) {
 				var colorPlaceholders = Library.findLayersInLayer('{{{*}}}', false, 'MSShapeGroup', selectedLayer, false, false);
 				var iconPlaceholders = Library.findLayersInLayer('{{*}}', false, 'MSShapeGroup', selectedLayer, false, colorPlaceholders);
 				var imagePlaceholders = Library.findLayersInLayer('{*}', false, 'MSShapeGroup', selectedLayer, false, colorPlaceholders.concat(iconPlaceholders));
+				var conditionalExpressions = Library.findLayersInLayer('*#*', false, 'MSLayerGroup', selectedLayer, false, false);
 
 				//process all image placeholders
 				imagePlaceholders.forEach(function(shapeGroup) {
@@ -490,6 +490,10 @@ function populate(data, selectedLayers, opt) {
 					processColorPlaceholder(shapeGroup, dataRow, opt.rootDir);
 				});
 
+				//process all expressions
+				conditionalExpressions.forEach(function(expr) {
+					processConditionalExpression(expr, dataRow, opt.rootDir);
+				});
 			}
 			else if(Library.isLayerText(selectedLayer)) {
 				processTextLayer(selectedLayer, dataRow);
@@ -692,6 +696,84 @@ function populate(data, selectedLayers, opt) {
 			//resize to fit
 			Library.resizeTextLayer(textLayer);
 		}
+	}
+
+	function processConditionalExpression(group, dataRow, rootDir) {
+		var name = [group name].toString();
+
+		var parseStatementReg = new RegExp('([^\#]*)?\#([^\(]*)\((.*)\)');
+		var tokens = name.match(parseStatementReg);
+		
+		if (tokens.length < 4) {
+			return;
+		}
+
+		var action = tokens[1];
+		var instruction = tokens[2];
+		var expressionArgs = tokens[3];
+
+		var expressions = {
+
+			'if': function(_action, expressionArgs) {
+
+				var action = _action ? _action.toLowerCase().trim() : 'visible';
+				var parseArgumentsReg = /(\{[a-zA-Z0-9\.]*\})/g;
+
+				function replacer(m) {
+					return findValueInDataRow(m.replace('{', '').replace('}', ''), dataRow);
+				}
+
+				var argumentsWithValues = expressionArgs.replace(parseArgumentsReg, replacer);
+				var result = false;
+				try {
+					var result = (new Function('return ' + argumentsWithValues))();
+				} catch(e) {
+					context.document.showMessage('Conditional Expression, #if Error: ' + e);
+				}
+
+				if(action == 'visible' || action == 'show') {
+					if(result) {
+						[group setIsVisible:true];
+					} else {
+						[group setIsVisible:false];
+					}
+				}
+				if(action == 'lock') {
+					if(result) {
+						[group setIsLocked:true];
+					} else {
+						[group setIsLocked:false];
+					}
+				}
+				if(action == 'delete') {
+					if(result) {
+						group.removeFromParent();
+					}
+				}
+				if(action == 'invisible' || action == 'hide') {
+					if(result) {
+						[group setIsVisible:false];
+					} else {
+						[group setIsVisible:true];
+					}
+				}
+				if(action == 'select') {
+					if(result) {
+						[group setIsSelected:false];
+					} else {
+						[group setIsSelected:true];
+					}
+				}
+			},
+
+		}
+
+		if(expressions[instruction]) {
+			expressions[instruction](action, expressionArgs);
+		} else {
+			context.document.showMessage('Conditional Expression: ' + instruction + ' not found, Layer: ' + name);
+		}
+
 	}
 
 
