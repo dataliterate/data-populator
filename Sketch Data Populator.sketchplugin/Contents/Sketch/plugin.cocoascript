@@ -2,6 +2,7 @@
 // sketch data populator - plugin
 //===============================================
 
+@import 'lodash.get.cocoascript';
 @import 'library.cocoascript';
 @import 'sandbox.cocoascript';
 
@@ -515,20 +516,7 @@ function populate(data, selectedLayers, opt) {
 	}
 
 	function findValueInDataRow(key, dataRow) {
-
-		//get subkeys
-		var subkeys = key.split('.');
-
-		//get the value for the first subkey
-		var value = dataRow[subkeys.shift()];
-
-		//find the value in nested object if necessary
-		if(value !== null && typeof value === 'object') {
-			return findValueInDataRow(subkeys.join('.'), value);
-		}
-		else {
-			return value;
-		}
+		return _.get(dataRow, key);
 	}
 
 	function processTextLayer(textLayer, dataRow) {
