@@ -1581,19 +1581,7 @@ function insertSVGHandler(_context) {
 //===============================================
 
 
-function restoreTextPlaceholdersHandler(_context) {
-	context = _context;
-	var doc = context.document;
-	var command = context.command;
-
-	//get selected layers
-	var selectedLayers = Library.getSelectedLayers();
-	selection = selectedLayers;
-	if(!selectedLayers.length) {
-		context.document.showMessage('Please select the text layers you would like to restore.');
-		return;
-	}
-
+function getAllTextLayersInSelection(selectedLayers) {
 	//get all text layers in selection
 	var textLayers = [];
 	selectedLayers.forEach(function(layer) {
@@ -1609,6 +1597,24 @@ function restoreTextPlaceholdersHandler(_context) {
 			textLayers.push(layer);
 		}
 	});
+	return textLayers;
+}
+
+function restoreTextPlaceholdersHandler(_context) {
+	context = _context;
+	var doc = context.document;
+	var command = context.command;
+
+	//get selected layers
+	var selectedLayers = Library.getSelectedLayers();
+	selection = selectedLayers;
+	if(!selectedLayers.length) {
+		context.document.showMessage('Please select the text layers you would like to restore.');
+		return;
+	}
+
+	//get all text layers in selection
+	var textLayers = getAllTextLayersInSelection(selectedLayers);
 
 	//restore text layers
 	textLayers.forEach(function(textLayer) {
@@ -1626,6 +1632,29 @@ function restoreTextPlaceholdersHandler(_context) {
 			Library.refreshTextLayer(textLayer);
 		}
 
+		//remove text stored on layer
+		[command setValue: nil forKey: 'textWithPlaceholders' onLayer: textLayer];
+	});
+}
+
+function cleanDataPopulatorInfoOnLayerHandler(_context) {
+	context = _context;
+	var doc = context.document;
+	var command = context.command;
+
+	//get selected layers
+	var selectedLayers = Library.getSelectedLayers();
+	selection = selectedLayers;
+	if(!selectedLayers.length) {
+		context.document.showMessage('Please select the text layers you would like to clean up.');
+		return;
+	}
+
+	//get all text layers in selection
+	var textLayers = getAllTextLayersInSelection(selectedLayers);
+
+	//restore text layers
+	textLayers.forEach(function(textLayer) {
 		//remove text stored on layer
 		[command setValue: nil forKey: 'textWithPlaceholders' onLayer: textLayer];
 	});
