@@ -2,6 +2,7 @@
 // sketch data populator - plugin
 //===============================================
 
+@import 'lodash.get.cocoascript';
 @import 'library.cocoascript';
 @import 'sandbox.cocoascript';
 
@@ -522,20 +523,7 @@ function populate(data, selectedLayers, opt) {
 	}
 
 	function findValueInDataRow(key, dataRow) {
-
-		//get subkeys
-		var subkeys = key.split('.');
-
-		//get the value for the first subkey
-		var value = dataRow[subkeys.shift()];
-
-		//find the value in nested object if necessary
-		if(value !== null && typeof value === 'object') {
-			return findValueInDataRow(subkeys.join('.'), value);
-		}
-		else {
-			return value;
-		}
+		return _.get(dataRow, key);
 	}
 
 	function processTextLayer(textLayer, dataRow) {
@@ -1556,22 +1544,22 @@ function insertSVGHandler(_context) {
 				var placeholderSubLayers = Library.jsArray([shapeGroup layers]);
 
 				//get file NSURL
-						var fileUrl = [NSURL fileURLWithPath:svgUrl];
+				var fileUrl = [NSURL fileURLWithPath:svgUrl];
 
-						//set up importer
-						var SVGImporter = [MSSVGImporter svgImporter];
+				//set up importer
+				var SVGImporter = [MSSVGImporter svgImporter];
 
-						//create temporary group for import
-						var container = tempIconPage.addLayerOfType('group');
-						container.setName('__IMPORTED_SVG__');
+				//create temporary group for import
+				var container = tempIconPage.addLayerOfType('group');
+				container.setName('__IMPORTED_SVG__');
 
-						//import svg into the container
-						[MSImportInsert importFromURL: fileUrl inGroup: container importer: SVGImporter completion: nil];
+				//import svg into the container
+				[MSImportInsert importFromURL: fileUrl inGroup: container importer: SVGImporter completion: nil];
 
-				//continue after delay to make sure import is complete
-						Library.delay(function() {
-							attemptImport();
-						}, 0.01);
+		//continue after delay to make sure import is complete
+				Library.delay(function() {
+					attemptImport();
+				}, 0.01);
 
 
 				function attemptImport() {
@@ -1678,19 +1666,7 @@ function insertSVGHandler(_context) {
 //===============================================
 
 
-function restoreTextPlaceholdersHandler(_context) {
-	context = _context;
-	var doc = context.document;
-	var command = context.command;
-
-	//get selected layers
-	var selectedLayers = Library.getSelectedLayers();
-	selection = selectedLayers;
-	if(!selectedLayers.length) {
-		context.document.showMessage('Please select the text layers you would like to restore.');
-		return;
-	}
-
+function getAllTextLayersInSelection(selectedLayers) {
 	//get all text layers in selection
 	var textLayers = [];
 	selectedLayers.forEach(function(layer) {
@@ -1706,6 +1682,24 @@ function restoreTextPlaceholdersHandler(_context) {
 			textLayers.push(layer);
 		}
 	});
+	return textLayers;
+}
+
+function restoreTextPlaceholdersHandler(_context) {
+	context = _context;
+	var doc = context.document;
+	var command = context.command;
+
+	//get selected layers
+	var selectedLayers = Library.getSelectedLayers();
+	selection = selectedLayers;
+	if(!selectedLayers.length) {
+		context.document.showMessage('Please select the text layers you would like to restore.');
+		return;
+	}
+
+	//get all text layers in selection
+	var textLayers = getAllTextLayersInSelection(selectedLayers);
 
 	//restore text layers
 	textLayers.forEach(function(textLayer) {
@@ -1723,6 +1717,29 @@ function restoreTextPlaceholdersHandler(_context) {
 			Library.refreshTextLayer(textLayer);
 		}
 
+		//remove text stored on layer
+		[command setValue: nil forKey: 'textWithPlaceholders' onLayer: textLayer];
+	});
+}
+
+function cleanDataPopulatorInfoOnLayerHandler(_context) {
+	context = _context;
+	var doc = context.document;
+	var command = context.command;
+
+	//get selected layers
+	var selectedLayers = Library.getSelectedLayers();
+	selection = selectedLayers;
+	if(!selectedLayers.length) {
+		context.document.showMessage('Please select the text layers you would like to clean up.');
+		return;
+	}
+
+	//get all text layers in selection
+	var textLayers = getAllTextLayersInSelection(selectedLayers);
+
+	//restore text layers
+	textLayers.forEach(function(textLayer) {
 		//remove text stored on layer
 		[command setValue: nil forKey: 'textWithPlaceholders' onLayer: textLayer];
 	});

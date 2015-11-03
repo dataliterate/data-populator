@@ -1,8 +1,12 @@
 {
     "name": "Sketch Data Populator",
     "description": "Say goodbye to Lorem Ipsum: populate your Sketch documents with meaningful data.",
+    "author" : "precious design studio",
+    "authorEmail" : "info@precious-forever.com",
+    "homepage": "https://github.com/preciousforever/sketch-data-populator",
     "identifier": "com.precious-forever.sketch.datapopulator",
-    "version": "1.0",
+    "compatibleVersion": "3.4",
+    "version": "1.2.3",
     "commands": [{
         "name": "Populate with Preset",
         "identifier": "populateWithPreset",
@@ -45,6 +49,12 @@
         "script": "plugin.cocoascript",
         "handler": "restoreTextPlaceholdersHandler",
         "shortcut": ""
+    }, {
+        "name": "Clean Placeholders",
+        "identifier": "cleanPlaceholders",
+        "script": "plugin.cocoascript",
+        "handler": "cleanDataPopulatorInfoOnLayerHandler",
+        "shortcut": ""
     }],
     "menu": {
         "isRoot": false,
@@ -55,7 +65,8 @@
             "revealPresets",
             "insertImage",
             "insertSVG",
-            "restoreTextPlaceholders"
+            "restoreTextPlaceholders",
+            "cleanPlaceholders"
         ],
     }
 }
