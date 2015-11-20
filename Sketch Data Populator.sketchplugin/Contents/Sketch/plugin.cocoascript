@@ -2,6 +2,7 @@
 // sketch data populator - plugin
 //===============================================
 
+@import 'lodash.get.cocoascript';
 @import 'library.cocoascript';
 @import 'sandbox.cocoascript';
 
@@ -62,17 +63,17 @@ function populateWithPresetHandler(_context) {
 	var spacerView = [[NSView alloc] initWithFrame: NSMakeRect(0, 0, 300, 5)];
 	[alert addAccessoryView: spacerView];
 
-    //create data options view
-    var dataOptionsView = createDataOptionsView();
-    [alert addAccessoryView: dataOptionsView.view];
+		//create data options view
+		var dataOptionsView = createDataOptionsView();
+		[alert addAccessoryView: dataOptionsView.view];
 
-    //add space
+		//add space
 	var spacerView2 = [[NSView alloc] initWithFrame: NSMakeRect(0, 0, 300, 5)];
 	[alert addAccessoryView: spacerView2];
 
 	//create layout options view
-    var layoutOptionsView = createLayoutOptionsView();
-    [alert addAccessoryView: layoutOptionsView.view];
+		var layoutOptionsView = createLayoutOptionsView();
+		[alert addAccessoryView: layoutOptionsView.view];
 
 	//add bottom buttons
 	[alert addButtonWithTitle:"Populate"];
@@ -211,17 +212,17 @@ function populateWithJSONHandler(_context) {
 	//create alert
 	var alert = Library.createAlert("Populate with JSON", "Please configure the options below.", "icon.png");
 
-    //create data options view
-    var dataOptionsView = createDataOptionsView();
-    [alert addAccessoryView: dataOptionsView.view];
+		//create data options view
+		var dataOptionsView = createDataOptionsView();
+		[alert addAccessoryView: dataOptionsView.view];
 
-    //add space
+		//add space
 	var spacerView2 = [[NSView alloc] initWithFrame: NSMakeRect(0, 0, 300, 5)];
 	[alert addAccessoryView: spacerView2];
 
 	//create layout options view
-    var layoutOptionsView = createLayoutOptionsView();
-    [alert addAccessoryView: layoutOptionsView.view];
+		var layoutOptionsView = createLayoutOptionsView();
+		[alert addAccessoryView: layoutOptionsView.view];
 
 	//add bottom buttons
 	[alert addButtonWithTitle:"Populate"];
@@ -515,20 +516,7 @@ function populate(data, selectedLayers, opt) {
 	}
 
 	function findValueInDataRow(key, dataRow) {
-
-		//get subkeys
-		var subkeys = key.split('.');
-
-		//get the value for the first subkey
-		var value = dataRow[subkeys.shift()];
-
-		//find the value in nested object if necessary
-		if(value !== null && typeof value === 'object') {
-			return findValueInDataRow(subkeys.join('.'), value);
-		}
-		else {
-			return value;
-		}
+		return _.get(dataRow, key);
 	}
 
 	function processTextLayer(textLayer, dataRow) {
@@ -708,7 +696,7 @@ function populate(data, selectedLayers, opt) {
 			var fill = [[[shapeGroup style] fills] firstObject];
 
 			//disable fill
-            fill.setIsEnabled(false);
+						fill.setIsEnabled(false);
 
 			return;
 		}
@@ -729,12 +717,12 @@ function populate(data, selectedLayers, opt) {
 			fill.setIsEnabled(true);
 
 			//set pattern fill
-            fill.setFillType(4);
+						fill.setFillType(4);
 
-            //set image as pattern fill
-            var imageCollection = fill.documentData().images();
-            [fill setPatternImage: image collection: imageCollection];
-            fill.setPatternFillType(1);
+						//set image as pattern fill
+						var imageCollection = fill.documentData().images();
+						[fill setPatternImage: image collection: imageCollection];
+						fill.setPatternFillType(1);
 		}
 
 		// Regular expression to match URL images
@@ -753,12 +741,12 @@ function populate(data, selectedLayers, opt) {
 			fill.setIsEnabled(true);
 
 			//set pattern fill
-            fill.setFillType(4);
+						fill.setFillType(4);
 
-            //set image as pattern fill
-            var imageCollection = fill.documentData().images();
-            [fill setPatternImage: image collection: imageCollection];
-            fill.setPatternFillType(1);
+						//set image as pattern fill
+						var imageCollection = fill.documentData().images();
+						[fill setPatternImage: image collection: imageCollection];
+						fill.setPatternFillType(1);
 		}
 	}
 
@@ -817,22 +805,22 @@ function populate(data, selectedLayers, opt) {
 			var placeholderSubLayers = Library.jsArray([shapeGroup layers]);
 
 			//get file NSURL
-	        var fileUrl = [NSURL fileURLWithPath:fullIconUrl];
+					var fileUrl = [NSURL fileURLWithPath:fullIconUrl];
 
-	        //set up importer
-	        var SVGImporter = [MSSVGImporter svgImporter];
+					//set up importer
+					var SVGImporter = [MSSVGImporter svgImporter];
 
-	        //create temporary group for import
-	        var container = tempIconPage.addLayerOfType('group');
-	        container.setName('__IMPORTED_SVG__');
+					//create temporary group for import
+					var container = tempIconPage.addLayerOfType('group');
+					container.setName('__IMPORTED_SVG__');
 
-	        //import svg into the container
-	        [MSImportInsert importFromURL: fileUrl inGroup: container importer: SVGImporter completion: nil];
+					//import svg into the container
+					[MSImportInsert importFromURL: fileUrl inGroup: container importer: SVGImporter completion: nil];
 
 			//continue after delay to make sure import is complete
-	        Library.delay(function() {
-	        	attemptImport();
-	        }, 0.01);
+					Library.delay(function() {
+						attemptImport();
+					}, 0.01);
 
 
 			function attemptImport() {
@@ -930,8 +918,8 @@ function populate(data, selectedLayers, opt) {
 
 					//try again later
 					Library.delay(function() {
-			        	attemptImport();
-			        }, 0.01);
+								attemptImport();
+							}, 0.01);
 				}
 			}
 		}
@@ -985,83 +973,83 @@ function populate(data, selectedLayers, opt) {
 		var text;
 
 		//find placeholders
-	  	while(text = re.exec(str)) {
+			while(text = re.exec(str)) {
 
-	  		//get inside of placeholder (between {})
-	  		var placeholderText = text[1];
+				//get inside of placeholder (between {})
+				var placeholderText = text[1];
 
-	  		//check if placeholder uses enumeration syntax
-	  		if(placeholderText.indexOf('|&') > -1) {
+				//check if placeholder uses enumeration syntax
+				if(placeholderText.indexOf('|&') > -1) {
 
-	  			//split enum placeholder text into components
-	  			var placeholderComponents = placeholderText.split('|&');
+					//split enum placeholder text into components
+					var placeholderComponents = placeholderText.split('|&');
 
-	  			//get placeholders
-	  			var placeholdersString = placeholderComponents[0] || '';
-	  			var placeholderStrings = placeholdersString.split(',');
-	  			var placeholders = [];
-	  			placeholderStrings.forEach(function(placeholderString) {
+					//get placeholders
+					var placeholdersString = placeholderComponents[0] || '';
+					var placeholderStrings = placeholdersString.split(',');
+					var placeholders = [];
+					placeholderStrings.forEach(function(placeholderString) {
 
-	  				//process placeholder string
-	  				var placeholder = processPlaceholderString(placeholderString.trim());
-	  				placeholders.push(placeholder);
-	  			});
+						//process placeholder string
+						var placeholder = processPlaceholderString(placeholderString.trim());
+						placeholders.push(placeholder);
+					});
 
-	  			//get delimiter
-	  			var delimiter = placeholderComponents[1] || '';
+					//get delimiter
+					var delimiter = placeholderComponents[1] || '';
 
-	  			//create object
-	  			results.push({
-	  				string: placeholderText,
-	  				type: 'enum',
-	  				command: 'join',
-	  				delimiter: delimiter,
-	  				placeholders: placeholders
-	  			});
-	  		}
-	  		else {
+					//create object
+					results.push({
+						string: placeholderText,
+						type: 'enum',
+						command: 'join',
+						delimiter: delimiter,
+						placeholders: placeholders
+					});
+				}
+				else {
 
-	  			//process placeholder text
-	  			var placeholder = processPlaceholderString(placeholderText);
-	  			results.push(placeholder);
-	  		}
-	  	}
+					//process placeholder text
+					var placeholder = processPlaceholderString(placeholderText);
+					results.push(placeholder);
+				}
+			}
 
 
-	  	function processPlaceholderString(placeholderString) {
+			function processPlaceholderString(placeholderString) {
 
-  			//split into components
-  			var placeholderComponents = placeholderString.split('?');
+				//split into components
+				var placeholderComponents = placeholderString.split('?');
 
-	  		//check if has substitute
-	  		var hasSubstitute = (placeholderComponents.length == 2);
-	  		if(hasSubstitute) {
+				//check if has substitute
+				var hasSubstitute = (placeholderComponents.length == 2);
+				if(hasSubstitute) {
 
-	  			//get key and substitute
-	  			var key = placeholderComponents[0].trim();
-	  			var substitute = placeholderComponents[1].trim();
+					//get key and substitute
+					var key = placeholderComponents[0].trim();
+					var substitute = placeholderComponents[1].trim();
 
-	  			//set default substitute
-	  			if(!substitute.length) substitute = opt.defaultSubstitute;
+					//set default substitute
+					if(!substitute.length) substitute = opt.defaultSubstitute;
 
-	  			return {
-	  				type: 'solo',
-		    		string: placeholderString,
-		    		key: key,
-		    		substitute: substitute
-		    	};
-	  		}
-	  		else {
+					return {
+						type: 'solo',
+						string: placeholderString,
+						key: key,
+						substitute: substitute
+					};
+				}
+				else {
 
-	  			return {
-	  				type: 'solo',
-		    		string: placeholderString,
-		    		key: placeholderString
-		    	};
-	  		}
-  		}
+					return {
+						type: 'solo',
+						string: placeholderString,
+						key: placeholderString
+					};
+				}
+			}
 
-	  	return results;
+			return results;
 	}
 }
 
@@ -1161,13 +1149,13 @@ function createGrid(selectedLayers, opt) {
 function createDataOptionsView() {
 
 	//create options view
-    var optionsView = [[NSView alloc] initWithFrame: NSMakeRect(0, 0, 300, 110)];
+		var optionsView = [[NSView alloc] initWithFrame: NSMakeRect(0, 0, 300, 110)];
 
 	//create options view title
 	var optionsViewTitle = Library.createLabel('Data options', 12, true, NSMakeRect(0, 90, 300, 20));
 	[optionsView addSubview: optionsViewTitle];
 
-    //create randomize checkbox
+		//create randomize checkbox
 	var randomizeCheckbox = Library.createCheckbox('Randomize data order', false, NSMakeRect(0, 65, 300, 20));
 	[optionsView addSubview: randomizeCheckbox];
 
@@ -1194,15 +1182,15 @@ function createDataOptionsView() {
 
 	//create substitute text field
 	var substituteTextField = [[NSTextField alloc] initWithFrame:NSMakeRect(110, 0, 120, 22)];
-    [optionsView addSubview: substituteTextField];
+		[optionsView addSubview: substituteTextField];
 
-    //set substitute
-    if([[NSUserDefaults standardUserDefaults] objectForKey:'defaultSubstitute']) {
-    	[substituteTextField setStringValue:[[NSUserDefaults standardUserDefaults] objectForKey:'defaultSubstitute']];
-    }
-    else {
-    	[substituteTextField setStringValue:''];
-    }
+		//set substitute
+		if([[NSUserDefaults standardUserDefaults] objectForKey:'defaultSubstitute']) {
+			[substituteTextField setStringValue:[[NSUserDefaults standardUserDefaults] objectForKey:'defaultSubstitute']];
+		}
+		else {
+			[substituteTextField setStringValue:''];
+		}
 
 
 	//return configured view
@@ -1219,13 +1207,13 @@ function createDataOptionsView() {
 function createLayoutOptionsView() {
 
 	//create options view
-    var optionsView = [[NSView alloc] initWithFrame: NSMakeRect(0, 0, 300, 104)];
+		var optionsView = [[NSView alloc] initWithFrame: NSMakeRect(0, 0, 300, 104)];
 
 	//create options view title
 	var optionsViewTitle = Library.createLabel('Layout options', 12, true, NSMakeRect(0, 84, 300, 20));
 	[optionsView addSubview: optionsViewTitle];
 
-    //create create grid checkbox
+		//create create grid checkbox
 	var createGridCheckbox = Library.createCheckbox('Create grid', false, NSMakeRect(0, 59, 300, 20));
 	[optionsView addSubview: createGridCheckbox];
 
@@ -1240,66 +1228,66 @@ function createLayoutOptionsView() {
 
 	//create rows count text field
 	var rowsCountTextField = [[NSTextField alloc] initWithFrame:NSMakeRect(60, 27, 70, 22)];
-    [optionsView addSubview: rowsCountTextField];
+		[optionsView addSubview: rowsCountTextField];
 
-    //set rows count
-    if([[NSUserDefaults standardUserDefaults] objectForKey:'rowsCount']) {
-    	[rowsCountTextField setStringValue:[[NSUserDefaults standardUserDefaults] objectForKey:'rowsCount']];
-    }
-    else {
-    	[rowsCountTextField setStringValue:'1'];
-    }
+		//set rows count
+		if([[NSUserDefaults standardUserDefaults] objectForKey:'rowsCount']) {
+			[rowsCountTextField setStringValue:[[NSUserDefaults standardUserDefaults] objectForKey:'rowsCount']];
+		}
+		else {
+			[rowsCountTextField setStringValue:'1'];
+		}
 
 
-    //create rows margin label
+		//create rows margin label
 	var rowsMarginLabel = Library.createLabel('Margin:', 12, false, NSMakeRect(142, 27, 50, 20));
 	[optionsView addSubview: rowsMarginLabel];
 
 	//create rows margin text field
 	var rowsMarginTextField = [[NSTextField alloc] initWithFrame:NSMakeRect(190, 27, 70, 22)];
-    [optionsView addSubview: rowsMarginTextField];
+		[optionsView addSubview: rowsMarginTextField];
 
-    //set rows margin
-    if([[NSUserDefaults standardUserDefaults] objectForKey:'rowsMargin']) {
-    	[rowsMarginTextField setStringValue:[[NSUserDefaults standardUserDefaults] objectForKey:'rowsMargin']];
-    }
-    else {
-    	[rowsMarginTextField setStringValue:'10'];
-    }
+		//set rows margin
+		if([[NSUserDefaults standardUserDefaults] objectForKey:'rowsMargin']) {
+			[rowsMarginTextField setStringValue:[[NSUserDefaults standardUserDefaults] objectForKey:'rowsMargin']];
+		}
+		else {
+			[rowsMarginTextField setStringValue:'10'];
+		}
 
 
-    //create columns count label
+		//create columns count label
 	var columnsCountLabel = Library.createLabel('Columns:', 12, false, NSMakeRect(0, 0, 60, 20));
 	[optionsView addSubview: columnsCountLabel];
 
 	//create columns count text field
 	var columnsCountTextField = [[NSTextField alloc] initWithFrame:NSMakeRect(60, 0, 70, 22)];
-    [optionsView addSubview: columnsCountTextField];
+		[optionsView addSubview: columnsCountTextField];
 
-    //set columns count
-    if([[NSUserDefaults standardUserDefaults] objectForKey:'columnsCount']) {
-    	[columnsCountTextField setStringValue:[[NSUserDefaults standardUserDefaults] objectForKey:'columnsCount']];
-    }
-    else {
-    	[columnsCountTextField setStringValue:'1'];
-    }
+		//set columns count
+		if([[NSUserDefaults standardUserDefaults] objectForKey:'columnsCount']) {
+			[columnsCountTextField setStringValue:[[NSUserDefaults standardUserDefaults] objectForKey:'columnsCount']];
+		}
+		else {
+			[columnsCountTextField setStringValue:'1'];
+		}
 
-    //create columns margin label
+		//create columns margin label
 	var columnsMarginLabel = Library.createLabel('Margin:', 12, false, NSMakeRect(142, 0, 50, 20));
 	[optionsView addSubview: columnsMarginLabel];
 
 	//create columns margin text field
 	var columnsMarginTextField = [[NSTextField alloc] initWithFrame:NSMakeRect(190, 0, 70, 22)];
-    [optionsView addSubview: columnsMarginTextField];
+		[optionsView addSubview: columnsMarginTextField];
 
 
 	//set columns margin
-    if([[NSUserDefaults standardUserDefaults] objectForKey:'columnsMargin']) {
-    	[columnsMarginTextField setStringValue:[[NSUserDefaults standardUserDefaults] objectForKey:'columnsMargin']];
-    }
-    else {
-    	[columnsMarginTextField setStringValue:'10'];
-    }
+		if([[NSUserDefaults standardUserDefaults] objectForKey:'columnsMargin']) {
+			[columnsMarginTextField setStringValue:[[NSUserDefaults standardUserDefaults] objectForKey:'columnsMargin']];
+		}
+		else {
+			[columnsMarginTextField setStringValue:'10'];
+		}
 
 	//return configured view
 	return {
@@ -1362,11 +1350,11 @@ function restoreSelection() {
 
 	//deselect current selection
 	var doc = context.document;
-    [[doc currentPage] deselectAllLayers];
+		[[doc currentPage] deselectAllLayers];
 
-    selection.forEach(function(layer) {
-    	[layer select:true byExpandingSelection:true];
-    });
+		selection.forEach(function(layer) {
+			[layer select:true byExpandingSelection:true];
+		});
 }
 
 
@@ -1403,12 +1391,12 @@ function insertImageHandler(_context) {
 				var fill = [[[layer style] fills] firstObject];
 
 				//set pattern fill
-	            fill.setFillType(4);
+							fill.setFillType(4);
 
-	            //set image as pattern fill
-	            var imageCollection = fill.documentData().images();
-	            [fill setPatternImage: image collection: imageCollection];
-	            fill.setPatternFillType(1);
+							//set image as pattern fill
+							var imageCollection = fill.documentData().images();
+							[fill setPatternImage: image collection: imageCollection];
+							fill.setPatternFillType(1);
 			}
 
 		}
@@ -1471,22 +1459,22 @@ function insertSVGHandler(_context) {
 				var placeholderSubLayers = Library.jsArray([shapeGroup layers]);
 
 				//get file NSURL
-		        var fileUrl = [NSURL fileURLWithPath:svgUrl];
+				var fileUrl = [NSURL fileURLWithPath:svgUrl];
 
-		        //set up importer
-		        var SVGImporter = [MSSVGImporter svgImporter];
+				//set up importer
+				var SVGImporter = [MSSVGImporter svgImporter];
 
-		        //create temporary group for import
-		        var container = tempIconPage.addLayerOfType('group');
-		        container.setName('__IMPORTED_SVG__');
+				//create temporary group for import
+				var container = tempIconPage.addLayerOfType('group');
+				container.setName('__IMPORTED_SVG__');
 
-		        //import svg into the container
-		        [MSImportInsert importFromURL: fileUrl inGroup: container importer: SVGImporter completion: nil];
+				//import svg into the container
+				[MSImportInsert importFromURL: fileUrl inGroup: container importer: SVGImporter completion: nil];
 
-				//continue after delay to make sure import is complete
-		        Library.delay(function() {
-		        	attemptImport();
-		        }, 0.01);
+		//continue after delay to make sure import is complete
+				Library.delay(function() {
+					attemptImport();
+				}, 0.01);
 
 
 				function attemptImport() {
@@ -1574,8 +1562,8 @@ function insertSVGHandler(_context) {
 
 						//try again later
 						Library.delay(function() {
-				        	attemptImport();
-				        }, 0.01);
+									attemptImport();
+								}, 0.01);
 					}
 				}
 			}
