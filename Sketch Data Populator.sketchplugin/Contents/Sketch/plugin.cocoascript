@@ -413,47 +413,52 @@ function populate(data, selectedLayers, opt) {
 
 			//get data row
 			var dataRow;
-			if(opt.randomizeData) {
+			if(data instanceof Array) {
+				if(opt.randomizeData) {
 
-				//reset random index tracking
-				if(randomIndexes.length == data.length) {
-					randomIndexes = [];
-				}
+					//reset random index tracking
+					if(randomIndexes.length == data.length) {
+						randomIndexes = [];
+					}
 
-				//get random index
-				var randomIndex;
-				while(!randomIndex && randomIndex !== 0) {
+					//get random index
+					var randomIndex;
+					while(!randomIndex && randomIndex !== 0) {
 
-					//get random in range
-					var random = Library.randomInteger(0, data.length);
+						//get random in range
+						var random = Library.randomInteger(0, data.length);
 
-					//make sure index doesn't exist in already chosen random indexes
-					if(randomIndexes.indexOf(random) == -1) {
+						//make sure index doesn't exist in already chosen random indexes
+						if(randomIndexes.indexOf(random) == -1) {
 
-						//make sure it's not the same as the last chosen random index
-						if(data.length > 1) {
-							if(random != lastRandomIndex) {
+							//make sure it's not the same as the last chosen random index
+							if(data.length > 1) {
+								if(random != lastRandomIndex) {
+									randomIndex = random;
+								}
+							}
+							else {
 								randomIndex = random;
 							}
 						}
-						else {
-							randomIndex = random;
-						}
 					}
+
+					//store selected random index
+					lastRandomIndex = randomIndex;
+					randomIndexes.push(randomIndex);
+
+					//get data row for random index
+					dataRow = data[randomIndex];
+
+					//reset random index (so next iteration generates a new one)
+					randomIndex = null;
 				}
-
-				//store selected random index
-				lastRandomIndex = randomIndex;
-				randomIndexes.push(randomIndex);
-
-				//get data row for random index
-				dataRow = data[randomIndex];
-
-				//reset random index (so next iteration generates a new one)
-				randomIndex = null;
+				else {
+					dataRow = data[i % data.length];
+				}
 			}
 			else {
-				dataRow = data[i % data.length];
+				dataRow = data;
 			}
 
 			//check type of selected layer
@@ -805,22 +810,22 @@ function populate(data, selectedLayers, opt) {
 			var placeholderSubLayers = Library.jsArray([shapeGroup layers]);
 
 			//get file NSURL
-					var fileUrl = [NSURL fileURLWithPath:fullIconUrl];
+			var fileUrl = [NSURL fileURLWithPath:fullIconUrl];
 
-					//set up importer
-					var SVGImporter = [MSSVGImporter svgImporter];
+			//set up importer
+			var SVGImporter = [MSSVGImporter svgImporter];
 
-					//create temporary group for import
-					var container = tempIconPage.addLayerOfType('group');
-					container.setName('__IMPORTED_SVG__');
+			//create temporary group for import
+			var container = tempIconPage.addLayerOfType('group');
+			container.setName('__IMPORTED_SVG__');
 
-					//import svg into the container
-					[MSImportInsert importFromURL: fileUrl inGroup: container importer: SVGImporter completion: nil];
+			//import svg into the container
+			[MSImportInsert importFromURL: fileUrl inGroup: container importer: SVGImporter completion: nil];
 
 			//continue after delay to make sure import is complete
-					Library.delay(function() {
-						attemptImport();
-					}, 0.01);
+			Library.delay(function() {
+				attemptImport();
+			}, 0.01);
 
 
 			function attemptImport() {
@@ -918,8 +923,8 @@ function populate(data, selectedLayers, opt) {
 
 					//try again later
 					Library.delay(function() {
-								attemptImport();
-							}, 0.01);
+						attemptImport();
+					}, 0.01);
 				}
 			}
 		}
@@ -1313,12 +1318,6 @@ function loadData(path) {
 	}
 	catch(e) {
 		context.document.showMessage("There was an error parsing data. Please make sure it's valid.");
-		return;
-	}
-
-	//make sure that there is at least one row of data
-	if(!data.length) {
-		context.document.showMessage("There must be at least one row of data.");
 		return;
 	}
 
