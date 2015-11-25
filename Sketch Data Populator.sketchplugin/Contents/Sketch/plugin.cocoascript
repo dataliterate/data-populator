@@ -407,6 +407,7 @@ function populate(data, selectedLayers, opt) {
 
 	function populateSelection() {
 
+
 		//process each selected layer
 		for(var i = 0; i < selectedLayers.length; i++) {
 			currentLayerIndex = i;
@@ -477,6 +478,7 @@ function populate(data, selectedLayers, opt) {
 				var colorPlaceholders = Library.findLayersInLayer('{{{*}}}', false, 'MSShapeGroup', selectedLayer, false, false);
 				var iconPlaceholders = Library.findLayersInLayer('{{*}}', false, 'MSShapeGroup', selectedLayer, false, colorPlaceholders);
 				var imagePlaceholders = Library.findLayersInLayer('{*}', false, 'MSShapeGroup', selectedLayer, false, colorPlaceholders.concat(iconPlaceholders));
+				var conditionalExpressions = Library.findLayersInLayer('*#*', false, 'MSLayerGroup', selectedLayer, false, false);
 
 				//process all image placeholders
 				imagePlaceholders.forEach(function(shapeGroup) {
@@ -492,6 +494,11 @@ function populate(data, selectedLayers, opt) {
 				//process all color placeholders
 				colorPlaceholders.forEach(function(shapeGroup) {
 					processColorPlaceholder(shapeGroup, dataRow, opt.rootDir);
+				});
+
+				//process all expressions
+				conditionalExpressions.forEach(function(expr) {
+					processConditionalExpression(expr, dataRow, opt.rootDir);
 				});
 			}
 			else if(Library.isLayerText(selectedLayer)) {
@@ -682,6 +689,84 @@ function populate(data, selectedLayers, opt) {
 			//resize to fit
 			Library.resizeTextLayer(textLayer);
 		}
+	}
+
+	function processConditionalExpression(group, dataRow, rootDir) {
+		var name = [group name].toString();
+
+		var parseStatementReg = new RegExp('([^\#]*)?\#([^\(]*)\((.*)\)');
+		var tokens = name.match(parseStatementReg);
+		
+		if (tokens.length < 4) {
+			return;
+		}
+
+		var action = tokens[1];
+		var instruction = tokens[2];
+		var expressionArgs = tokens[3];
+
+		var expressions = {
+
+			'if': function(_action, expressionArgs) {
+
+				var action = _action ? _action.toLowerCase().trim() : 'visible';
+				var parseArgumentsReg = /(\{[a-zA-Z0-9\.]*\})/g;
+
+				function replacer(m) {
+					return findValueInDataRow(m.replace('{', '').replace('}', ''), dataRow);
+				}
+
+				var argumentsWithValues = expressionArgs.replace(parseArgumentsReg, replacer);
+				var result = false;
+				try {
+					var result = (new Function('return ' + argumentsWithValues))();
+				} catch(e) {
+					context.document.showMessage('Conditional Expression, #if Error: ' + e);
+				}
+
+				if(action == 'visible' || action == 'show') {
+					if(result) {
+						[group setIsVisible:true];
+					} else {
+						[group setIsVisible:false];
+					}
+				}
+				if(action == 'lock') {
+					if(result) {
+						[group setIsLocked:true];
+					} else {
+						[group setIsLocked:false];
+					}
+				}
+				if(action == 'delete') {
+					if(result) {
+						group.removeFromParent();
+					}
+				}
+				if(action == 'invisible' || action == 'hide') {
+					if(result) {
+						[group setIsVisible:false];
+					} else {
+						[group setIsVisible:true];
+					}
+				}
+				if(action == 'select') {
+					if(result) {
+						[group setIsSelected:false];
+					} else {
+						[group setIsSelected:true];
+					}
+				}
+			},
+
+		}
+
+		if(expressions[instruction]) {
+			expressions[instruction](action, expressionArgs);
+		} else {
+			context.document.showMessage('Conditional Expression: ' + instruction + ' not found, Layer: ' + name);
+		}
+
 	}
 
 
@@ -1580,19 +1665,7 @@ function insertSVGHandler(_context) {
 //===============================================
 
 
-function restoreTextPlaceholdersHandler(_context) {
-	context = _context;
-	var doc = context.document;
-	var command = context.command;
-
-	//get selected layers
-	var selectedLayers = Library.getSelectedLayers();
-	selection = selectedLayers;
-	if(!selectedLayers.length) {
-		context.document.showMessage('Please select the text layers you would like to restore.');
-		return;
-	}
-
+function getAllTextLayersInSelection(selectedLayers) {
 	//get all text layers in selection
 	var textLayers = [];
 	selectedLayers.forEach(function(layer) {
@@ -1608,6 +1681,24 @@ function restoreTextPlaceholdersHandler(_context) {
 			textLayers.push(layer);
 		}
 	});
+	return textLayers;
+}
+
+function restoreTextPlaceholdersHandler(_context) {
+	context = _context;
+	var doc = context.document;
+	var command = context.command;
+
+	//get selected layers
+	var selectedLayers = Library.getSelectedLayers();
+	selection = selectedLayers;
+	if(!selectedLayers.length) {
+		context.document.showMessage('Please select the text layers you would like to restore.');
+		return;
+	}
+
+	//get all text layers in selection
+	var textLayers = getAllTextLayersInSelection(selectedLayers);
 
 	//restore text layers
 	textLayers.forEach(function(textLayer) {
@@ -1625,6 +1716,29 @@ function restoreTextPlaceholdersHandler(_context) {
 			Library.refreshTextLayer(textLayer);
 		}
 
+		//remove text stored on layer
+		[command setValue: nil forKey: 'textWithPlaceholders' onLayer: textLayer];
+	});
+}
+
+function cleanDataPopulatorInfoOnLayerHandler(_context) {
+	context = _context;
+	var doc = context.document;
+	var command = context.command;
+
+	//get selected layers
+	var selectedLayers = Library.getSelectedLayers();
+	selection = selectedLayers;
+	if(!selectedLayers.length) {
+		context.document.showMessage('Please select the text layers you would like to clean up.');
+		return;
+	}
+
+	//get all text layers in selection
+	var textLayers = getAllTextLayersInSelection(selectedLayers);
+
+	//restore text layers
+	textLayers.forEach(function(textLayer) {
 		//remove text stored on layer
 		[command setValue: nil forKey: 'textWithPlaceholders' onLayer: textLayer];
 	});
