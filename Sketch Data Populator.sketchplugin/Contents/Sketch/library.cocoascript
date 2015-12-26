@@ -31,6 +31,7 @@ var Library = {};
 	self.isLayerText = isLayerText;
     self.addPage = addPage;
     self.removePage = removePage;
+    self.isArtboard = isArtboard;
 
 	//other
 	self.mergeStringWithValues = mergeStringWithValues;
@@ -329,6 +330,10 @@ var Library = {};
     function isLayerText(layer) {
         return ([layer isKindOfClass: [MSTextLayer class]]);
     }
+
+	function isArtboard(layer) {
+		return ([layer isKindOfClass: [MSArtboardGroup class]]);
+	}
 
 
     function addPage(name) {

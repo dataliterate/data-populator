@@ -464,6 +464,11 @@ function populate(data, selectedLayers, opt) {
 			//check type of selected layer
 			var selectedLayer = selectedLayers[i];
 			if(Library.isLayerGroup(selectedLayer)) {
+				//get all selected artboards and process them
+				var artboards = Library.findLayersInLayer(false, false, 'MSArtboardGroup', selectedLayer, false, false);
+				artboards.forEach(function(artboard) {
+					processArtboard(artboard, dataRow)
+				});
 
 				//get all text layers in selected layer
 				var textLayers = Library.findLayersInLayer(false, false, 'MSTextLayer', selectedLayer, false, false);
@@ -506,6 +511,9 @@ function populate(data, selectedLayers, opt) {
 				else if([selectedLayer name].indexOf('{') > -1) {
 					processImagePlaceholder(selectedLayer, dataRow, opt.rootDir);
 				}
+			}
+			else if(Library.isArtboard(selectedLayer)) {
+				processArtboard(selectedLayer, dataRow);
 			}
 		}
 
@@ -682,6 +690,60 @@ function populate(data, selectedLayers, opt) {
 			//resize to fit
 			Library.resizeTextLayer(textLayer);
 		}
+	}
+
+
+	function processArtboard(artboard, dataRow) {
+		var name = [artboard name];
+		var placeholders = getPlaceholders(name);
+
+		var values = {};
+		placeholders.forEach(function(placeholder) {
+			if(placeholder.type == 'solo') {
+				var value = findValueInDataRow(placeholder.key, dataRow);
+
+				if(!value) {
+					if(placeholder.substitute) {
+						value = String(placeholder.substitute);
+					} else {
+						value = '';
+					}
+				}
+
+				values[placeholder.string] = value;
+			}
+			else if(placeholder.type == 'enum') {
+				var placeholderValues = [];
+
+				placeholder.placeholders.forEach(function(subPlaceholder) {
+					var value = findValueInDataRow(subPlaceholder.key, dataRow);
+
+					if(!value) {
+						if(subPlaceholder.substitute) {
+							value = String(subPlaceholder.substitute);
+						} else {
+							value = '';
+						}
+					}
+
+					if(value.length) placeholderValues.push(value);
+				});
+
+				var enumeratedValue = '';
+				if(placeholder.command == 'join') {
+					enumeratedValue = placeholderValues.join(placeholder.delimiter);
+				}
+
+				values[placeholder.string] = enumeratedValue;
+			}
+		});
+
+		var mergedText = Library.mergeStringWithValues(name, values);
+		if(!mergedText.length) {
+			mergedText = '-';
+		}
+
+		[artboard setName: mergedText];
 	}
 
 
