@@ -815,10 +815,11 @@ function populate(data, selectedLayers, opt) {
 
 		// Conditional test for image
 		if (urlRegexp.test(imageUrl)) {
-			var imageData = get(imageUrl);
+			var rawImageData = get(imageUrl);
 
-			var image = [[NSImage alloc] initWithData: imageData];
-
+			var image = [[NSImage alloc] initWithData: rawImageData];
+			var imageData = [[MSImageData alloc] initWithImage: image convertColorSpace: false]];
+			
 			//get shape group fill
 			var fill = [[[shapeGroup style] fills] firstObject];
 
@@ -827,10 +828,7 @@ function populate(data, selectedLayers, opt) {
 
 			//set pattern fill
 			fill.setFillType(4);
-
-			//set image as pattern fill
-			var imageCollection = fill.documentData().images();
-			[fill setPatternImage: image collection: imageCollection];
+			[fill setImage: imageData];
 			fill.setPatternFillType(1);
 		}
 	}
