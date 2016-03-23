@@ -815,9 +815,17 @@ function populate(data, selectedLayers, opt) {
 
 		// Conditional test for image
 		if (urlRegexp.test(imageUrl)) {
-			var rawImageData = get(imageUrl);
-
-			var image = [[NSImage alloc] initWithData: rawImageData];
+			
+			//get image from url
+			var image = getImage(imageUrl);
+			
+			//make sure that image was loaded successfully
+			if(!image) {
+				context.document.showMessage('Some images could not be downloaded. Please check the URLs.');
+				return;
+			}
+			
+			//create image data from image
 			var imageData = [[MSImageData alloc] initWithImage: image convertColorSpace: false]];
 			
 			//get shape group fill
@@ -1724,8 +1732,14 @@ function restoreTextPlaceholdersHandler(_context) {
 	})
 }
 
-function get(url) {
-	var request = NSURLRequest.requestWithURL(NSURL.URLWithString(url));
-	var response = NSURLConnection.sendSynchronousRequest_returningResponse_error(request, null, null);
-	return response;
+function getImage(urlString) {
+	
+	//get data from url
+	var url = NSURL.URLWithString(urlString);
+	var data = [url resourceDataUsingCache:false];
+	if(!data) return;
+
+	//create image from data
+	var image = [[NSImage alloc] initWithData:data];
+	return image;
 }
