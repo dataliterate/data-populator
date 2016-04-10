@@ -758,6 +758,7 @@ function populate(data, selectedLayers, opt) {
 		
 		//get image placeholders
 		var imagePlaceholders = Library.findLayersInLayer('{*}', false, 'MSBitmapLayer', symbolMaster, false, false);
+		imagePlaceholders = imagePlaceholders.concat(Library.findLayersInLayer('{*}', false, 'MSShapeGroup', symbolMaster, false, false));
 		
 		//process all image placeholders
 		imagePlaceholders.forEach(function(shapeGroup) {
