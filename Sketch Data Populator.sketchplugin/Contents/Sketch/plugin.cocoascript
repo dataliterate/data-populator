@@ -2,6 +2,7 @@
 // sketch data populator - plugin
 //===============================================
 
+@import 'lodash.get.cocoascript';
 @import 'library.cocoascript';
 @import 'sandbox.cocoascript';
 
@@ -62,17 +63,17 @@ function populateWithPresetHandler(_context) {
 	var spacerView = [[NSView alloc] initWithFrame: NSMakeRect(0, 0, 300, 5)];
 	[alert addAccessoryView: spacerView];
 
-    //create data options view
-    var dataOptionsView = createDataOptionsView();
-    [alert addAccessoryView: dataOptionsView.view];
+	//create data options view
+	var dataOptionsView = createDataOptionsView();
+	[alert addAccessoryView: dataOptionsView.view];
 
-    //add space
+	//add space
 	var spacerView2 = [[NSView alloc] initWithFrame: NSMakeRect(0, 0, 300, 5)];
 	[alert addAccessoryView: spacerView2];
 
 	//create layout options view
-    var layoutOptionsView = createLayoutOptionsView();
-    [alert addAccessoryView: layoutOptionsView.view];
+	var layoutOptionsView = createLayoutOptionsView();
+	[alert addAccessoryView: layoutOptionsView.view];
 
 	//add bottom buttons
 	[alert addButtonWithTitle:"Populate"];
@@ -199,7 +200,7 @@ function populateWithJSONHandler(_context) {
 	//get JSON file path
 	var filePath = Library.askForJSON(lastLocation);
 	if(!filePath) return;
-	
+
 	//save last used location
 	[defaults setObject: filePath forKey: 'LastJSONFilePickerLocation'];
 	[defaults synchronize];
@@ -211,17 +212,17 @@ function populateWithJSONHandler(_context) {
 	//create alert
 	var alert = Library.createAlert("Populate with JSON", "Please configure the options below.", "icon.png");
 
-    //create data options view
-    var dataOptionsView = createDataOptionsView();
-    [alert addAccessoryView: dataOptionsView.view];
+	//create data options view
+	var dataOptionsView = createDataOptionsView();
+	[alert addAccessoryView: dataOptionsView.view];
 
-    //add space
+		//add space
 	var spacerView2 = [[NSView alloc] initWithFrame: NSMakeRect(0, 0, 300, 5)];
 	[alert addAccessoryView: spacerView2];
 
 	//create layout options view
-    var layoutOptionsView = createLayoutOptionsView();
-    [alert addAccessoryView: layoutOptionsView.view];
+	var layoutOptionsView = createLayoutOptionsView();
+	[alert addAccessoryView: layoutOptionsView.view];
 
 	//add bottom buttons
 	[alert addButtonWithTitle:"Populate"];
@@ -412,52 +413,63 @@ function populate(data, selectedLayers, opt) {
 
 			//get data row
 			var dataRow;
-			if(opt.randomizeData) {
+			if(data instanceof Array) {
+				if(opt.randomizeData) {
 
-				//reset random index tracking
-				if(randomIndexes.length == data.length) {
-					randomIndexes = [];
-				}
+					//reset random index tracking
+					if(randomIndexes.length == data.length) {
+						randomIndexes = [];
+					}
 
-				//get random index
-				var randomIndex;
-				while(!randomIndex && randomIndex !== 0) {
+					//get random index
+					var randomIndex;
+					while(!randomIndex && randomIndex !== 0) {
 
-					//get random in range
-					var random = Library.randomInteger(0, data.length);
+						//get random in range
+						var random = Library.randomInteger(0, data.length);
 
-					//make sure index doesn't exist in already chosen random indexes
-					if(randomIndexes.indexOf(random) == -1) {
+						//make sure index doesn't exist in already chosen random indexes
+						if(randomIndexes.indexOf(random) == -1) {
 
-						//make sure it's not the same as the last chosen random index
-						if(data.length > 1) {
-							if(random != lastRandomIndex) {
+							//make sure it's not the same as the last chosen random index
+							if(data.length > 1) {
+								if(random != lastRandomIndex) {
+									randomIndex = random;
+								}
+							}
+							else {
 								randomIndex = random;
 							}
 						}
-						else {
-							randomIndex = random;
-						}
 					}
+
+					//store selected random index
+					lastRandomIndex = randomIndex;
+					randomIndexes.push(randomIndex);
+
+					//get data row for random index
+					dataRow = data[randomIndex];
+
+					//reset random index (so next iteration generates a new one)
+					randomIndex = null;
 				}
-
-				//store selected random index
-				lastRandomIndex = randomIndex;
-				randomIndexes.push(randomIndex);
-
-				//get data row for random index
-				dataRow = data[randomIndex];
-
-				//reset random index (so next iteration generates a new one)
-				randomIndex = null;
+				else {
+					dataRow = data[i % data.length];
+				}
 			}
 			else {
-				dataRow = data[i % data.length];
+				dataRow = data;
 			}
 
 			//check type of selected layer
 			var selectedLayer = selectedLayers[i];
 			if(Library.isLayerGroup(selectedLayer)) {
+				
+				//get all selected artboards and process them
+				var artboards = Library.findLayersInLayer(false, false, 'MSArtboardGroup', selectedLayer, false, false);
+				artboards.forEach(function(artboard) {
+					processArtboard(artboard, dataRow)
+				});
 
 				//get all text layers in selected layer
 				var textLayers = Library.findLayersInLayer(false, false, 'MSTextLayer', selectedLayer, false, false);
@@ -468,8 +480,9 @@ function populate(data, selectedLayers, opt) {
 				});
 
 				//find icon and image placeholders
-				var iconPlaceholders = Library.findLayersInLayer('{{*}}', false, 'MSShapeGroup', selectedLayer, false, false);
-				var imagePlaceholders = Library.findLayersInLayer('{*}', false, 'MSShapeGroup', selectedLayer, false, iconPlaceholders);
+				var colorPlaceholders = Library.findLayersInLayer('{{{*}}}', false, 'MSShapeGroup', selectedLayer, false, false);
+				var iconPlaceholders = Library.findLayersInLayer('{{*}}', false, 'MSShapeGroup', selectedLayer, false, colorPlaceholders);
+				var imagePlaceholders = Library.findLayersInLayer('{*}', false, 'MSShapeGroup', selectedLayer, false, colorPlaceholders.concat(iconPlaceholders));
 
 				//process all image placeholders
 				imagePlaceholders.forEach(function(shapeGroup) {
@@ -480,6 +493,11 @@ function populate(data, selectedLayers, opt) {
 				iconPlaceholders.forEach(function(shapeGroup) {
 					processIconPlaceholder(shapeGroup, dataRow, opt.rootDir);
 					svgIconsStartedImport++;
+				});
+
+				//process all color placeholders
+				colorPlaceholders.forEach(function(shapeGroup) {
+					processColorPlaceholder(shapeGroup, dataRow, opt.rootDir);
 				});
 			}
 			else if(Library.isLayerText(selectedLayer)) {
@@ -495,6 +513,9 @@ function populate(data, selectedLayers, opt) {
 					processImagePlaceholder(selectedLayer, dataRow, opt.rootDir);
 				}
 			}
+			else if(Library.isArtboard(selectedLayer)) {
+				processArtboard(selectedLayer, dataRow);
+			}
 		}
 
 		//if there were no svg icons, processing is now finished
@@ -509,20 +530,7 @@ function populate(data, selectedLayers, opt) {
 	}
 
 	function findValueInDataRow(key, dataRow) {
-		
-		//get subkeys 
-		var subkeys = key.split('.');
-		
-		//get the value for the first subkey
-		var value = dataRow[subkeys.shift()];
-
-		//find the value in nested object if necessary
-		if(value !== null && typeof value === 'object') {
-			return findValueInDataRow(subkeys.join('.'), value);
-		}
-		else {
-			return value;
-		}
+		return _.get(dataRow, key);
 	}
 
 	function processTextLayer(textLayer, dataRow) {
@@ -551,10 +559,10 @@ function populate(data, selectedLayers, opt) {
 		//assign values to placeholders
 		var values = {};
 		placeholders.forEach(function(placeholder) {
-			
+
 			//solo/default placeholder
 			if(placeholder.type == 'solo') {
-				
+
 				//get value
 				var value = findValueInDataRow(placeholder.key, dataRow);
 
@@ -576,11 +584,11 @@ function populate(data, selectedLayers, opt) {
 				values[placeholder.string] = value;
 			}
 			else if(placeholder.type == 'enum') {
-				
+
 				//get values for sub placeholders
 				var placeholderValues = [];
 				placeholder.placeholders.forEach(function(subPlaceholder) {
-					
+
 					//get value
 					var value = findValueInDataRow(subPlaceholder.key, dataRow);
 
@@ -598,17 +606,17 @@ function populate(data, selectedLayers, opt) {
 							value = '';
 						}
 					}
-					
+
 					//make sure value is not empty
 					if(value.length) placeholderValues.push(value);
 				});
-				
+
 				//prepare enumerated value
 				var enumeratedValue = '';
 				if(placeholder.command == 'join') {
 					enumeratedValue = placeholderValues.join(placeholder.delimiter);
 				}
-				
+
 				values[placeholder.string] = enumeratedValue;
 			}
 		});
@@ -686,6 +694,79 @@ function populate(data, selectedLayers, opt) {
 	}
 
 
+	function processArtboard(artboard, dataRow) {
+		
+		//reference command
+		var command = context.command;
+
+		//get stored text from artboard layer
+		var storedText = [command valueForKey: 'textWithPlaceholders' onLayer: artboard];
+
+		//get text from text layer
+		var text;
+		if(storedText && storedText.length) {
+			text = storedText;
+		}
+		else {
+			text = [artboard name];
+		}
+
+		//store text on layer
+		[command setValue: String(text) forKey: 'textWithPlaceholders' onLayer: artboard];
+		
+		//get placeholders in text
+		var placeholders = getPlaceholders(text);
+
+		var values = {};
+		placeholders.forEach(function(placeholder) {
+			if(placeholder.type == 'solo') {
+				var value = findValueInDataRow(placeholder.key, dataRow);
+
+				if(!value) {
+					if(placeholder.substitute) {
+						value = String(placeholder.substitute);
+					} else {
+						value = '';
+					}
+				}
+
+				values[placeholder.string] = value;
+			}
+			else if(placeholder.type == 'enum') {
+				var placeholderValues = [];
+
+				placeholder.placeholders.forEach(function(subPlaceholder) {
+					var value = findValueInDataRow(subPlaceholder.key, dataRow);
+
+					if(!value) {
+						if(subPlaceholder.substitute) {
+							value = String(subPlaceholder.substitute);
+						} else {
+							value = '';
+						}
+					}
+
+					if(value.length) placeholderValues.push(value);
+				});
+
+				var enumeratedValue = '';
+				if(placeholder.command == 'join') {
+					enumeratedValue = placeholderValues.join(placeholder.delimiter);
+				}
+
+				values[placeholder.string] = enumeratedValue;
+			}
+		});
+
+		var mergedText = Library.mergeStringWithValues(text, values);
+		if(!mergedText.length) {
+			mergedText = '-';
+		}
+
+		[artboard setName: mergedText];
+	}
+
+
 	function processImagePlaceholder(shapeGroup, dataRow, rootDir) {
 
 		//get shape group name
@@ -702,7 +783,7 @@ function populate(data, selectedLayers, opt) {
 			var fill = [[[shapeGroup style] fills] firstObject];
 
 			//disable fill
-            fill.setIsEnabled(false);
+			fill.setIsEnabled(false);
 
 			return;
 		}
@@ -715,7 +796,8 @@ function populate(data, selectedLayers, opt) {
 		var fileManager = [NSFileManager defaultManager];
 		if ([fileManager fileExistsAtPath: fullImageUrl]) {
 			var image = [[NSImage alloc] initWithContentsOfFile: fullImageUrl];
-
+			var imageData = [[MSImageData alloc] initWithImage: image convertColorSpace: false]];
+			
 			//get shape group fill
 			var fill = [[[shapeGroup style] fills] firstObject];
 
@@ -723,12 +805,39 @@ function populate(data, selectedLayers, opt) {
 			fill.setIsEnabled(true);
 
 			//set pattern fill
-            fill.setFillType(4);
+			fill.setFillType(4);
+			[fill setImage: imageData];
+			fill.setPatternFillType(1);
+		}
 
-            //set image as pattern fill
-            var imageCollection = fill.documentData().images();
-            [fill setPatternImage: image collection: imageCollection];
-            fill.setPatternFillType(1);
+		// Regular expression to match URL images
+		var urlRegexp = new RegExp('(http)[s]?(://)');
+
+		// Conditional test for image
+		if (urlRegexp.test(imageUrl)) {
+			
+			//get image from url
+			var image = getImage(imageUrl);
+			
+			//make sure that image was loaded successfully
+			if(!image) {
+				context.document.showMessage('Some images could not be downloaded. Please check the URLs.');
+				return;
+			}
+			
+			//create image data from image
+			var imageData = [[MSImageData alloc] initWithImage: image convertColorSpace: false]];
+			
+			//get shape group fill
+			var fill = [[[shapeGroup style] fills] firstObject];
+
+			//enable fill
+			fill.setIsEnabled(true);
+
+			//set pattern fill
+			fill.setFillType(4);
+			[fill setImage: imageData];
+			fill.setPatternFillType(1);
 		}
 	}
 
@@ -787,22 +896,22 @@ function populate(data, selectedLayers, opt) {
 			var placeholderSubLayers = Library.jsArray([shapeGroup layers]);
 
 			//get file NSURL
-	        var fileUrl = [NSURL fileURLWithPath:fullIconUrl];
+			var fileUrl = [NSURL fileURLWithPath:fullIconUrl];
 
-	        //set up importer
-	        var SVGImporter = [MSSVGImporter svgImporter];
+			//set up importer
+			var SVGImporter = [MSSVGImporter svgImporter];
 
-	        //create temporary group for import
-	        var container = tempIconPage.addLayerOfType('group');
-	        container.setName('__IMPORTED_SVG__');
+			//create temporary group for import
+			var container = tempIconPage.addLayerOfType('group');
+			container.setName('__IMPORTED_SVG__');
 
-	        //import svg into the container
-	        [MSImportInsert importFromURL: fileUrl inGroup: container importer: SVGImporter completion: nil];
-
+			//import svg into the container
+			[MSDocumentImporter importFromURL: fileUrl inGroup: container importer: SVGImporter];
+			
 			//continue after delay to make sure import is complete
-	        Library.delay(function() {
-	        	attemptImport();
-	        }, 0.01);
+			Library.delay(function() {
+				attemptImport();
+			}, 0.01);
 
 
 			function attemptImport() {
@@ -860,9 +969,6 @@ function populate(data, selectedLayers, opt) {
 						placeholderSubLayer.removeFromParent();
 					});
 
-					//resize
-					[shapeGroup resizeRoot: true];
-
 					//get imported icon size
 					var iconFrame = {
 						x: shapeGroup.frame().x(),
@@ -900,14 +1006,50 @@ function populate(data, selectedLayers, opt) {
 
 					//try again later
 					Library.delay(function() {
-			        	attemptImport();
-			        }, 0.01);
+						attemptImport();
+					}, 0.01);
 				}
 			}
 		}
 		else {
 			svgIconsImported++;
 		}
+	}
+
+	function processColorPlaceholder(shapeGroup, dataRow, rootDir) {
+
+		//get shape group name
+		var shapeGroupName = [shapeGroup name].toString();
+
+		//get placeholder name
+		var placeholder = shapeGroupName.substring(3, [shapeGroupName length] - 3);
+
+		//get hex color for placeholder from data row
+		var hexColor = dataRow[placeholder];
+
+		if(!hexColor) {
+			
+			//hide placeholder
+			shapeGroup.setIsVisible(false);
+			return;
+		}
+		else {
+			
+			//show placeholder
+			shapeGroup.setIsVisible(true);
+		}
+
+		//get shape group fill
+		var fill = [[[shapeGroup style] fills] firstObject];
+
+		//enable fill
+		fill.setIsEnabled(true);
+
+		//set pattern fill
+		fill.setFillType(0);
+
+		// set the color
+		fill.color = [MSColor colorWithSVGString:hexColor];
 	}
 
 
@@ -921,89 +1063,89 @@ function populate(data, selectedLayers, opt) {
 		var text;
 
 		//find placeholders
-	  	while(text = re.exec(str)) {
+		while(text = re.exec(str)) {
 
-	  		//get inside of placeholder (between {})
-	  		var placeholderText = text[1];
-	  		
-	  		//check if placeholder uses enumeration syntax
-	  		if(placeholderText.indexOf('|&') > -1) {
-	  			
-	  			//split enum placeholder text into components
-	  			var placeholderComponents = placeholderText.split('|&');
-	  			
-	  			//get placeholders
-	  			var placeholdersString = placeholderComponents[0] || '';
-	  			var placeholderStrings = placeholdersString.split(',');
-	  			var placeholders = [];
-	  			placeholderStrings.forEach(function(placeholderString) {
-	  				
-	  				//process placeholder string
-	  				var placeholder = processPlaceholderString(placeholderString.trim());
-	  				placeholders.push(placeholder);
-	  			});
-	  			
-	  			//get delimiter
-	  			var delimiter = placeholderComponents[1] || '';
-	  			
-	  			//create object
-	  			results.push({
-	  				string: placeholderText,
-	  				type: 'enum',
-	  				command: 'join',
-	  				delimiter: delimiter,
-	  				placeholders: placeholders
-	  			});
-	  		}
-	  		else {
-	  			
-	  			//process placeholder text
-	  			var placeholder = processPlaceholderString(placeholderText);
-	  			results.push(placeholder);
-	  		}
-	  	}
-	  	
-	  	
-	  	function processPlaceholderString(placeholderString) {
-	  			
-  			//split into components
-  			var placeholderComponents = placeholderString.split('?');
+			//get inside of placeholder (between {})
+			var placeholderText = text[1];
 
-	  		//check if has substitute
-	  		var hasSubstitute = (placeholderComponents.length == 2);
-	  		if(hasSubstitute) {
+			//check if placeholder uses enumeration syntax
+			if(placeholderText.indexOf('|&') > -1) {
 
-	  			//get key and substitute
-	  			var key = placeholderComponents[0].trim();
-	  			var substitute = placeholderComponents[1].trim();
+				//split enum placeholder text into components
+				var placeholderComponents = placeholderText.split('|&');
 
-	  			//set default substitute
-	  			if(!substitute.length) substitute = opt.defaultSubstitute;
+				//get placeholders
+				var placeholdersString = placeholderComponents[0] || '';
+				var placeholderStrings = placeholdersString.split(',');
+				var placeholders = [];
+				placeholderStrings.forEach(function(placeholderString) {
 
-	  			return {
-	  				type: 'solo',
-		    		string: placeholderString,
-		    		key: key,
-		    		substitute: substitute
-		    	};
-	  		}
-	  		else {
+					//process placeholder string
+					var placeholder = processPlaceholderString(placeholderString.trim());
+					placeholders.push(placeholder);
+				});
 
-	  			return {
-	  				type: 'solo',
-		    		string: placeholderString,
-		    		key: placeholderString
-		    	};
-	  		}
-  		}
+				//get delimiter
+				var delimiter = placeholderComponents[1] || '';
 
-	  	return results;
+				//create object
+				results.push({
+					string: placeholderText,
+					type: 'enum',
+					command: 'join',
+					delimiter: delimiter,
+					placeholders: placeholders
+				});
+			}
+			else {
+
+				//process placeholder text
+				var placeholder = processPlaceholderString(placeholderText);
+				results.push(placeholder);
+			}
+		}
+
+
+		function processPlaceholderString(placeholderString) {
+
+			//split into components
+			var placeholderComponents = placeholderString.split('?');
+
+			//check if has substitute
+			var hasSubstitute = (placeholderComponents.length == 2);
+			if(hasSubstitute) {
+
+				//get key and substitute
+				var key = placeholderComponents[0].trim();
+				var substitute = placeholderComponents[1].trim();
+
+				//set default substitute
+				if(!substitute.length) substitute = opt.defaultSubstitute;
+
+				return {
+					type: 'solo',
+					string: placeholderString,
+					key: key,
+					substitute: substitute
+				};
+			}
+			else {
+
+				return {
+					type: 'solo',
+					string: placeholderString,
+					key: placeholderString
+				};
+			}
+		}
+
+		return results;
 	}
 }
 
 
 function createGrid(selectedLayers, opt) {
-	
+
 	//check rows count
 	if(!opt.rowsCount || opt.rowsCount < 0) {
 		context.document.showMessage('Number of grid rows must be at least 1.');
@@ -1087,9 +1229,6 @@ function createGrid(selectedLayers, opt) {
 		}
 	}
 
-	//adjust parent layer
-	[layerParent resizeRoot: true];
-
 	return newSelectedLayers;
 }
 
@@ -1097,13 +1236,13 @@ function createGrid(selectedLayers, opt) {
 function createDataOptionsView() {
 
 	//create options view
-    var optionsView = [[NSView alloc] initWithFrame: NSMakeRect(0, 0, 300, 110)];
+	var optionsView = [[NSView alloc] initWithFrame: NSMakeRect(0, 0, 300, 110)];
 
 	//create options view title
 	var optionsViewTitle = Library.createLabel('Data options', 12, true, NSMakeRect(0, 90, 300, 20));
 	[optionsView addSubview: optionsViewTitle];
 
-    //create randomize checkbox
+	//create randomize checkbox
 	var randomizeCheckbox = Library.createCheckbox('Randomize data order', false, NSMakeRect(0, 65, 300, 20));
 	[optionsView addSubview: randomizeCheckbox];
 
@@ -1130,15 +1269,15 @@ function createDataOptionsView() {
 
 	//create substitute text field
 	var substituteTextField = [[NSTextField alloc] initWithFrame:NSMakeRect(110, 0, 120, 22)];
-    [optionsView addSubview: substituteTextField];
+	[optionsView addSubview: substituteTextField];
 
-    //set substitute
-    if([[NSUserDefaults standardUserDefaults] objectForKey:'defaultSubstitute']) {
-    	[substituteTextField setStringValue:[[NSUserDefaults standardUserDefaults] objectForKey:'defaultSubstitute']];
-    }
-    else {
-    	[substituteTextField setStringValue:''];
-    }
+	//set substitute
+	if([[NSUserDefaults standardUserDefaults] objectForKey:'defaultSubstitute']) {
+		[substituteTextField setStringValue:[[NSUserDefaults standardUserDefaults] objectForKey:'defaultSubstitute']];
+	}
+	else {
+		[substituteTextField setStringValue:''];
+	}
 
 
 	//return configured view
@@ -1155,13 +1294,13 @@ function createDataOptionsView() {
 function createLayoutOptionsView() {
 
 	//create options view
-    var optionsView = [[NSView alloc] initWithFrame: NSMakeRect(0, 0, 300, 104)];
+	var optionsView = [[NSView alloc] initWithFrame: NSMakeRect(0, 0, 300, 104)];
 
 	//create options view title
 	var optionsViewTitle = Library.createLabel('Layout options', 12, true, NSMakeRect(0, 84, 300, 20));
 	[optionsView addSubview: optionsViewTitle];
 
-    //create create grid checkbox
+	//create create grid checkbox
 	var createGridCheckbox = Library.createCheckbox('Create grid', false, NSMakeRect(0, 59, 300, 20));
 	[optionsView addSubview: createGridCheckbox];
 
@@ -1176,66 +1315,66 @@ function createLayoutOptionsView() {
 
 	//create rows count text field
 	var rowsCountTextField = [[NSTextField alloc] initWithFrame:NSMakeRect(60, 27, 70, 22)];
-    [optionsView addSubview: rowsCountTextField];
+	[optionsView addSubview: rowsCountTextField];
 
-    //set rows count
-    if([[NSUserDefaults standardUserDefaults] objectForKey:'rowsCount']) {
-    	[rowsCountTextField setStringValue:[[NSUserDefaults standardUserDefaults] objectForKey:'rowsCount']];
-    }
-    else {
-    	[rowsCountTextField setStringValue:'1'];
-    }
+	//set rows count
+	if([[NSUserDefaults standardUserDefaults] objectForKey:'rowsCount']) {
+		[rowsCountTextField setStringValue:[[NSUserDefaults standardUserDefaults] objectForKey:'rowsCount']];
+	}
+	else {
+		[rowsCountTextField setStringValue:'1'];
+	}
 
 
-    //create rows margin label
+	//create rows margin label
 	var rowsMarginLabel = Library.createLabel('Margin:', 12, false, NSMakeRect(142, 27, 50, 20));
 	[optionsView addSubview: rowsMarginLabel];
 
 	//create rows margin text field
 	var rowsMarginTextField = [[NSTextField alloc] initWithFrame:NSMakeRect(190, 27, 70, 22)];
-    [optionsView addSubview: rowsMarginTextField];
+	[optionsView addSubview: rowsMarginTextField];
 
-    //set rows margin
-    if([[NSUserDefaults standardUserDefaults] objectForKey:'rowsMargin']) {
-    	[rowsMarginTextField setStringValue:[[NSUserDefaults standardUserDefaults] objectForKey:'rowsMargin']];
-    }
-    else {
-    	[rowsMarginTextField setStringValue:'10'];
-    }
+	//set rows margin
+	if([[NSUserDefaults standardUserDefaults] objectForKey:'rowsMargin']) {
+		[rowsMarginTextField setStringValue:[[NSUserDefaults standardUserDefaults] objectForKey:'rowsMargin']];
+	}
+	else {
+		[rowsMarginTextField setStringValue:'10'];
+	}
 
 
-    //create columns count label
+	//create columns count label
 	var columnsCountLabel = Library.createLabel('Columns:', 12, false, NSMakeRect(0, 0, 60, 20));
 	[optionsView addSubview: columnsCountLabel];
 
 	//create columns count text field
 	var columnsCountTextField = [[NSTextField alloc] initWithFrame:NSMakeRect(60, 0, 70, 22)];
-    [optionsView addSubview: columnsCountTextField];
+	[optionsView addSubview: columnsCountTextField];
 
-    //set columns count
-    if([[NSUserDefaults standardUserDefaults] objectForKey:'columnsCount']) {
-    	[columnsCountTextField setStringValue:[[NSUserDefaults standardUserDefaults] objectForKey:'columnsCount']];
-    }
-    else {
-    	[columnsCountTextField setStringValue:'1'];
-    }
+	//set columns count
+	if([[NSUserDefaults standardUserDefaults] objectForKey:'columnsCount']) {
+		[columnsCountTextField setStringValue:[[NSUserDefaults standardUserDefaults] objectForKey:'columnsCount']];
+	}
+	else {
+		[columnsCountTextField setStringValue:'1'];
+	}
 
-    //create columns margin label
+	//create columns margin label
 	var columnsMarginLabel = Library.createLabel('Margin:', 12, false, NSMakeRect(142, 0, 50, 20));
 	[optionsView addSubview: columnsMarginLabel];
 
 	//create columns margin text field
 	var columnsMarginTextField = [[NSTextField alloc] initWithFrame:NSMakeRect(190, 0, 70, 22)];
-    [optionsView addSubview: columnsMarginTextField];
+	[optionsView addSubview: columnsMarginTextField];
 
 
 	//set columns margin
-    if([[NSUserDefaults standardUserDefaults] objectForKey:'columnsMargin']) {
-    	[columnsMarginTextField setStringValue:[[NSUserDefaults standardUserDefaults] objectForKey:'columnsMargin']];
-    }
-    else {
-    	[columnsMarginTextField setStringValue:'10'];
-    }
+	if([[NSUserDefaults standardUserDefaults] objectForKey:'columnsMargin']) {
+		[columnsMarginTextField setStringValue:[[NSUserDefaults standardUserDefaults] objectForKey:'columnsMargin']];
+	}
+	else {
+		[columnsMarginTextField setStringValue:'10'];
+	}
 
 	//return configured view
 	return {
@@ -1261,12 +1400,6 @@ function loadData(path) {
 	}
 	catch(e) {
 		context.document.showMessage("There was an error parsing data. Please make sure it's valid.");
-		return;
-	}
-
-	//make sure that there is at least one row of data
-	if(!data.length) {
-		context.document.showMessage("There must be at least one row of data.");
 		return;
 	}
 
@@ -1298,11 +1431,11 @@ function restoreSelection() {
 
 	//deselect current selection
 	var doc = context.document;
-    [[doc currentPage] deselectAllLayers];
+	[[doc currentPage] deselectAllLayers];
 
-    selection.forEach(function(layer) {
-    	[layer select:true byExpandingSelection:true];
-    });
+	selection.forEach(function(layer) {
+		[layer select:true byExpandingSelection:true];
+	});
 }
 
 
@@ -1339,12 +1472,12 @@ function insertImageHandler(_context) {
 				var fill = [[[layer style] fills] firstObject];
 
 				//set pattern fill
-	            fill.setFillType(4);
+				fill.setFillType(4);
 
-	            //set image as pattern fill
-	            var imageCollection = fill.documentData().images();
-	            [fill setPatternImage: image collection: imageCollection];
-	            fill.setPatternFillType(1);
+				//set image as pattern fill
+				var imageCollection = fill.documentData().images();
+				[fill setPatternImage: image collection: imageCollection];
+				fill.setPatternFillType(1);
 			}
 
 		}
@@ -1407,22 +1540,22 @@ function insertSVGHandler(_context) {
 				var placeholderSubLayers = Library.jsArray([shapeGroup layers]);
 
 				//get file NSURL
-		        var fileUrl = [NSURL fileURLWithPath:svgUrl];
+				var fileUrl = [NSURL fileURLWithPath:svgUrl];
 
-		        //set up importer
-		        var SVGImporter = [MSSVGImporter svgImporter];
+				//set up importer
+				var SVGImporter = [MSSVGImporter svgImporter];
 
-		        //create temporary group for import
-		        var container = tempIconPage.addLayerOfType('group');
-		        container.setName('__IMPORTED_SVG__');
+				//create temporary group for import
+				var container = tempIconPage.addLayerOfType('group');
+				container.setName('__IMPORTED_SVG__');
 
-		        //import svg into the container
-		        [MSImportInsert importFromURL: fileUrl inGroup: container importer: SVGImporter completion: nil];
+				//import svg into the container
+				[MSDocumentImporter importFromURL: fileUrl inGroup: container importer: SVGImporter];
 
 				//continue after delay to make sure import is complete
-		        Library.delay(function() {
-		        	attemptImport();
-		        }, 0.01);
+				Library.delay(function() {
+					attemptImport();
+				}, 0.01);
 
 
 				function attemptImport() {
@@ -1480,9 +1613,6 @@ function insertSVGHandler(_context) {
 							placeholderSubLayer.removeFromParent();
 						});
 
-						//resize
-						[shapeGroup resizeRoot: true];
-
 						//get imported icon size
 						var iconFrame = {
 							x: shapeGroup.frame().x(),
@@ -1510,8 +1640,8 @@ function insertSVGHandler(_context) {
 
 						//try again later
 						Library.delay(function() {
-				        	attemptImport();
-				        }, 0.01);
+							attemptImport();
+						}, 0.01);
 					}
 				}
 			}
@@ -1542,12 +1672,18 @@ function restoreTextPlaceholdersHandler(_context) {
 		return;
 	}
 
-	//get all text layers in selection
+	//get all text layers and artboards in selection
 	var textLayers = [];
+	var artboards = [];
 	selectedLayers.forEach(function(layer) {
-
+		
+		//add artboards too
+		if(Library.isArtboard(layer)) {
+			artboards.push(layer);
+		}
+		
 		//get text layers from group
-		if(Library.isLayerGroup(layer)) {
+		else if(Library.isLayerGroup(layer)) {
 			var nestedTextLayers = Library.findLayersInLayer(false, false, 'MSTextLayer', layer, false, false);
 			textLayers = textLayers.concat(nestedTextLayers);
 		}
@@ -1577,4 +1713,33 @@ function restoreTextPlaceholdersHandler(_context) {
 		//remove text stored on layer
 		[command setValue: nil forKey: 'textWithPlaceholders' onLayer: textLayer];
 	});
+	
+	//restore artboard names
+	artboards.forEach(function(artboardLayer) {
+		
+		//get stored text from layer
+		var storedText = [command valueForKey: 'textWithPlaceholders' onLayer: artboardLayer];
+
+		//replace text by original string including placeholders
+		if(storedText) {
+
+			//set text layer text
+			artboardLayer.setName(storedText);
+		}
+
+		//remove text stored on layer
+		[command setValue: nil forKey: 'textWithPlaceholders' onLayer: artboardLayer];
+	})
+}
+
+function getImage(urlString) {
+	
+	//get data from url
+	var url = NSURL.URLWithString(urlString);
+	var data = [url resourceDataUsingCache:false];
+	if(!data) return;
+
+	//create image from data
+	var image = [[NSImage alloc] initWithData:data];
+	return image;
 }
