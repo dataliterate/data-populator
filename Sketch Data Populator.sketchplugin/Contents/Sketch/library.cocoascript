@@ -26,6 +26,7 @@ var Library = {};
     self.getSelectedLayers = getSelectedLayers;
 
 	//check layer type
+    self.isSymbolInstance = isSymbolInstance;
 	self.isLayerGroup = isLayerGroup;
     self.isLayerShapeGroup = isLayerShapeGroup;
 	self.isLayerText = isLayerText;
@@ -316,7 +317,12 @@ var Library = {};
         return selectedLayers;
     }
 
-
+    
+    function isSymbolInstance(layer) {
+        return ([layer isKindOfClass: [MSSymbolInstance class]]);
+    }
+    
+    
     function isLayerGroup(layer) {
         return ([layer isKindOfClass: [MSLayerGroup class]] && ![layer isKindOfClass: [MSShapeGroup class]]);
     }

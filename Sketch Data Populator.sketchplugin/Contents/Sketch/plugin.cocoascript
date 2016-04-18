@@ -483,7 +483,15 @@ function populate(data, selectedLayers, opt) {
 				var colorPlaceholders = Library.findLayersInLayer('{{{*}}}', false, 'MSShapeGroup', selectedLayer, false, false);
 				var iconPlaceholders = Library.findLayersInLayer('{{*}}', false, 'MSShapeGroup', selectedLayer, false, colorPlaceholders);
 				var imagePlaceholders = Library.findLayersInLayer('{*}', false, 'MSShapeGroup', selectedLayer, false, colorPlaceholders.concat(iconPlaceholders));
-
+				
+				//find symbols
+				var symbolInstances = Library.findLayersInLayer('*', false, 'MSSymbolInstance', selectedLayer, false, false);
+				
+				//process all symbol instances
+				symbolInstances.forEach(function(symbolInstance) {
+					processSymbolInstance(symbolInstance, dataRow, opt.rootDir);
+				});
+				
 				//process all image placeholders
 				imagePlaceholders.forEach(function(shapeGroup) {
 					processImagePlaceholder(shapeGroup, dataRow, opt.rootDir);
@@ -515,6 +523,9 @@ function populate(data, selectedLayers, opt) {
 			}
 			else if(Library.isArtboard(selectedLayer)) {
 				processArtboard(selectedLayer, dataRow);
+			}
+			else if(Library.isSymbolInstance(selectedLayer)) {
+				processSymbolInstance(selectedLayer, dataRow, opt.rootDir);
 			}
 		}
 
@@ -553,6 +564,101 @@ function populate(data, selectedLayers, opt) {
 		//store text on layer
 		[command setValue: String(text) forKey: 'textWithPlaceholders' onLayer: textLayer];
 
+		//merge text with values
+		var mergedText = getPopulatedText(text, dataRow);
+
+		//prevent bug with empty text layer
+		if(!mergedText.length) {
+			mergedText = '-';
+			textLayer.setIsVisible(false);
+		}
+		else {
+			textLayer.setIsVisible(true);
+		}
+
+		//set text layer text
+		textLayer.setStringValue(mergedText);
+
+		//resize text layer to fit text
+		Library.refreshTextLayer(textLayer);
+
+		//check if text layer has fixed size and trimming activated
+		if(textLayer.textBehaviour() == 1 && opt.trimText) {
+
+			//get original text layer height
+			var textLayerFrame = textLayer.frame();
+			var originalHeight = textLayerFrame.height();
+
+			//resize to fit and get new height
+			Library.resizeTextLayer(textLayer);
+			var newHeight = textLayerFrame.height();
+
+			//shorten text to fit
+			var didTrim = (newHeight > originalHeight);
+			while(newHeight > originalHeight) {
+
+				//trim last character
+				mergedText = mergedText.substring(0, mergedText.length - 1);
+
+				//set trimmed text and re-evaluate height
+				textLayer.setStringValue(mergedText);
+				Library.resizeTextLayer(textLayer);
+				newHeight = textLayerFrame.height();
+			}
+
+			//if trimmed add ellipsis
+			if(didTrim && opt.insertEllipsis) {
+
+				//add ellipsis
+				mergedText += '…';
+				textLayer.setStringValue(mergedText);
+				Library.resizeTextLayer(textLayer);
+				newHeight = textLayerFrame.height();
+
+				//make sure that ellipsis fits in the text layer
+				while(newHeight > originalHeight) {
+
+					//remove character before ellipsis
+					mergedText = mergedText.substring(0, mergedText.length - 2);
+					mergedText += '…';
+
+					//set new text with ellipsis
+					textLayer.setStringValue(mergedText);
+					Library.resizeTextLayer(textLayer);
+					newHeight = textLayerFrame.height();
+				}
+			}
+		}
+		else {
+
+			//resize to fit
+			Library.resizeTextLayer(textLayer);
+		}
+	}
+	
+	function processSymbolTextLayer(textLayer, dataRow, overrides) {
+		
+		//get text from text layer (in the symbol master)
+		var text = textLayer.stringValue();
+		
+		//merge text with values
+		var mergedText = getPopulatedText(text, dataRow);
+
+		//make text invisible by setting it to a space
+		if(!mergedText.length) {
+			mergedText = ' ';
+		}
+		
+		//get id of text layer
+		var layerId = textLayer.objectID();
+		
+		//add override for layer
+		overrides.setValue_forKey(mergedText, layerId);
+	}
+	
+	
+	function getPopulatedText(text, dataRow) {
+		
 		//get placeholders in text
 		var placeholders = getPlaceholders(text);
 
@@ -622,75 +728,45 @@ function populate(data, selectedLayers, opt) {
 		});
 
 		//merge text with values
-		var mergedText = Library.mergeStringWithValues(text, values);
-
-		//prevent bug with empty text layer
-		if(!mergedText.length) {
-			mergedText = '-';
-			textLayer.setIsVisible(false);
+		return Library.mergeStringWithValues(text, values);
+	}
+	
+	
+	function processSymbolInstance(symbolInstance, dataRow, rootDir) {
+		
+		//get existing overrides
+		var existingOverrides = symbolInstance.overrides();
+		if(existingOverrides) {
+			existingOverrides = symbolInstance.overrides().objectForKey(NSNumber.numberWithInt(0));
+		} else {
+			existingOverrides = NSDictionary.alloc().init();
 		}
-		else {
-			textLayer.setIsVisible(true);
-		}
+		
+		//create mutable overrides
+		var overrides = NSMutableDictionary.dictionaryWithDictionary(existingOverrides);
+		
+		//get master for symbol instance
+		var symbolMaster = symbolInstance.symbolMaster();
+		
+		//get text layers in symbol
+		var textLayers = Library.findLayersInLayer(false, false, 'MSTextLayer', symbolMaster, false, false);
+		
+		//process all text layers
+		textLayers.forEach(function(textLayer) {
+			processSymbolTextLayer(textLayer, dataRow, overrides);
+		});
+		
+		//get image placeholders
+		var imagePlaceholders = Library.findLayersInLayer('{*}', false, 'MSBitmapLayer', symbolMaster, false, false);
+		imagePlaceholders = imagePlaceholders.concat(Library.findLayersInLayer('{*}', false, 'MSShapeGroup', symbolMaster, false, false));
+		
+		//process all image placeholders
+		imagePlaceholders.forEach(function(shapeGroup) {
+			processSymbolImagePlaceholder(shapeGroup, dataRow, rootDir, overrides);
+		});
 
-		//set text layer text
-		textLayer.setStringValue(mergedText);
-
-		//resize text layer to fit text
-		Library.refreshTextLayer(textLayer);
-
-		//check if text layer has fixed size and trimming activated
-		if(textLayer.textBehaviour() == 1 && opt.trimText) {
-
-			//get original text layer height
-			var textLayerFrame = textLayer.frame();
-			var originalHeight = textLayerFrame.height();
-
-			//resize to fit and get new height
-			Library.resizeTextLayer(textLayer);
-			var newHeight = textLayerFrame.height();
-
-			//shorten text to fit
-			var didTrim = (newHeight > originalHeight);
-			while(newHeight > originalHeight) {
-
-				//trim last character
-				mergedText = mergedText.substring(0, mergedText.length - 1);
-
-				//set trimmed text and re-evaluate height
-				textLayer.setStringValue(mergedText);
-				Library.resizeTextLayer(textLayer);
-				newHeight = textLayerFrame.height();
-			}
-
-			//if trimmed add ellipsis
-			if(didTrim && opt.insertEllipsis) {
-
-				//add ellipsis
-				mergedText += '…';
-				textLayer.setStringValue(mergedText);
-				Library.resizeTextLayer(textLayer);
-				newHeight = textLayerFrame.height();
-
-				//make sure that ellipsis fits in the text layer
-				while(newHeight > originalHeight) {
-
-					//remove character before ellipsis
-					mergedText = mergedText.substring(0, mergedText.length - 2);
-					mergedText += '…';
-
-					//set new text with ellipsis
-					textLayer.setStringValue(mergedText);
-					Library.resizeTextLayer(textLayer);
-					newHeight = textLayerFrame.height();
-				}
-			}
-		}
-		else {
-
-			//resize to fit
-			Library.resizeTextLayer(textLayer);
-		}
+		//set new overrides
+		symbolInstance.setOverrides(NSDictionary.dictionaryWithObject_forKey(overrides, NSNumber.numberWithInt(0)));
 	}
 
 
@@ -765,10 +841,23 @@ function populate(data, selectedLayers, opt) {
 
 		[artboard setName: mergedText];
 	}
-
-
-	function processImagePlaceholder(shapeGroup, dataRow, rootDir) {
-
+	
+	
+	function processSymbolImagePlaceholder(shapeGroup, dataRow, rootDir, overrides) {
+		
+		//get image data
+		var imageData = getImageData(shapeGroup, dataRow, rootDir);
+		
+		//get id of text layer
+		var layerId = shapeGroup.objectID();
+	
+		//add override for layer
+		overrides.setValue_forKey(imageData, layerId);
+	}
+	
+	
+	function getImageData(shapeGroup, dataRow, rootDir) {
+		
 		//get shape group name
 		var shapeGroupName = [shapeGroup name].toString();
 
@@ -777,16 +866,7 @@ function populate(data, selectedLayers, opt) {
 
 		//get image url for placeholder from data row
 		var imageUrl = findValueInDataRow(placeholder, dataRow);
-		if(!imageUrl) {
-
-			//get shape group fill
-			var fill = [[[shapeGroup style] fills] firstObject];
-
-			//disable fill
-			fill.setIsEnabled(false);
-
-			return;
-		}
+		if(!imageUrl) return;
 		if(imageUrl[0] == '/') imageUrl = imageUrl.substring(1);
 
 		//build full image url
@@ -797,17 +877,7 @@ function populate(data, selectedLayers, opt) {
 		if ([fileManager fileExistsAtPath: fullImageUrl]) {
 			var image = [[NSImage alloc] initWithContentsOfFile: fullImageUrl];
 			var imageData = [[MSImageData alloc] initWithImage: image convertColorSpace: false]];
-			
-			//get shape group fill
-			var fill = [[[shapeGroup style] fills] firstObject];
-
-			//enable fill
-			fill.setIsEnabled(true);
-
-			//set pattern fill
-			fill.setFillType(4);
-			[fill setImage: imageData];
-			fill.setPatternFillType(1);
+			return imageData;
 		}
 
 		// Regular expression to match URL images
@@ -827,6 +897,16 @@ function populate(data, selectedLayers, opt) {
 			
 			//create image data from image
 			var imageData = [[MSImageData alloc] initWithImage: image convertColorSpace: false]];
+			return imageData;
+		}
+	}
+	
+
+	function processImagePlaceholder(shapeGroup, dataRow, rootDir) {
+		
+		//get image data
+		var imageData = getImageData(shapeGroup, dataRow, rootDir);
+		if(imageData) {
 			
 			//get shape group fill
 			var fill = [[[shapeGroup style] fills] firstObject];
@@ -839,8 +919,13 @@ function populate(data, selectedLayers, opt) {
 			[fill setImage: imageData];
 			fill.setPatternFillType(1);
 		}
+		else {
+			
+			//disable fill
+			fill.setIsEnabled(false);
+		}
 	}
-
+	
 
 	function processIconPlaceholder(shapeGroup, dataRow, rootDir) {
 
@@ -1015,6 +1100,7 @@ function populate(data, selectedLayers, opt) {
 			svgIconsImported++;
 		}
 	}
+	
 
 	function processColorPlaceholder(shapeGroup, dataRow, rootDir) {
 
@@ -1051,7 +1137,7 @@ function populate(data, selectedLayers, opt) {
 		// set the color
 		fill.color = [MSColor colorWithSVGString:hexColor];
 	}
-
+	
 
 	function getPlaceholders(str) {
 
@@ -1104,7 +1190,6 @@ function populate(data, selectedLayers, opt) {
 				results.push(placeholder);
 			}
 		}
-
 
 		function processPlaceholderString(placeholderString) {
 
@@ -1675,6 +1760,7 @@ function restoreTextPlaceholdersHandler(_context) {
 	//get all text layers and artboards in selection
 	var textLayers = [];
 	var artboards = [];
+	var symbolInstances = [];
 	selectedLayers.forEach(function(layer) {
 		
 		//add artboards too
@@ -1691,6 +1777,9 @@ function restoreTextPlaceholdersHandler(_context) {
 		//add text layer
 		else if(Library.isLayerText(layer)) {
 			textLayers.push(layer);
+		}
+		else if(Library.isSymbolInstance(layer)) {
+			symbolInstances.push(layer);
 		}
 	});
 
@@ -1729,7 +1818,14 @@ function restoreTextPlaceholdersHandler(_context) {
 
 		//remove text stored on layer
 		[command setValue: nil forKey: 'textWithPlaceholders' onLayer: artboardLayer];
-	})
+	});
+	
+	//restore symbol instances
+	symbolInstances.forEach(function(symbolInstance) {
+		
+		//remove overrides
+		symbolInstance.setOverrides(null);
+	});
 }
 
 function getImage(urlString) {
