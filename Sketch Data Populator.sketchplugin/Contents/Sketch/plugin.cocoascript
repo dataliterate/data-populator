@@ -1264,10 +1264,12 @@ function populate(data, selectedLayers, opt) {
         
         //get image data
         var imageData = getImageData(shapeGroup, dataRow, rootDir);
-        if(imageData) {
+        
+        //get shape group fill
+        var fill = [[[shapeGroup style] fills] firstObject];
             
-            //get shape group fill
-            var fill = [[[shapeGroup style] fills] firstObject];
+        //set fill
+        if(imageData) {
 
             //enable fill
             fill.setIsEnabled(true);
