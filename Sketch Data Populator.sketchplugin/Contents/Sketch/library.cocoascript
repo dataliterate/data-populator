@@ -5,7 +5,6 @@
 var Library = {};
 (function(self) {
 
-
 	//array conversion
 	self.jsArray = jsArray;
 
@@ -16,14 +15,18 @@ var Library = {};
 	self.readFileAsText = readFileAsText;
     self.getPresetsDir = getPresetsDir;
     self.loadPresets = loadPresets;
+    self.getImageFromURL = getImageFromURL;
+    self.loadJSONData = loadJSONData;
 
-	//find layers
+	//layers
 	self.findLayersInLayer = findLayersInLayer;
 	self.findLayerInLayer = findLayerInLayer;
     self.findPageWithName = findPageWithName;
 	self.resizeTextLayer = resizeTextLayer;
     self.refreshTextLayer = refreshTextLayer;
     self.getSelectedLayers = getSelectedLayers;
+    self.restoreSelection = restoreSelection;
+    self.createGrid = createGrid;
 
 	//check layer type
     self.isSymbolInstance = isSymbolInstance;
@@ -46,7 +49,9 @@ var Library = {};
     self.createLabel = createLabel;
     self.createCheckbox = createCheckbox;
     self.createSelect = createSelect;
-
+    self.createDataOptionsView = createDataOptionsView;
+    self.createLayoutOptionsView = createLayoutOptionsView;
+    
 
 	//===============================================
 
@@ -202,6 +207,38 @@ var Library = {};
 
         return presets;
     }
+    
+    
+    function getImageFromURL(urlString) {
+    
+        //get data from url
+        var url = NSURL.URLWithString(urlString);
+        var data = [url resourceDataUsingCache:false];
+        if(!data) return;
+
+        //create image from data
+        var image = [[NSImage alloc] initWithData:data];
+        return image;
+    }
+    
+    
+    function loadJSONData(path) {
+
+        //load contents
+        var contents = readFileAsText(path);
+
+        //get data from JSON
+        var data;
+        try {
+            data = JSON.parse(contents);
+        }
+        catch(e) {
+            context.document.showMessage("There was an error parsing data. Please make sure it's valid.");
+            return;
+        }
+
+        return data;
+    }
 
 
     function findLayersInLayer(name, exactMatch, type, rootLayer, subLayersOnly, layersToExclude) {
@@ -315,6 +352,107 @@ var Library = {};
         }
 
         return selectedLayers;
+    }
+    
+    
+    function restoreSelection() {
+
+        //deselect current selection
+        var doc = context.document;
+        [[doc currentPage] deselectAllLayers];
+
+        selection.forEach(function(layer) {
+            [layer select:true byExpandingSelection:true];
+        });
+    }
+    
+    
+    function createGrid(selectedLayers, opt) {
+
+        //check rows count
+        if(!opt.rowsCount || opt.rowsCount < 0) {
+            context.document.showMessage('Number of grid rows must be at least 1.');
+            return;
+        }
+
+        //check rows margin
+        if((!opt.rowsMargin && opt.rowsMargin != 0) || opt.rowsMargin < 0) {
+            context.document.showMessage('Grid row margin is invalid.');
+            return;
+        }
+
+        //check column count
+        if(!opt.columnsCount || opt.columnsCount < 0) {
+            context.document.showMessage('Number of grid columns must be at least 1.');
+            return;
+        }
+
+        //check columns margin
+        if((!opt.columnsMargin && opt.columnsMargin != 0) || opt.columnsMargin < 0) {
+            context.document.showMessage('Grid column margin is invalid.');
+            return;
+        }
+
+        //get first layer (most top left)
+        var layer = selectedLayers[0];
+        var smallestX = selectedLayers[0].frame().x();
+        var smallestY = selectedLayers[0].frame().y();
+        for(var i = 0; i < selectedLayers.length; i++) {
+            var tempLayer = selectedLayers[i];
+            if(tempLayer.frame().x() < smallestX || tempLayer.frame().y() < smallestY) {
+                smallestX = tempLayer.frame().x();
+                smallestY = tempLayer.frame().y();
+                layer = tempLayer;
+            }
+        }
+
+        //arrange copies of the first layer
+        var layerWidth = layer.frame().width();
+        var layerHeight = layer.frame().height();
+        var layerParent = [layer parentGroup];
+        if(!layerParent) layerParent = [layer parentArtboard];
+        if(!layerParent) layerParent = [layer parentPage];
+
+        //remove selected layers from parent
+        selectedLayers.forEach(function(tempLayer) {
+            tempLayer.removeFromParent();
+        });
+
+        //keep track of original position
+        var startX = layer.frame().x();
+        var startY = layer.frame().y();
+
+        //store new selected layers
+        var newSelectedLayers = [];
+
+        //create rows
+        for(var i = 0; i < opt.rowsCount; i++) {
+
+            //set row y
+            var y = startY + (i * (layerHeight + opt.rowsMargin));
+
+            //create columns
+            for(var j = 0; j < opt.columnsCount; j++) {
+
+                //create layer copy
+                var copy = copyLayer(layer);
+
+                //add to parent layer
+                layerParent.addLayers([copy]);
+
+                //add to selected layers
+                newSelectedLayers.push(copy);
+
+                //set column x
+                var x = startX + (j * (layerWidth + opt.columnsMargin));
+
+                //position copy
+                copy.frame().setX(x);
+                copy.frame().setY(y);
+            }
+        }
+
+        return newSelectedLayers;
     }
 
     
@@ -519,6 +657,161 @@ var Library = {};
         }
 
         return alert;
+    }
+    
+    
+    function createDataOptionsView() {
+
+        //create options view
+        var optionsView = [[NSView alloc] initWithFrame: NSMakeRect(0, 0, 300, 110)];
+
+        //create options view title
+        var optionsViewTitle = createLabel('Data options', 12, true, NSMakeRect(0, 90, 300, 20));
+        [optionsView addSubview: optionsViewTitle];
+
+        //create randomize checkbox
+        var randomizeCheckbox = createCheckbox('Randomize data order', false, NSMakeRect(0, 65, 300, 20));
+        [optionsView addSubview: randomizeCheckbox];
+
+        //set randomize checkbox state
+        [randomizeCheckbox setState: [[NSUserDefaults standardUserDefaults] objectForKey:'randomizeData']];
+
+        //create trim checkbox
+        var trimCheckbox = createCheckbox('Trim overflowing text (fixed width text layers)', false, NSMakeRect(0, 45, 300, 20));
+        [optionsView addSubview: trimCheckbox];
+
+        //set trim checkbox state
+        [trimCheckbox setState: [[NSUserDefaults standardUserDefaults] objectForKey:'trimText']];
+
+        //create ellipsis checkbox
+        var ellipsisCheckbox = createCheckbox('Insert ellipsis after trimmed text', false, NSMakeRect(0, 25, 300, 20));
+        [optionsView addSubview: ellipsisCheckbox];
+
+        //set ellipsis checkbox state
+        [ellipsisCheckbox setState: [[NSUserDefaults standardUserDefaults] objectForKey:'insertEllipsis']];
+
+        //create substitute label
+        var substituteLabel = createLabel('Default substitute:', 12, false, NSMakeRect(0, 0, 110, 20));
+        [optionsView addSubview: substituteLabel];
+
+        //create substitute text field
+        var substituteTextField = [[NSTextField alloc] initWithFrame:NSMakeRect(110, 0, 120, 22)];
+        [optionsView addSubview: substituteTextField];
+
+        //set substitute
+        if([[NSUserDefaults standardUserDefaults] objectForKey:'defaultSubstitute']) {
+            [substituteTextField setStringValue:[[NSUserDefaults standardUserDefaults] objectForKey:'defaultSubstitute']];
+        }
+        else {
+            [substituteTextField setStringValue:''];
+        }
+
+
+        //return configured view
+        return {
+            view: optionsView,
+            randomizeCheckbox: randomizeCheckbox,
+            trimCheckbox: trimCheckbox,
+            ellipsisCheckbox: ellipsisCheckbox,
+            substituteTextField: substituteTextField
+        };
+    }
+
+
+    function createLayoutOptionsView() {
+
+        //create options view
+        var optionsView = [[NSView alloc] initWithFrame: NSMakeRect(0, 0, 300, 104)];
+
+        //create options view title
+        var optionsViewTitle = createLabel('Layout options', 12, true, NSMakeRect(0, 84, 300, 20));
+        [optionsView addSubview: optionsViewTitle];
+
+        //create create grid checkbox
+        var createGridCheckbox = createCheckbox('Create grid', false, NSMakeRect(0, 59, 300, 20));
+        [optionsView addSubview: createGridCheckbox];
+
+        //set randomize checkbox state
+        [createGridCheckbox setState: [[NSUserDefaults standardUserDefaults] objectForKey:'createGrid']];
+
+
+
+        //create rows count label
+        var rowsCountLabel = createLabel('Rows:', 12, false, NSMakeRect(0, 27, 60, 20));
+        [optionsView addSubview: rowsCountLabel];
+
+        //create rows count text field
+        var rowsCountTextField = [[NSTextField alloc] initWithFrame:NSMakeRect(60, 27, 70, 22)];
+        [optionsView addSubview: rowsCountTextField];
+
+        //set rows count
+        if([[NSUserDefaults standardUserDefaults] objectForKey:'rowsCount']) {
+            [rowsCountTextField setStringValue:[[NSUserDefaults standardUserDefaults] objectForKey:'rowsCount']];
+        }
+        else {
+            [rowsCountTextField setStringValue:'1'];
+        }
+
+
+        //create rows margin label
+        var rowsMarginLabel = createLabel('Margin:', 12, false, NSMakeRect(142, 27, 50, 20));
+        [optionsView addSubview: rowsMarginLabel];
+
+        //create rows margin text field
+        var rowsMarginTextField = [[NSTextField alloc] initWithFrame:NSMakeRect(190, 27, 70, 22)];
+        [optionsView addSubview: rowsMarginTextField];
+
+        //set rows margin
+        if([[NSUserDefaults standardUserDefaults] objectForKey:'rowsMargin']) {
+            [rowsMarginTextField setStringValue:[[NSUserDefaults standardUserDefaults] objectForKey:'rowsMargin']];
+        }
+        else {
+            [rowsMarginTextField setStringValue:'10'];
+        }
+
+
+        //create columns count label
+        var columnsCountLabel = createLabel('Columns:', 12, false, NSMakeRect(0, 0, 60, 20));
+        [optionsView addSubview: columnsCountLabel];
+
+        //create columns count text field
+        var columnsCountTextField = [[NSTextField alloc] initWithFrame:NSMakeRect(60, 0, 70, 22)];
+        [optionsView addSubview: columnsCountTextField];
+
+        //set columns count
+        if([[NSUserDefaults standardUserDefaults] objectForKey:'columnsCount']) {
+            [columnsCountTextField setStringValue:[[NSUserDefaults standardUserDefaults] objectForKey:'columnsCount']];
+        }
+        else {
+            [columnsCountTextField setStringValue:'1'];
+        }
+
+        //create columns margin label
+        var columnsMarginLabel = createLabel('Margin:', 12, false, NSMakeRect(142, 0, 50, 20));
+        [optionsView addSubview: columnsMarginLabel];
+
+        //create columns margin text field
+        var columnsMarginTextField = [[NSTextField alloc] initWithFrame:NSMakeRect(190, 0, 70, 22)];
+        [optionsView addSubview: columnsMarginTextField];
+
+
+        //set columns margin
+        if([[NSUserDefaults standardUserDefaults] objectForKey:'columnsMargin']) {
+            [columnsMarginTextField setStringValue:[[NSUserDefaults standardUserDefaults] objectForKey:'columnsMargin']];
+        }
+        else {
+            [columnsMarginTextField setStringValue:'10'];
+        }
+
+        //return configured view
+        return {
+            view: optionsView,
+            createGridCheckbox: createGridCheckbox,
+            rowsCountTextField: rowsCountTextField,
+            rowsMarginTextField: rowsMarginTextField,
+            columnsCountTextField: columnsCountTextField,
+            columnsMarginTextField: columnsMarginTextField
+        };
     }
 
 
