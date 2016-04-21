@@ -5,8 +5,8 @@
     "authorEmail" : "info@precious-forever.com",
     "homepage": "https://github.com/preciousforever/sketch-data-populator",
     "identifier": "com.precious-forever.sketch.datapopulator",
-    "compatibleVersion": "3.5.1",
-    "version": "1.5.1",
+    "compatibleVersion": "3.7",
+    "version": "1.6-beta.2",
     "commands": [{
         "name": "Populate with Preset",
         "identifier": "populateWithPreset",
