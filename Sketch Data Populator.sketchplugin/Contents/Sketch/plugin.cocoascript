@@ -1210,7 +1210,12 @@ function populate(data, selectedLayers, opt) {
         var layerId = shapeGroup.objectID();
     
         //add override for layer
-        overrides.setValue_forKey(imageData, layerId);
+        if(imageData) {
+        	overrides.setValue_forKey(imageData, layerId);
+        }
+        else {
+        	overrides.setValue_forKey(null, layerId);
+        }
     }
     
     
