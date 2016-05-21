@@ -969,6 +969,12 @@ function populate(data, selectedLayers, opt) {
         //get text from text layer (in the symbol master)
         var text = textLayer.stringValue();
         
+        //reference command
+        var command = context.command;
+        
+        //store text on layer (in symbol master)
+        [command setValue: String(text) forKey: 'textWithPlaceholders' onLayer: textLayer];
+        
         //merge text with values
         var mergedText = getPopulatedText(text, dataRow);
         
