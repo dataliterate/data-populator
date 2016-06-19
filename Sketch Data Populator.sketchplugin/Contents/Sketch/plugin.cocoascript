@@ -1256,7 +1256,7 @@ function populate(data, selectedLayers, opt) {
         if (urlRegexp.test(imageUrl)) {
             
             //get image from url
-            var image = getImage(imageUrl);
+            var image = Library.getImageFromURL(imageUrl);
             
             //make sure that image was loaded successfully
             if(!image) {
