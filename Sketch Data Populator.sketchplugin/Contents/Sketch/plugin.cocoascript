@@ -482,7 +482,7 @@ function insertSVGHandler(_context) {
 				var SVGImporter = [MSSVGImporter svgImporter];
 
 				//create temporary group for import
-				var container = tempIconPage.addLayerOfType('group');
+				var container = MSLayerGroup.new();
 				container.setName('__IMPORTED_SVG__');
 
 				//import svg into the container
@@ -1358,7 +1358,7 @@ function populate(data, selectedLayers, opt) {
             var SVGImporter = [MSSVGImporter svgImporter];
 
             //create temporary group for import
-            var container = tempIconPage.addLayerOfType('group');
+            var container = MSLayerGroup.new();
             container.setName('__IMPORTED_SVG__');
 
             //import svg into the container
