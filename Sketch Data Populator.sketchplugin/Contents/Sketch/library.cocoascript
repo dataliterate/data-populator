@@ -368,7 +368,7 @@ var Library = {};
     
     
     function createGrid(selectedLayers, opt) {
-
+        
         //check rows count
         if(!opt.rowsCount || opt.rowsCount < 0) {
             context.document.showMessage('Number of grid rows must be at least 1.');
@@ -376,7 +376,7 @@ var Library = {};
         }
 
         //check rows margin
-        if((!opt.rowsMargin && opt.rowsMargin != 0) || opt.rowsMargin < 0) {
+        if(!opt.rowsMargin && opt.rowsMargin != 0) {
             context.document.showMessage('Grid row margin is invalid.');
             return;
         }
@@ -388,7 +388,7 @@ var Library = {};
         }
 
         //check columns margin
-        if((!opt.columnsMargin && opt.columnsMargin != 0) || opt.columnsMargin < 0) {
+        if(!opt.columnsMargin && opt.columnsMargin != 0) {
             context.document.showMessage('Grid column margin is invalid.');
             return;
         }
