@@ -777,11 +777,17 @@ function populate(data, selectedLayers, opt) {
                 });
 
                 //get all text layers in selected layer
-                var textLayers = Library.findLayersInLayer(false, false, 'MSTextLayer', selectedLayer, false, false);
-
+                var fontIconTextLayers = Library.findLayersInLayer('{*}', false, 'MSTextLayer', selectedLayer, false, false);
+                var textLayers = Library.findLayersInLayer(false, false, 'MSTextLayer', selectedLayer, false, fontIconTextLayers);
+                
                 //process all text layers
                 textLayers.forEach(function(textLayer) {
                     processTextLayer(textLayer, dataRow);
+                });
+                
+                //process all icon font layers layers
+                fontIconTextLayers.forEach(function(fontIconTextLayer) {
+                    processTextLayer(fontIconTextLayer, dataRow, true);
                 });
 
                 //find icon and image placeholders
@@ -814,7 +820,17 @@ function populate(data, selectedLayers, opt) {
                 });
             }
             else if(Library.isLayerText(selectedLayer)) {
-                processTextLayer(selectedLayer, dataRow);
+                
+                //check for icon font
+            	var layerName = String(selectedLayer.name());
+            	
+            	//check if font icon
+            	if(layerName.match(/\{.*\}/g)) {
+            		processTextLayer(selectedLayer, dataRow, true);
+            	}
+            	else {
+            		processTextLayer(selectedLayer, dataRow);
+            	}
             }
             else if(Library.isLayerShapeGroup(selectedLayer)) {
 
@@ -917,7 +933,7 @@ function populate(data, selectedLayers, opt) {
     }
 
 
-    function processTextLayer(textLayer, dataRow) {
+    function processTextLayer(textLayer, dataRow, isFontIcon) {
     	
         //reference command
         var command = context.command;
@@ -938,9 +954,29 @@ function populate(data, selectedLayers, opt) {
         [command setValue: String(text) forKey: 'textWithPlaceholders' onLayer: textLayer];
 
         //merge text with values
-        var mergedText = getPopulatedText(text, dataRow);
-
-        //prevent bug with empty text layer
+        var mergedText;
+        if(isFontIcon) {
+        	
+        	//get key from layer name
+        	var placeholder = String(textLayer.name());
+        	var key = placeholder.substring(1, placeholder.length - 1);
+        	
+        	//get value from data row
+        	mergedText = findValueInDataRow(key, dataRow);
+        	if(!mergedText) return;
+        }
+        else {
+        	
+        	//get merged text by populating placeholders
+        	mergedText = getPopulatedText(text, dataRow);
+	        
+	        //check if text layer has fixed size and trimming activated
+	        if(textLayer.textBehaviour() == 1 && opt.trimText) {
+	        	mergedText = trimText(textLayer, mergedText, opt.insertEllipsis);
+	        }
+	    }
+	    
+	    //prevent bug with empty text layer
         if(!mergedText.length) {
             mergedText = '-';
             textLayer.setIsVisible(false);
@@ -949,13 +985,14 @@ function populate(data, selectedLayers, opt) {
             textLayer.setIsVisible(true);
         }
         
-        //check if text layer has fixed size and trimming activated
-        if(textLayer.textBehaviour() == 1 && opt.trimText) {
-        	mergedText = trimText(textLayer, mergedText, opt.insertEllipsis);
-        }
+        //get current font
+        var font = textLayer.font();
         
         //set text layer text
         textLayer.setStringValue(mergedText);
+        
+        //set current font back (fix for font icons)
+        textLayer.setFont(font);
 
         //resize text layer to fit text
         Library.refreshTextLayer(textLayer);
@@ -964,7 +1001,7 @@ function populate(data, selectedLayers, opt) {
         Library.resizeTextLayer(textLayer);
     }
     
-    function processSymbolTextLayer(textLayer, dataRow, overrides) {
+    function processSymbolTextLayer(textLayer, dataRow, overrides, isFontIcon) {
         
         //get text from text layer (in the symbol master)
         var text = textLayer.stringValue();
@@ -976,13 +1013,28 @@ function populate(data, selectedLayers, opt) {
         [command setValue: String(text) forKey: 'textWithPlaceholders' onLayer: textLayer];
         
         //merge text with values
-        var mergedText = getPopulatedText(text, dataRow);
-        
-        //check if text layer has fixed size and trimming activated
-        if(textLayer.textBehaviour() == 1 && opt.trimText) {
-        	mergedText = trimText(textLayer, mergedText, opt.insertEllipsis);
+        var mergedText;
+        if(isFontIcon) {
+        	
+        	//get key from layer name
+        	var placeholder = String(textLayer.name());
+        	var key = placeholder.substring(1, placeholder.length - 1);
+        	
+        	//get value from data row
+        	mergedText = findValueInDataRow(key, dataRow);
+        	if(!mergedText) return;
         }
-
+        else {
+        	
+        	//get merged text by populating placeholders
+        	mergedText = getPopulatedText(text, dataRow);
+        	
+        	//check if text layer has fixed size and trimming activated
+	        if(textLayer.textBehaviour() == 1 && opt.trimText) {
+	        	mergedText = trimText(textLayer, mergedText, opt.insertEllipsis);
+	        }
+	    }
+        
         //make text invisible by setting it to a space
         if(!mergedText.length) {
             mergedText = ' ';
@@ -1096,11 +1148,17 @@ function populate(data, selectedLayers, opt) {
         var symbolMaster = symbolInstance.symbolMaster();
         
         //get text layers in symbol
-        var textLayers = Library.findLayersInLayer(false, false, 'MSTextLayer', symbolMaster, false, false);
+        var fontIconTextLayers = Library.findLayersInLayer('{*}', false, 'MSTextLayer', symbolMaster, false, false);
+        var textLayers = Library.findLayersInLayer(false, false, 'MSTextLayer', symbolMaster, false, fontIconTextLayers);
         
         //process all text layers
         textLayers.forEach(function(textLayer) {
             processSymbolTextLayer(textLayer, dataRow, overrides);
+        });
+        
+        //process all icon font layers layers
+        fontIconTextLayers.forEach(function(fontIconTextLayer) {
+            processSymbolTextLayer(fontIconTextLayer, dataRow, overrides, true);
         });
 
         //get image placeholders
