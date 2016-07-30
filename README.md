@@ -32,8 +32,6 @@ The **Sketch Data Populator** plugin creates a grid from a selected element (Lay
 
 2. In the same Layer Group, create a Shape Layer (this is your image placeholder). Give the Shape Layer a placeholder name in curly brackets – such as ```{image}```. The plugin's "Populate with …" command will replace this placeholder with respective image data (PNG, JPG).
 
-3. Create another Shape Layer as your icon placeholder. Give it a placeholder name in double curly brackets, something like ```{{icon}}```. Set any of its properties like size, fill color or shadow as desired – all properties will apply to the final icon once populated. The plugin's "Populate with …" command will replace this placeholder with respective icon vector data (SVG).
-
 ### All available Commands:
 
 #### Populate with JSON
@@ -59,8 +57,31 @@ _Text Substitutes_
 `{placeholder?}` uses the _Default substitute_  
 `{placeholder?substitute}` uses the custom substitute you append after the "?"
 
-_Image & SVG Substitutes_  
-If there's no image or SVG available, it will turn off the fill of the placeholder shape and turn it on again once there's data available when re-populating. So for images, it's recommended to put a substitute image or pictogram behind the actual image. So this will be visible if there's no actual image data (see "demo.sketch" for examples).
+_Image Substitutes_  
+If there's no image available, it will turn off the fill of the placeholder shape and turn it on again once there's data available when re-populating. So for images, it's recommended to put a substitute image or pictogram behind the actual image. So this will be visible if there's no actual image data (see "demo.sketch" for examples).
+
+**"Join" function**
+Imagine you want to concatenate the keys _name_, _price_, _date_ and _time_ seperated by a `·` (interpunct/middle dot). Usually, you would create a string in a Text Layer like this:
+`{name} · {price} · {date} · {time}`
+
+This works great as long as you have data for each key – like:
+`CursusId.jpeg · $1993.33 · 3.12.2014 · 2:29 PM`
+
+But now imagine there's no data (or substitute) for _price_ and _time_. Which would lead to:
+`CursusId.jpeg ·  · 3.12.2014 · `
+
+That's why there's now a "join" function with the following syntax to be used inside a {placeholder}:
+`{name,price,date,time|& · }`
+
+1. comma separated list of keys
+2. `|`
+3. `&` followed by a delimiter, eg. ` · ` or `, ` (put _spaces_ where you need them!)
+
+So in our above mentioned example, without data (or substitutes) for _price_ and _time_, it renders like this:
+`CursusId.jpeg · 3.12.2014`
+
+Here's an animated example:
+![join-enumeration](https://cloud.githubusercontent.com/assets/1927315/8994538/462cbae4-370c-11e5-82ca-79e1939a050d.gif)
 
 **Layout options**  
 If "Create grid" is checked, the plugin will create a grid from selected elements (Layer Groups or Artboards) and populate them in one go. Set the amount of rows and columns and the respective margins. This option works very similar to Sketch's "Make Grid" tool.
@@ -70,9 +91,6 @@ re-populates all selections with the last used Preset/JSON and options configura
 
 #### Restore Placeholders
 restores populated Text Layers to their initial {placeholders}. An example: you used the placeholders "{firstname} {lastname}" in a Text Layer, they became "John Doe" after populating. "Restore Placeholders" will restore to "{firstname} {lastname}". This is useful because populating a Text Layer means the initially used {placeholders} will be persisted – so without restoring, it would always try to populate the initial {placeholders}, no matter what you type into the field.
-
-#### Place SVG
-will prompt you for picking a SVG asset on your computer. It will replace the selected shape and adapt its properties (like size, color, shadow …).
 
 #### Place image
 will prompt you for picking an image on your computer and then use it as the background for the selected shape.
