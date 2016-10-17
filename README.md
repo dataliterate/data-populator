@@ -1,4 +1,4 @@
-![Sketch Data Populator](sketch-data-populator.png)
+![Sketch Data Populator](https://github.com/preciousforever/sketch-data-populator/raw/master/sketch-data-populator.png)
 
 ## Why Data Populator
 
@@ -24,7 +24,7 @@ We conceived _Sketch Data Populator_ to improve our design process for working w
 
 The **Sketch Data Populator** plugin creates a grid from a selected element (Layer Group or Artboard) and replaces text and image {placeholders} with data from a JSON source:
 
-![Sketch Data Populator](sketch-data-populator.gif)
+![Sketch Data Populator](https://github.com/preciousforever/sketch-data-populator/raw/master/sketch-data-populator.gif)
 
 ### Here's how it works:
 
@@ -37,12 +37,12 @@ The **Sketch Data Populator** plugin creates a grid from a selected element (Lay
 #### Populate with JSON
 will ask you to choose a JSON file that can sit anywhere on your Computer. After picking a JSON file you can configure Data and Layout options:
 
-![Populate with JSON](populate-with-json-dialog.png)
+![Populate with JSON](https://github.com/preciousforever/sketch-data-populator/raw/master/populate-with-json-dialog.png)
 
 #### Populate with Preset
 will display a dialog that allows you to select one of your Presets as well as configure Data and Layout options:
 
-![Populate with Preset](populate-with-preset-dialog.png)
+![Populate with Preset](https://github.com/preciousforever/sketch-data-populator/raw/master/populate-with-preset-dialog.png)
 
 **Data options**  
 * _Randomize data order_: instead of going through the JSON top down row by row, it will pick a random data set.  
@@ -103,46 +103,59 @@ will point you into the plugin's location for its Presets. Presets are simply JS
 Check out the **demo.sketch** file to get an idea.
 
 ---
+## Additional Documentation
 
-### Data format & assets
+### Text placeholders (MSTextLayer)
+    
+    In layer name:
+        - completely replaces the contents of the text layer
+        - can be used for font icons
+        - the name can contain other text, conditional actions, args, etc
+        - only the first placeholder is considered if multiple exist
+    
+    In layer content:
+        - each placeholder is treated as per usual
+    
+    Placeholder examples (usable in layer name and content): 
+        - {firstName}, {name.first} - John
+        - {firstName, lastName | & • } - John • Doe
+        - {(lastName?, firstName | &, ), DOB | & born on } - Doe, John born on 14/07/1970
+        - {firstName | upper} - JOHN
+        - {firstName | upper | max 2} - JO
+        - {(firstName | upper | max 2), (lastName | max 1) | & • } - JO • D
+        - {keypath?} - The default substitute
+        - {keypath?not available} - not available
+        
+    Args (standard CLI args):
+        -l n - set n as the max number of lines in a fixed size text layer
+        
 
-The data need to be stored in JSON files that can be loaded by the plugin from either the Presets Folder (Populate with Preset) or from any folder on your computer (Populate with JSON). The data in JSON need to be in an array like in this example:
+### Image placeholders (MSShapeGroup, MSBitmapLayer)
+    
+    - sets the fill of the layer to the image (creates a new fill if needed, e.g. for a bitmap layer)
+    
+    Placeholder examples:
+        - {avatarImage}
+        - {avatar.image}
+        
+      
+### Filters
 
-```json
-[
-  {
-    "id": 1,
-    "firstname": "Willie",
-    "lastname": "Willis",
-    "company": "Myworks",
-    "job": "Marketing Assistant",
-    "email": "wwillis0@cdc.gov",
-    "phone": "9-(528)011-1428",
-    "address": "99 Hallows Terrace",
-    "city": "Outeiro",
-    "country": "Portugal",
-    "image": "assets/1.jpg",
-    "icon": "assets/vip.svg"
-  },
-  {
-    "id": 2,
-    "firstname": "Melissa",
-    "lastname": "Flores",
-    "company": "Tagtune",
-    "job": "Actuary",
-    "email": "mflores1@jigsy.com",
-    "phone": "4-(965)937-9250",
-    "address": "46 Acker Trail",
-    "city": "Santiago",
-    "country": "Philippines",
-    "image": "assets/2.jpg",
-    "icon": "assets/vip.svg"
-  }
-]
-```
+    Filters are used via the pipe (|) operator and can be chained. Each filter has a name and an alias, e.g. join and &. More filters can be easily implemented.
 
-Note that in the example the image file (JPG) and the icon (SVG) are referenced from a folder called _assets_. This means all your image and icon data should be placed inside a folder that sits on the same level as your JSON file. The images/icons folders as well as your images and icons can be named anything you like, you just need to reference them relative to your JSON file.
+      
+### Conditional actions
 
-You can also use a full URL to reference your images if that is your preference.
-
-<sup>The mock data in "demo" were created with https://www.mockaroo.com, which is a pretty powerful tool to generate all kinds of data. The "products" images are from apple.com, the "contacts" images from https://randomuser.me/ and http://uifaces.com/</sup>
+    - actions that get executed based on a condition applicable to the specific layer
+    - can be added to any layer (even text layers whose names contain a placeholder)
+    
+    Actions:
+        - #show[condition] - shows layer if true and hides otherwise
+        - #hide[condition] - hides layer if true and shows otherwise
+        - #lock[condition] - locks layer if true and unlocks otherwise
+        - #unlock[condition] - unlocks layer if true and locks otherwise
+        - #delete[condition] - deletes the layer if the condition is true
+        - #plugin[condition, command path] - runs the specified plugin command if condition is true
+        
+    Example actions:
+        - #plugin["{name}".length > 2, Some Plugin > The Command]
