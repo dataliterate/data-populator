@@ -1,0 +1,66 @@
+{
+  "name": "Sketch Data Populator",
+  "bundleName": "Sketch Data Populator",
+  "description": "Say goodbye to Lorem Ipsum: populate your Sketch documents with meaningful data.",
+  "author": "precious design studio",
+  "authorEmail": "info@precious-forever.com",
+  "version": "2.0.0",
+  "identifier": "com.precious-forever.sketch.datapopulator2",
+  "compatibleVersion": "3.7",
+  "menu": {
+    "isRoot": false,
+    "items": [
+      "populateWithPreset",
+      "populateWithJSON",
+      "populateTable",
+      "populateAgain",
+      "revealPresets",
+      "clearLayers"
+    ]
+  },
+  "commands": [
+    {
+      "identifier": "populateWithPreset",
+      "handler": "___populateWithPreset_run_handler_",
+      "script": "plugin.js",
+      "name": "Populate with Preset",
+      "shortcut": ""
+    },
+    {
+      "identifier": "populateWithJSON",
+      "handler": "___populateWithJson_run_handler_",
+      "script": "plugin.js",
+      "name": "Populate with JSON",
+      "shortcut": ""
+    },
+    {
+      "identifier": "populateTable",
+      "handler": "___populateTable_run_handler_",
+      "script": "plugin.js",
+      "name": "Populate Table",
+      "shortcut": ""
+    },
+    {
+      "identifier": "populateAgain",
+      "handler": "___populateAgain_run_handler_",
+      "script": "plugin.js",
+      "name": "Populate Again",
+      "shortcut": "cmd shift x"
+    },
+    {
+      "identifier": "revealPresets",
+      "handler": "___revealPresets_run_handler_",
+      "script": "plugin.js",
+      "name": "Reveal Presets",
+      "shortcut": ""
+    },
+    {
+      "identifier": "clearLayers",
+      "handler": "___clearLayers_run_handler_",
+      "script": "plugin.js",
+      "name": "Clear Layers",
+      "shortcut": ""
+    }
+  ],
+  "disableCocoaScriptPreprocessor": true
+}

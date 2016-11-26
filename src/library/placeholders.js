@@ -365,7 +365,7 @@ export function populatePlaceholder(placeholder, data, defaultSubstitute) {
     populated = populated.join(' ')
   }
 
-  return populated
+  return String(populated)
 }
 
 
