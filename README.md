@@ -16,6 +16,9 @@ Please report bugs, observations, ideas & feature requests as [issues](https://g
 
 We conceived _Sketch Data Populator_ to improve our design process for working with data at [precious design studio](http://precious-forever.com/) and developed the plugin in collaboration with [Lukas Ondrej](https://github.com/lukasondrej). Please get in touch if you have questions or comments via [@preciousforever](https://twitter.com/preciousforever) or [our website](http://precious-forever.com/contact).
 
+It is based on Sketch Fusion by [Andrey Shakhmin, @turbobabr](https://github.com/turbobabr), as presented at [#SketcHHackday 2016](http://designtoolshackday.com).
+
+
 ## Installation
 1. Download the ZIP file (or clone repository)
 2. Move the file ```Sketch Data Populator.sketchplugin``` into your Sketch Plugins folder. In Sketch 3, choose **Plugins › Reveal Plugins Folder…** to open it.
@@ -89,11 +92,8 @@ If "Create grid" is checked, the plugin will create a grid from selected element
 #### Populate again (⌘⇧X)
 re-populates all selections with the last used Preset/JSON and options configuration. Great for "shuffling" through different data sets.
 
-#### Restore Placeholders
-restores populated Text Layers to their initial {placeholders}. An example: you used the placeholders "{firstname} {lastname}" in a Text Layer, they became "John Doe" after populating. "Restore Placeholders" will restore to "{firstname} {lastname}". This is useful because populating a Text Layer means the initially used {placeholders} will be persisted – so without restoring, it would always try to populate the initial {placeholders}, no matter what you type into the field.
-
-#### Place image
-will prompt you for picking an image on your computer and then use it as the background for the selected shape.
+#### Clear Layer
+restores populated Text Layers to their initial {placeholders}. An example: you used the placeholders "{firstname} {lastname}" in a Text Layer, they became "John Doe" after populating. "Clear Layer" will restore to "{firstname} {lastname}". This is useful because populating a Text Layer means the initially used {placeholders} will be persisted – so without restoring, it would always try to populate the initial {placeholders}, no matter what you type into the field.
 
 #### Reveal Presets
 will point you into the plugin's location for its Presets. Presets are simply JSON files and folders with image assets that live inside the plugin bundle. In there, you can use any desired folder structure. To find the "Preset" folder inside the plugin bundle, right click _Sketch Data Populator.sketchplugin_ and select _Show Package Contents_.
