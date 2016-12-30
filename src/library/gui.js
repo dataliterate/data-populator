@@ -35,7 +35,7 @@ export function showPopulatorDialog(type, opt) {
   }
 
   //create alert for type
-  let alert = createAlert(alertTitle[type], alertDesc[type], 'icon_new.png')
+  let alert = createAlert(alertTitle[type], alertDesc[type], 'icon.png')
 
   //get saved options
   let options = Options()
