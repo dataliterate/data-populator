@@ -1,6 +1,7 @@
 node_modules
 dist
 build
+src/custom-presets
 .idea
 .DB_Store
 *.log
