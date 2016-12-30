@@ -13,6 +13,8 @@ var expandTilde = require('expand-tilde');
 var release = require('gulp-github-release');
 var zip = require('gulp-zip');
 
+var sketch = require('gulp-sketch');
+
 var SKETCH_PLUGINS_FOLDER = path.join(expandTilde('~'),'/Library/Application Support/com.bohemiancoding.sketch3/Plugins');
 
 var ManifestProcessorOptions = {
@@ -40,6 +42,30 @@ function extractManifestObject() {
 
     return JSON.parse(data.substring(startIndex+startTag.length,endIndex));
 }
+
+//export icon
+gulp.task('icon', function(){
+  return gulp.src('./images/icon.sketch')
+    .pipe(sketch({
+      export: 'artboards',
+      formats: 'png'
+    }))
+    .pipe(gulp.dest('./src/resources/'));
+});
+
+//export logo
+gulp.task('logo', function(){
+  return gulp.src('./images/sketch-data-populator.sketch')
+    .pipe(sketch({
+      export: 'artboards',
+      formats: 'png'
+    }))
+    .pipe(gulp.dest('./images/'));
+});
+
+gulp.task('assets',function(callback) {
+    runSequence('icon','logo',callback);
+});
 
 gulp.task('clean', function () {
     return del(['build/**','dist/**']);
@@ -105,6 +131,16 @@ gulp.task('assemble-plugin-presets',function(callback) {
         .pipe(gulp.dest(path.join(__dirname,'dist',normalizePluginFileName(currentManifest.bundleName || currentManifest.name)+'.sketchplugin','Presets')));
 });
 
+//custom Presets
+gulp.task('assemble-plugin-custompresets',function(callback) {
+    function normalizePluginFileName(name) {
+        return name;
+    }
+
+    return gulp.src('src/custom-presets/**/*.*')
+        .pipe(gulp.dest(path.join(__dirname,'dist',normalizePluginFileName(currentManifest.bundleName || currentManifest.name)+'.sketchplugin','Presets')));
+});
+
 gulp.task('install-plugin',function(){
     return gulp.src("dist/**/*.*")
         .pipe(gulp.dest(SKETCH_PLUGINS_FOLDER));
@@ -112,6 +148,10 @@ gulp.task('install-plugin',function(){
 
 gulp.task('build',function(callback) {
     runSequence('clean','prepare-folders','bundle','prepare-manifest','assemble-plugin-bundle','assemble-plugin-resources','assemble-plugin-presets','install-plugin',callback);
+});
+
+gulp.task('build-custom',function(callback) {
+    runSequence('clean','assets','prepare-folders','bundle','prepare-manifest','assemble-plugin-bundle','assemble-plugin-resources','assemble-plugin-presets','assemble-plugin-custompresets','install-plugin',callback);
 });
 
 gulp.task('bundle',function() {
@@ -147,7 +187,7 @@ gulp.task('watch', function(){
 });
 
 gulp.task('default',function(callback) {
-    runSequence('build', callback);
+    runSequence('assets','build', callback);
 });
 
 gulp.task('zip', ['build'], function() {

@@ -31,7 +31,8 @@
     "lodash": "^4.2.1",
     "run-sequence": "^1.1.5",
     "standard": "^7.1.2",
-    "vinyl-source-stream": "^1.1.0"
+    "vinyl-source-stream": "^1.1.0",
+    "gulp-sketch": "^1.0.3"
   },
   "standard": {
     "ignore": [
