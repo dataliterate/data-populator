@@ -192,12 +192,12 @@ gulp.task('default',function(callback) {
 
 gulp.task('zip', ['build'], function() {
   return gulp.src('./dist/*.sketchplugin/**/*')
-    .pipe(zip('Sketch Data Populator.zip'))
+    .pipe(zip('SketchDataPopulator.zip'))
     .pipe(gulp.dest('dist'))
 });
 
 gulp.task('release', ['zip'], function() {
-  return gulp.src('./dist/Sketch Data Populator.zip')
+  return gulp.src('./dist/SketchDataPopulator.zip')
     .pipe(release({
       //token: 'token',                     // or you can set an env var called GITHUB_TOKEN instead
       owner: '',                    // if missing, it will be extracted from manifest (the repository.url field)
