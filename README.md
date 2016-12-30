@@ -11,6 +11,9 @@ We believe designers should work with _meaningful_ and _realistic_ data as early
 
 _Sketch Data Populator_ not only makes you more productive (probably around [60x faster](https://vimeo.com/131896485)), it changes the way you design user interfaces (at least that's what happened to us).
 
+## How to install
+Download the latest version from the [releases page](https://github.com/preciousforever/sketch-data-populator/releases), unzip it and double-click the file to install it in Sketch.
+
 ## Testing & Credits
 
 Please report bugs, observations, ideas & feature requests as [issues](https://github.com/preciousforever/sketch-data-populator/issues) or [get in touch](mailto:feedback@datapopulator.com).
@@ -19,11 +22,7 @@ We conceived _Sketch Data Populator_ to improve our design process for working w
 
 It is based on Sketch Fusion by [Andrey Shakhmin, @turbobabr](https://github.com/turbobabr), as presented at [#SketcHHackday 2016](http://designtoolshackday.com).
 
-## Installation
-1. Download the ZIP file (or clone repository)
-2. Move the file ```Sketch Data Populator.sketchplugin``` into your Sketch Plugins folder. In Sketch 3, choose **Plugins › Reveal Plugins Folder…** to open it.
-
-## How to use …
+## How to use
 
 The **Sketch Data Populator** plugin creates a grid from a selected element (Layer Group or Artboard) and replaces text and image {placeholders} with data from a JSON source:
 
@@ -47,6 +46,21 @@ will display a dialog that allows you to select one of your Presets as well as c
 
 ![Populate with Preset](images/populate-with-preset-dialog.png)
 
+#### Populate again (⌘⇧X)
+re-populates all selections with the last used Preset/JSON and options configuration. Great for "shuffling" through different data sets.
+
+#### Clear Layer
+restores populated Text Layers to their initial {placeholders}. An example: you used the placeholders "{firstname} {lastname}" in a Text Layer, they became "John Doe" after populating. "Clear Layer" will restore to "{firstname} {lastname}". This is useful because populating a Text Layer means the initially used {placeholders} will be persisted – so without restoring, it would always try to populate the initial {placeholders}, no matter what you type into the field.
+
+#### Reveal Presets
+will point you into the plugin's location for its Presets. Presets are simply JSON files and folders with image assets that live inside the plugin bundle. In there, you can use any desired folder structure. To find the "Preset" folder inside the plugin bundle, right click _Sketch Data Populator.sketchplugin_ and select _Show Package Contents_.
+
+Check out the **demo.sketch** file to get an idea.
+
+---
+
+### Data & Layout Options for the 'Populate' commands
+
 **Data options**  
 * _Randomize data order_: instead of going through the JSON top down row by row, it will pick a random data set.  
 * _Trim overflowing text_: a Text Layer that has been set with a fixed width will trim overflowing text.  
@@ -63,7 +77,14 @@ _Text Substitutes_
 _Image Substitutes_  
 If there's no image available, it will turn off the fill of the placeholder shape and turn it on again once there's data available when re-populating. So for images, it's recommended to put a substitute image or pictogram behind the actual image. So this will be visible if there's no actual image data (see "demo.sketch" for examples).
 
-**"Join" function**  
+**Layout options**  
+If "Create grid" is checked, the plugin will create a grid from selected elements (Layer Groups or Artboards) and populate them in one go. Set the amount of rows and columns and the respective margins. This option works very similar to Sketch's "Make Grid" tool.
+
+---
+
+### Filters (WIP)
+
+#### Join
 Imagine you want to concatenate the keys _name_, _price_, _date_ and _time_ seperated by a `·` (interpunct/middle dot). Usually, you would create a string in a Text Layer like this:  
 `{name} · {price} · {date} · {time}`
 
@@ -86,24 +107,25 @@ So in our above mentioned example, without data (or substitutes) for _price_ and
 Here's an animated example:
 ![join-enumeration](https://cloud.githubusercontent.com/assets/1927315/8994538/462cbae4-370c-11e5-82ca-79e1939a050d.gif)
 
-**Layout options**  
-If "Create grid" is checked, the plugin will create a grid from selected elements (Layer Groups or Artboards) and populate them in one go. Set the amount of rows and columns and the respective margins. This option works very similar to Sketch's "Make Grid" tool.
+### Conditional actions (WIP)
 
-#### Populate again (⌘⇧X)
-re-populates all selections with the last used Preset/JSON and options configuration. Great for "shuffling" through different data sets.
+- actions that get executed based on a condition applicable to the specific layer
+- can be added to any layer (even text layers whose names contain a placeholder)
 
-#### Clear Layer
-restores populated Text Layers to their initial {placeholders}. An example: you used the placeholders "{firstname} {lastname}" in a Text Layer, they became "John Doe" after populating. "Clear Layer" will restore to "{firstname} {lastname}". This is useful because populating a Text Layer means the initially used {placeholders} will be persisted – so without restoring, it would always try to populate the initial {placeholders}, no matter what you type into the field.
+#### Available Actions
+- #show[condition] - shows layer if true and hides otherwise
+- #hide[condition] - hides layer if true and shows otherwise
+- #lock[condition] - locks layer if true and unlocks otherwise
+- #unlock[condition] - unlocks layer if true and locks otherwise
+- #delete[condition] - deletes the layer if the condition is true
+- #plugin[condition, command path] - runs the specified plugin command if condition is true
 
-#### Reveal Presets
-will point you into the plugin's location for its Presets. Presets are simply JSON files and folders with image assets that live inside the plugin bundle. In there, you can use any desired folder structure. To find the "Preset" folder inside the plugin bundle, right click _Sketch Data Populator.sketchplugin_ and select _Show Package Contents_.
+Example action:
+- #plugin["{name}".length > 2, Some Plugin > The Command]
 
 ---
 
-Check out the **demo.sketch** file to get an idea.
-
----
-## Additional Documentation
+## Additional Documentation (WIP: will be moved to general documentation)
 
 ### Text placeholders (MSTextLayer)
 
@@ -137,25 +159,3 @@ Check out the **demo.sketch** file to get an idea.
     Placeholder examples:
         - {avatarImage}
         - {avatar.image}
-
-
-### Filters
-
-    Filters are used via the pipe (|) operator and can be chained. Each filter has a name and an alias, e.g. join and &. More filters can be easily implemented.
-
-
-### Conditional actions
-
-    - actions that get executed based on a condition applicable to the specific layer
-    - can be added to any layer (even text layers whose names contain a placeholder)
-
-    Actions:
-        - #show[condition] - shows layer if true and hides otherwise
-        - #hide[condition] - hides layer if true and shows otherwise
-        - #lock[condition] - locks layer if true and unlocks otherwise
-        - #unlock[condition] - unlocks layer if true and locks otherwise
-        - #delete[condition] - deletes the layer if the condition is true
-        - #plugin[condition, command path] - runs the specified plugin command if condition is true
-
-    Example actions:
-        - #plugin["{name}".length > 2, Some Plugin > The Command]
