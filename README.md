@@ -51,7 +51,7 @@ will ask you to choose a JSON file that can sit anywhere on your Computer. After
 #### Populate Table
 allows to use .csv files (eg. exported from a Google Sheet) to populate complex data structures to complex layer structures. The documentation for this feature is still work in progress.
 
-#### Populate again (pre-configured shortcut: ⌘⇧X)
+#### Populate again (⌘⇧X)
 re-populates all selections with the last used Preset/JSON and options configuration. Great for "shuffling" through different data sets.
 
 #### Clear Layers
@@ -107,11 +107,11 @@ However, if you want Data Populator to truncate after another defined number of 
 By appending your {placeholder} with one of the following available filters, separated by a `|`, you can use certain operations on your populated strings. We will add more filters in the future.
 
 #### UPPERCASE
-You can force your data to be UPPERCASE after populating by appending your {placeholder} with `| upper`.
+You can force your data to be UPPERCASE after populating by appending your {placeholder} with `| upper`.  
 `{name | upper}` will lead to `PETER`.
 
 #### Maximum characters
-You can set the maximum number of characters of your {placeholder} by appending it with `| max n`, _n_ representing the desired number of characters.
+You can set the maximum number of characters of your {placeholder} by appending it with `| max n`, _n_ representing the desired number of characters.  
 `{name | max 3}` will lead to `Pet`.
 
 #### Join
