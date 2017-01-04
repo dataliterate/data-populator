@@ -1,5 +1,4 @@
 <img src="images/sketch-data-populator.png" width="418" alt ="Sketch Data Populator">
-<hr />
 
 ## Why Data Populator
 
