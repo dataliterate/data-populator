@@ -88,7 +88,9 @@ If "Create grid" is checked, the plugin will create a grid from selected element
 ---
 
 ### Populating Iconfonts
-If you're into using Iconfonts for Icons in Sketch as described [in this article](https://medium.com/sketch-app-sources/a-case-for-iconfonts-in-sketch-f62de0b269b9#.hh80mjnhs), that's a great fit with Data Populator. It is possible because Iconfonts use custom ligatures to trigger certain icons: for example, the string 'heart' is being replaced with a ♥ icon. To make this happen, simply create an _Auto Width_ Text Layer, choose an appropriate Iconfont and call the Layer `{iconname}` (according to your available Ligatures) in the Layer List. The Layer's content will always be replaced with the {iconname} ligature, triggering the respective icon.
+If you're into using Iconfonts for Icons in Sketch as described [in this article](https://medium.com/sketch-app-sources/a-case-for-iconfonts-in-sketch-f62de0b269b9#.hh80mjnhs), that's a great fit with Data Populator. It is possible because Iconfonts use custom ligatures to trigger certain icons: for example, the string 'heart' is being replaced with a ♥ icon.
+
+To make this happen, simply create an _Auto Width_ Text Layer, choose an appropriate Iconfont and call the Layer `{iconname}` (according to your available Ligatures) in the Layer List. The Layer's content will always be replaced with the {iconname} ligature, triggering the respective icon.
 
 ---
 
@@ -160,6 +162,6 @@ Examples:
 `#show["{firstname}".includes('e')]` – shows layer if {firstname} includes 'e' and hides otherwise
 
 You can also combine several conditions:
-`#show["{firstname}".includes('e') || "{firstname}".length > 3]` – shows layer if {firstname} includes 'e' and has more than 3 characters, hides otherwise
+`#show["{firstname}".includes('e') || "{firstname}".length > 3]` – shows layer if {firstname} includes 'e' and has more than 3 characters, hides otherwise 
 
 Pure _JavaScript_ syntax is being used for _Conditional Actions_, so you can basically use anything available in _JavaScript_.
