@@ -139,9 +139,9 @@ Here's an animated example:
 
 #### Combining Filters
 Filters can also be combined or grouped with parentheses within {placeholders}. Here are some examples:
-`{firstname | upper | max 3}` = PET (assuming firstname = Peter)
-`{(lastname, firstname | &, ), DateOfBirth | & born on }` = Miller, Peter born on 14.07.1970 (assuming firstname = Peter, lastname = Miller)
-`{(firstname | upper | max 3), (lastname | max 1) | & · }` = PET · M
+`{firstname | upper | max 3}` = PET (assuming firstname = Peter)  
+`{(lastname, firstname | &, ), DateOfBirth | & born on }` = Miller, Peter born on 14.07.1970 (assuming firstname = Peter, lastname = Miller)  
+`{(firstname | upper | max 3), (lastname | max 1) | & · }` = PET · M  
 
 ---
 
@@ -149,19 +149,19 @@ Filters can also be combined or grouped with parentheses within {placeholders}. 
 Conditional Actions can be used to execute certain actions within Sketch based on data. This can be done by adding available actions to the Layer Name in the Layer List – for example to show (or hide) a certain Layer based on the used string or the number of characters.
 
 #### Available Actions
-`#show[condition]` - shows layer if true and hides otherwise
-`#hide[condition]` - hides layer if true and shows otherwise
-`#lock[condition]` - locks layer if true and unlocks otherwise
-`#unlock[condition]` - unlocks layer if true and locks otherwise
-`#delete[condition]` - deletes the layer if the condition is true
-`#plugin[condition, command path]` - runs the specified plugin command if condition is true (use the command path like this: 'Plugin > Command')
+`#show[condition]` - shows layer if true and hides otherwise  
+`#hide[condition]` - hides layer if true and shows otherwise  
+`#lock[condition]` - locks layer if true and unlocks otherwise  
+`#unlock[condition]` - unlocks layer if true and locks otherwise  
+`#delete[condition]` - deletes the layer if the condition is true  
+`#plugin[condition, command path]` - runs the specified plugin command if condition is true (use the command path like this: 'Plugin > Command')  
 
-Examples:
-`#show["{firstname}".length > 3]` - shows layer if {firstname} has more than 3 characters and hides otherwise
-`#show["{firstname}" == "Peter"]` - shows layer if {firstname} is 'Peter' and hides otherwise
-`#show["{firstname}".includes('e')]` – shows layer if {firstname} includes 'e' and hides otherwise
+Examples:  
+`#show["{firstname}".length > 3]` - shows layer if {firstname} has more than 3 characters and hides otherwise  
+`#show["{firstname}" == "Peter"]` - shows layer if {firstname} is 'Peter' and hides otherwise  
+`#show["{firstname}".includes('e')]` – shows layer if {firstname} includes 'e' and hides otherwise  
 
-You can also combine several conditions:
-`#show["{firstname}".includes('e') || "{firstname}".length > 3]` – shows layer if {firstname} includes 'e' and has more than 3 characters, hides otherwise 
+You can also combine several conditions:  
+`#show["{firstname}".includes('e') || "{firstname}".length > 3]` – shows layer if {firstname} includes 'e' and has more than 3 characters, hides otherwise  
 
 Pure _JavaScript_ syntax is being used for _Conditional Actions_, so you can basically use anything available in _JavaScript_.
