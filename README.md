@@ -165,3 +165,19 @@ You can also combine several conditions:
 `#show["{firstname}".includes('e') || "{firstname}".length > 3]` – shows layer if {firstname} includes 'e' and has more than 3 characters, hides otherwise  
 
 Pure _JavaScript_ syntax is being used for _Conditional Actions_, so you can basically use anything available in _JavaScript_.
+
+## Development
+
+Development
+
+```
+npm install
+gulp watch
+```
+
+To release a new version as GitHub release, run:
+
+```
+export GITHUB_TOKEN=yoursecrettoken
+gulp release
+```
