@@ -200,13 +200,13 @@ gulp.task('release', ['zip'], function() {
   return gulp.src('./dist/SketchDataPopulator.zip')
     .pipe(release({
       //token: 'token',                     // or you can set an env var called GITHUB_TOKEN instead
-      owner: '',                    // if missing, it will be extracted from manifest (the repository.url field)
-      repo: '',            // if missing, it will be extracted from manifest (the repository.url field)
+      owner: 'preciousforever',                    // if missing, it will be extracted from manifest (the repository.url field)
+      repo: 'sketch-data-populator',            // if missing, it will be extracted from manifest (the repository.url field)
       //tag: 'v1.0.0',                      // if missing, the version will be extracted from manifest and prepended by a 'v'
       //name: 'publish-release v1.0.0',     // if missing, it will be the same as the tag
       //notes: 'very good!',                // if missing it will be left undefined
       draft: false,                       // if missing it's false
-      prerelease: true,                  // if missing it's false
+      prerelease: false,                  // if missing it's false
       manifest: require('./build/manifest.json') // package.json from which default values will be extracted if they're missing
     }));
 });
