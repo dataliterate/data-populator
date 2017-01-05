@@ -33,7 +33,7 @@ The _Sketch Data Populator_ plugin creates a grid from a selected Layer, Layer G
 
 1. Create a Layer Group that contains at least one Text Layer. In the Text Layer content, use placeholders for you data fields in curly brackets – such as `{firstname}` or `{lastname}`. You can do arbitrary string concatenation such as `{lastname}, {firstname}`. The plugin's "Populate with …" command will replace all these placeholders with respective data. _Please note that if your Text Layer is called `{name}` (in the Layer List), the content of the Layer will always be overwritten with the data contained in {name}. So if you use multiple {placeholders} in a Text Layer, you should rename your Layer to something without curly brackets._
 
-2. In the same Layer Group, create a Shape Layer (this is your image placeholder). Give the Shape Layer a placeholder name in curly brackets – such as `{image}`. The plugin's "Populate with …" command will replace this placeholder with respective image data (PNG or JPG).
+2. In the same Layer Group, create a Shape Layer (this is your image placeholder). Give the Shape Layer a placeholder name in curly brackets – such as `{image}`. The plugin's "Populate with …" command will replace this placeholder with respective image data (PNG or JPG, local file or URL).
 
 ## Available Commands
 
@@ -106,7 +106,7 @@ The Layer's content will always be replaced with the {iconname} representing a l
 ## Multiline Text Layers
 Usually, populating Text Layers is limited to single lines of text. If you populate an _Auto Width_ Text Layer, it will always expand the width of the Layer and keep it single line.
 
-If you populate a _Fixed Width_ Text Layer without the trimming (see above), it will keep that fixed with but always expand the number of lines to fit the available data. If you populate a _Fixed Width_ Text Layer with trimming turned on, it will always truncate the data to a single line – meaning the default max. number of lines is 1.
+If you populate a _Fixed Width_ Text Layer without the trimming (see above), it will keep that fixed width but always expand the number of lines to fit the available data. If you populate a _Fixed Width_ Text Layer with trimming turned on, it will always truncate the data to a single line – meaning the default max. number of lines is 1.
 
 However, if you want Data Populator to truncate after another defined number of lines, that's also possible. Do this by appending the following to the Layer Name of a Fixed Width Text Layer in Sketch's Layer List:
 
@@ -114,7 +114,7 @@ However, if you want Data Populator to truncate after another defined number of 
 _where 'n' is your desired number of max. lines_
 
 ## Filters
-By appending your {placeholder} with one of the following available filters, separated by a `|`, you can use certain operations on your populated strings. We will add more filters in the future.
+By appending your {placeholder} with one of the following available filters, separated by a `|`, you can use certain operations on your populated strings. We will add more filters in the future and you can add filters yourself, too.
 
 ### 1. UPPERCASE
 You can force your data to be UPPERCASE after populating by appending your {placeholder} with `| upper`.
@@ -167,6 +167,8 @@ _assuming firstname = Peter, lastname = Miller_
 
 ## Conditional actions
 Conditional Actions can be used to execute certain actions within Sketch based on data. This can be done by adding available actions to the Layer Name in the Layer List – for example to show (or hide) a certain Layer based on the used string or the number of characters.
+
+We will add more Conditional Actions in the future and you can add some yourself, too.
 
 ### 1. `#show[condition]`  
 shows layer if true and hides otherwise
