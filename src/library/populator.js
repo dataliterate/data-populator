@@ -335,10 +335,10 @@ export function clearLayer(layer) {
     })
 
     //clear symbols
-    let symbolLayers = Layers.findLayersInLayer('*', false, Layers.SYMBOL, layer, false, null)
-    symbolLayers.forEach(function (symbolLayer) {
-      clearSymbolLayer(symbolLayer)
-    })
+    // let symbolLayers = Layers.findLayersInLayer('*', false, Layers.SYMBOL, layer, false, null)
+    // symbolLayers.forEach(function (symbolLayer) {
+    //   clearSymbolLayer(symbolLayer)
+    // })
   }
 
   //clear text layer
@@ -356,9 +356,9 @@ export function clearLayer(layer) {
   }
 
   //clear symbol
-  else if (Layers.isSymbolInstance(layer)) {
-    clearSymbolLayer(layer)
-  }
+  // else if (Layers.isSymbolInstance(layer)) {
+  //   clearSymbolLayer(layer)
+  // }
 }
 
 
@@ -444,13 +444,13 @@ function populateSymbolLayer(layer, data, opt) {
   })
 
   //populate symbols
-  let symbolLayers = Layers.findLayersInLayer('*', false, Layers.SYMBOL, symbolMaster, false, null)
-  symbolLayers.forEach(function (symbolLayer) {
-
-    //get overrides from nested symbol
-    let nestedOverrides = populateSymbolLayer(symbolLayer, data, opt)
-    overrides.setValue_forKey(nestedOverrides, symbolLayer.objectID())
-  })
+  // let symbolLayers = Layers.findLayersInLayer('*', false, Layers.SYMBOL, symbolMaster, false, null)
+  // symbolLayers.forEach(function (symbolLayer) {
+  //
+  //   //get overrides from nested symbol
+  //   let nestedOverrides = populateSymbolLayer(symbolLayer, data, opt)
+  //   overrides.setValue_forKey(nestedOverrides, symbolLayer.objectID())
+  // })
 
   //set new overrides
   layer.setOverrides(NSDictionary.dictionaryWithObject_forKey(overrides, NSNumber.numberWithInt(0)))
