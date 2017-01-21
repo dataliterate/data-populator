@@ -398,6 +398,7 @@ function removeLayerMetadata(layer) {
  * @param {MSSymbolInstance} layer
  * @param {Object} data
  * @param {Object} opt
+ * @param {boolean} nested
  *
  * opt: {
  *   rootDir: {string},
@@ -406,7 +407,7 @@ function removeLayerMetadata(layer) {
  *   defaultSubstitute: {string}
  * }
  */
-function populateSymbolLayer(layer, data, opt) {
+function populateSymbolLayer(layer, data, opt, nested) {
 
   //get existing overrides
   let existingOverrides = layer.overrides()
@@ -444,16 +445,16 @@ function populateSymbolLayer(layer, data, opt) {
   })
 
   //populate symbols
-  // let symbolLayers = Layers.findLayersInLayer('*', false, Layers.SYMBOL, symbolMaster, false, null)
-  // symbolLayers.forEach(function (symbolLayer) {
-  //
-  //   //get overrides from nested symbol
-  //   let nestedOverrides = populateSymbolLayer(symbolLayer, data, opt)
-  //   overrides.setValue_forKey(nestedOverrides, symbolLayer.objectID())
-  // })
+  let symbolLayers = Layers.findLayersInLayer('*', false, Layers.SYMBOL, symbolMaster, false, null)
+  symbolLayers.forEach(function (symbolLayer) {
+
+    //get overrides from nested symbol
+    let nestedOverrides = populateSymbolLayer(symbolLayer, data, opt, true)
+    overrides.setValue_forKey(nestedOverrides, symbolLayer.objectID())
+  })
 
   //set new overrides
-  layer.setOverrides(NSDictionary.dictionaryWithObject_forKey(overrides, NSNumber.numberWithInt(0)))
+  if(!nested) layer.setOverrides(NSDictionary.dictionaryWithObject_forKey(overrides, NSNumber.numberWithInt(0)))
 
   //return overrides
   return overrides
