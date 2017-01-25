@@ -12,7 +12,11 @@
  * @returns {Array}
  */
 export function convertToJSArray(nativeArray) {
-  let length = nativeArray.count();
+
+  if(nativeArray.class() == MSLayerArray) {
+    nativeArray = nativeArray.layers()
+  }
+  let length = nativeArray.count()
   let jsArray = [];
 
   while (jsArray.length < length) {
