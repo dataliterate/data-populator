@@ -23,4 +23,7 @@ export default (context) => {
   selectedLayers.forEach((layer) => {
     Populator.clearLayer(layer)
   })
+
+  //reload inspector to update displayed data
+  context.document.reloadInspector()
 }

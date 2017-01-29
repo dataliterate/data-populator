@@ -62,7 +62,17 @@ export function extractFilters(string) {
 export function parseFilter(filterString) {
 
   //get command
-  let command = filterString.split(/(\s*\S+)/g)[1]
+  let command = null
+  for (let i = 0; i < filters.length; i++) {
+    if (filterString.startsWith(filters[i].name)) {
+      command = filters[i].name
+      break;
+    }
+    else if (filterString.startsWith(filters[i].alias)) {
+      command = filters[i].alias
+      break;
+    }
+  }
 
   //get param by removing the command from the string
   let param = filterString.substring(command.length)

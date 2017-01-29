@@ -16,6 +16,9 @@ export const alias = '&'
  */
 export function apply(inputStrings, param) {
 
+  log(inputStrings)
+  log(param)
+
   //make sure that input strings is an array
   if (!(inputStrings instanceof Array)) return inputStrings
 

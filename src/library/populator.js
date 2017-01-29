@@ -335,10 +335,10 @@ export function clearLayer(layer) {
     })
 
     //clear symbols
-    // let symbolLayers = Layers.findLayersInLayer('*', false, Layers.SYMBOL, layer, false, null)
-    // symbolLayers.forEach(function (symbolLayer) {
-    //   clearSymbolLayer(symbolLayer)
-    // })
+    let symbolLayers = Layers.findLayersInLayer('*', false, Layers.SYMBOL, layer, false, null)
+    symbolLayers.forEach(function (symbolLayer) {
+      clearSymbolLayer(symbolLayer)
+    })
   }
 
   //clear text layer
@@ -356,9 +356,9 @@ export function clearLayer(layer) {
   }
 
   //clear symbol
-  // else if (Layers.isSymbolInstance(layer)) {
-  //   clearSymbolLayer(layer)
-  // }
+  else if (Layers.isSymbolInstance(layer)) {
+    clearSymbolLayer(layer)
+  }
 }
 
 
@@ -409,19 +409,38 @@ function removeLayerMetadata(layer) {
  */
 function populateSymbolLayer(layer, data, opt, nested) {
 
-  //get existing overrides
-  let existingOverrides = layer.overrides()
-  if (existingOverrides) {
-    existingOverrides = layer.overrides().objectForKey(NSNumber.numberWithInt(0))
-  } else {
-    existingOverrides = NSDictionary.alloc().init()
+  let overrides = null
+  let symbolMaster = null
+
+  //layer might be a symbol master if populating target symbol override
+  if(Layers.isSymbolMaster(layer)) {
+    overrides = NSMutableDictionary.alloc().init()
+    symbolMaster = layer
+  }
+  else {
+
+    //get existing overrides
+    let existingOverrides = layer.overrides()
+    if (existingOverrides) {
+      existingOverrides = layer.overrides().objectForKey(NSNumber.numberWithInt(0))
+    } else {
+      existingOverrides = NSDictionary.alloc().init()
+    }
+
+    //create mutable overrides
+    overrides = NSMutableDictionary.dictionaryWithDictionary(existingOverrides)
+
+    //get master for symbol instance
+    symbolMaster = layer.symbolMaster()
   }
 
-  //create mutable overrides
-  let overrides = NSMutableDictionary.dictionaryWithDictionary(existingOverrides)
-
-  //get master for symbol instance
-  let symbolMaster = layer.symbolMaster()
+  //set root overrides in option to pass down in recursive calls
+  if(!nested) {
+    opt.rootOverrides = overrides
+  }
+  if(!opt.rootOverrides) {
+    opt.rootOverrides = NSMutableDictionary.alloc().init()
+  }
 
   //populate text layers
   let textLayers = Layers.findLayersInLayer('*', false, Layers.TEXT, symbolMaster, false, null)
@@ -448,9 +467,64 @@ function populateSymbolLayer(layer, data, opt, nested) {
   let symbolLayers = Layers.findLayersInLayer('*', false, Layers.SYMBOL, symbolMaster, false, null)
   symbolLayers.forEach(function (symbolLayer) {
 
-    //get overrides from nested symbol
-    let nestedOverrides = populateSymbolLayer(symbolLayer, data, opt, true)
-    overrides.setValue_forKey(nestedOverrides, symbolLayer.objectID())
+    //resolve nested symbol override
+    if(opt.rootOverrides.valueForKey(symbolLayer.objectID()) &&
+       opt.rootOverrides.valueForKey(symbolLayer.objectID()).valueForKey('symbolID')) {
+
+      //get overridden symbol ID
+      let symbolID = String(opt.rootOverrides.valueForKey(symbolLayer.objectID()).valueForKey('symbolID'))
+
+      //hide symbol
+      if(!symbolID || !symbolID.length) {
+
+        //get existing nested overrides
+        let existingNestedOverrides = overrides.valueForKey(symbolLayer.objectID())
+        if (!existingNestedOverrides) {
+          existingNestedOverrides = NSDictionary.alloc().init()
+        }
+        let nestedOverrides = NSMutableDictionary.dictionaryWithDictionary(existingNestedOverrides)
+
+        //set empty symbol override
+        //no need to keep populating recursively
+        nestedOverrides.setValue_forKey('', 'symbolID')
+        overrides.setValue_forKey(nestedOverrides, symbolLayer.objectID())
+      }
+      else {
+
+        //get all symbol masters
+        let symbolMasters = Layers.findLayersInLayers('*', false, Layers.SYMBOL_MASTER, Context().document.pages(), true, null)
+        let overriddenSymbolLayer = null
+        for(let i = 0; i < symbolMasters.length; ++i) {
+          if(symbolMasters[i].symbolID() == symbolID) {
+            overriddenSymbolLayer = symbolMasters[i]
+            break
+          }
+        }
+
+        //prepare nested root overrides
+        let nestedRootOverrides = opt.rootOverrides.valueForKey(symbolLayer.objectID())
+        let nestedOpt = Object.assign({}, opt)
+        nestedOpt.rootOverrides = nestedRootOverrides
+
+        //get nested overrides
+        let nestedOverrides = populateSymbolLayer(overriddenSymbolLayer, data, nestedOpt, true)
+        nestedOverrides.setValue_forKey(symbolID, 'symbolID')
+        overrides.setValue_forKey(nestedOverrides, symbolLayer.objectID())
+      }
+    }
+
+    //nested symbol is not overridden
+    else {
+
+      //prepare nested root overrides
+      let nestedRootOverrides = opt.rootOverrides.valueForKey(symbolLayer.objectID())
+      let nestedOpt = Object.assign({}, opt)
+      nestedOpt.rootOverrides = nestedRootOverrides
+
+      //get nested overrides
+      let nestedOverrides = populateSymbolLayer(symbolLayer, data, nestedOpt, true)
+      overrides.setValue_forKey(nestedOverrides, symbolLayer.objectID())
+    }
   })
 
   //set new overrides
@@ -468,11 +542,58 @@ function populateSymbolLayer(layer, data, opt, nested) {
  */
 function clearSymbolLayer(layer) {
 
-  //remove overrides
-  layer.setOverrides(null)
+  //get existing overrides
+  let existingOverrides = layer.overrides()
+  if (existingOverrides) {
+    existingOverrides = layer.overrides().objectForKey(NSNumber.numberWithInt(0))
+  } else return
+
+  //clear overrides except for symbol overrides
+  let clearedOverrides = clearOverrides(existingOverrides)
 
   //remove metadata
   removeLayerMetadata(layer)
+
+  //set cleared overrides
+  layer.setOverrides(NSDictionary.dictionaryWithObject_forKey(clearedOverrides, NSNumber.numberWithInt(0)))
+}
+
+
+/**
+ * Removes all 'content' data from overrides, keeping only symbol overrides.
+ *
+ * @param {NSDictionary} overrides
+ * @returns {NSDictionary}
+ */
+function clearOverrides(overrides) {
+
+  //create mutable overrides
+  overrides = NSMutableDictionary.dictionaryWithDictionary(overrides)
+
+  //filter dictionary
+  let keys = overrides.allKeys()
+  keys.forEach((key) => {
+
+    let value = overrides.objectForKey(key)
+    if(value.isKindOfClass(NSDictionary.class())) {
+
+      value = clearOverrides(value)
+      if(value.allKeys().count() > 0) {
+        overrides.setValue_forKey(value, key)
+      }
+      else {
+        overrides.removeObjectForKey(key)
+      }
+    }
+    else {
+
+      if(key != 'symbolID') {
+        overrides.removeObjectForKey(key)
+      }
+    }
+  })
+
+  return overrides
 }
 
 
@@ -537,6 +658,10 @@ function populateTextLayer(layer, data, opt) {
       populatedString = populatedString.replace(placeholder.string, populatedPlaceholder)
     })
   }
+
+  //check if the populated string is different from original text
+  //this prevents needlessly setting text and affecting text layers that don't contain placeholders
+  if(populatedString == originalText) return
 
   //trim text, taking into account the lines arg if available
   if (layer.textBehaviour() == 1 && opt.trimText) {
