@@ -130,6 +130,25 @@ export function findLayersInLayers(name, exactMatch, type, rootLayers, subLayers
 
 
 /**
+ * Finds a single layer in a set of root layers.
+ *
+ * @param {string} name
+ * @param {boolean} exactMatch
+ * @param {string} type
+ * @param {MSLayer} rootLayers
+ * @param {boolean} subLayersOnly
+ * @param {Array} layersToExclude
+ * @returns {array}
+ */
+export function findLayerInLayers(name, exactMatch, type, rootLayers, subLayersOnly, layersToExclude) {
+  let result = findLayersInLayers(name, exactMatch, type, rootLayers, subLayersOnly, layersToExclude)
+
+  //return first layer in result
+  if (result.length) return result[0]
+}
+
+
+/**
  * Finds a page with the specified name in the current document.
  *
  * @param {string} name

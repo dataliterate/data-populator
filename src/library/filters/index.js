@@ -11,11 +11,13 @@
 import * as JoinFilter from './join'
 import * as MaxFilter from './max'
 import * as UppercaseFilter from './uppercase'
+import * as LowercaseFilter from './lowercase'
 
 let filters = [
   JoinFilter,
   MaxFilter,
-  UppercaseFilter
+  UppercaseFilter,
+  LowercaseFilter
 ]
 
 

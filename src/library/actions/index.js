@@ -18,6 +18,7 @@ import * as LockAction from './lock'
 import * as UnlockAction from './unlock'
 import * as DeleteAction from './delete'
 import * as PluginAction from './plugin'
+import * as SwapSymbolAction from './swapSymbol'
 
 let actions = [
   ShowAction,
@@ -25,7 +26,8 @@ let actions = [
   LockAction,
   UnlockAction,
   DeleteAction,
-  PluginAction
+  PluginAction,
+  SwapSymbolAction
 ]
 
 
@@ -140,6 +142,65 @@ export function parseAction(actionString) {
     },
     params: params
   }
+
+  return action
+}
+
+
+/**
+ * Resolves the placeholders in the action with the supplied data.
+ *
+ * @param action {Object}
+ * @param data {Object}
+ */
+export function resolveAction(action, data) {
+
+  //copy action object
+  action = Object.assign({}, action)
+
+  //create populated condition string
+  let populatedConditionString = action.condition.string
+  action.condition.placeholders.forEach((placeholder) => {
+
+    //populate placeholder found in the condition string
+    let populatedPlaceholder = Placeholders.populatePlaceholder(placeholder, data, 'null')
+
+    //replace original placeholder string
+    populatedConditionString = populatedConditionString.replace(placeholder.string, populatedPlaceholder)
+  })
+  action.condition = populatedConditionString
+
+  //populate params
+  let populatedParams = action.params.map((param) => {
+
+    //create populated param string
+    let populatedParamString = param.string
+    param.placeholders.forEach((placeholder) => {
+
+      //populate placeholder found in the param string
+      let populatedPlaceholder = Placeholders.populatePlaceholder(placeholder, data, 'null')
+
+      //replace original placeholder string
+      populatedParamString = populatedParamString.replace(placeholder.string, populatedPlaceholder)
+    })
+
+    return populatedParamString
+  })
+  action.params = populatedParams
+
+  //evaluate condition
+  let condition
+  try {
+
+    //evaluate condition
+    condition = (new Function('return ' + populatedConditionString))()
+
+  } catch(e) {
+
+    //show error that action could not be evaluated
+    Context().document.showMessage('Conditional action \'' + action.string + '\' could not be evaluated.')
+  }
+  action.condition = condition
 
   return action
 }

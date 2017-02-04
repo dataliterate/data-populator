@@ -13,6 +13,8 @@ import * as Placeholders from './placeholders'
 import * as Args from './args'
 import * as Actions from './actions'
 
+import * as SwapSymbolAction from './actions/swapSymbol'
+
 
 /**
  * Populate types:
@@ -141,7 +143,7 @@ export function populateLayers(layers, data, opt) {
 
   //keep track of already selected random indexes
   let randomIndexes = []
-  let lastRandomIndex = 0
+  let lastRandomIndex = -1
 
   //process each layer
   for (let i = 0; i < layers.length; i++) {
@@ -163,7 +165,7 @@ export function populateLayers(layers, data, opt) {
 
           //get random in range
           let random = Utils.randomInteger(0, data.length)
-
+          
           //make sure index doesn't exist in already chosen random indexes
           if (randomIndexes.indexOf(random) == -1) {
 
@@ -409,6 +411,32 @@ function removeLayerMetadata(layer) {
  */
 function populateSymbolLayer(layer, data, opt, nested) {
 
+  //get swap action on symbol
+  let swapAction = Actions.extractActions(String(layer.name())).filter((swapAction) => {
+    return (swapAction.command == SwapSymbolAction.name || swapAction.command == SwapSymbolAction.alias)
+  }).map((swapAction) => {
+    return Actions.resolveAction(swapAction, data)
+  }).filter((swapAction) => {
+    return swapAction.condition
+  })[0]
+
+  //swap symbol
+  if(swapAction) {
+
+    //find symbol master with specified name
+    let symbolToSwapWith = Layers.findLayerInLayers(swapAction.params[0], true, Layers.SYMBOL_MASTER, Context().document.pages(), true, null)
+    if(symbolToSwapWith) {
+
+      //replace top level symbol
+      if(!nested) {
+        layer.changeInstanceToSymbol(symbolToUse)
+      }
+    }
+    else {
+
+    }
+  }
+
   let overrides = null
   let symbolMaster = null
 
@@ -467,54 +495,24 @@ function populateSymbolLayer(layer, data, opt, nested) {
   let symbolLayers = Layers.findLayersInLayer('*', false, Layers.SYMBOL, symbolMaster, false, null)
   symbolLayers.forEach(function (symbolLayer) {
 
-    //resolve nested symbol override
-    if(opt.rootOverrides.valueForKey(symbolLayer.objectID()) &&
-       opt.rootOverrides.valueForKey(symbolLayer.objectID()).valueForKey('symbolID')) {
+    //get swap action on symbol
+    let swapAction = Actions.extractActions(String(symbolLayer.name())).filter((swapAction) => {
+      return (swapAction.command == SwapSymbolAction.name || swapAction.command == SwapSymbolAction.alias)
+    }).map((swapAction) => {
+      return Actions.resolveAction(swapAction, data)
+    }).filter((swapAction) => {
+      return swapAction.condition
+    })[0]
 
-      //get overridden symbol ID
-      let symbolID = String(opt.rootOverrides.valueForKey(symbolLayer.objectID()).valueForKey('symbolID'))
+    //find symbol master with specified name
+    let symbolToSwapWith = (swapAction) ? Layers.findLayerInLayers(swapAction.params[0], true, Layers.SYMBOL_MASTER, Context().document.pages(), true, null) : null
 
-      //hide symbol
-      if(!symbolID || !symbolID.length) {
+    //swap nested symbol
+    //swap action always takes priority
+    if(symbolToSwapWith) {
 
-        //get existing nested overrides
-        let existingNestedOverrides = overrides.valueForKey(symbolLayer.objectID())
-        if (!existingNestedOverrides) {
-          existingNestedOverrides = NSDictionary.alloc().init()
-        }
-        let nestedOverrides = NSMutableDictionary.dictionaryWithDictionary(existingNestedOverrides)
-
-        //set empty symbol override
-        //no need to keep populating recursively
-        nestedOverrides.setValue_forKey('', 'symbolID')
-        overrides.setValue_forKey(nestedOverrides, symbolLayer.objectID())
-      }
-      else {
-
-        //get all symbol masters
-        let symbolMasters = Layers.findLayersInLayers('*', false, Layers.SYMBOL_MASTER, Context().document.pages(), true, null)
-        let overriddenSymbolLayer = null
-        for(let i = 0; i < symbolMasters.length; ++i) {
-          if(symbolMasters[i].symbolID() == symbolID) {
-            overriddenSymbolLayer = symbolMasters[i]
-            break
-          }
-        }
-
-        //prepare nested root overrides
-        let nestedRootOverrides = opt.rootOverrides.valueForKey(symbolLayer.objectID())
-        let nestedOpt = Object.assign({}, opt)
-        nestedOpt.rootOverrides = nestedRootOverrides
-
-        //get nested overrides
-        let nestedOverrides = populateSymbolLayer(overriddenSymbolLayer, data, nestedOpt, true)
-        nestedOverrides.setValue_forKey(symbolID, 'symbolID')
-        overrides.setValue_forKey(nestedOverrides, symbolLayer.objectID())
-      }
-    }
-
-    //nested symbol is not overridden
-    else {
+      //get symbol id
+      let idOfSymbolToSwapWith = symbolToSwapWith.symbolID()
 
       //prepare nested root overrides
       let nestedRootOverrides = opt.rootOverrides.valueForKey(symbolLayer.objectID())
@@ -522,8 +520,70 @@ function populateSymbolLayer(layer, data, opt, nested) {
       nestedOpt.rootOverrides = nestedRootOverrides
 
       //get nested overrides
-      let nestedOverrides = populateSymbolLayer(symbolLayer, data, nestedOpt, true)
+      let nestedOverrides = populateSymbolLayer(symbolToSwapWith, data, nestedOpt, true)
+      nestedOverrides.setValue_forKey(idOfSymbolToSwapWith, 'symbolID')
       overrides.setValue_forKey(nestedOverrides, symbolLayer.objectID())
+    }
+    else {
+
+      //resolve nested symbol override
+      if(opt.rootOverrides.valueForKey(symbolLayer.objectID()) &&
+        opt.rootOverrides.valueForKey(symbolLayer.objectID()).valueForKey('symbolID')) {
+
+        //get overridden symbol ID
+        let symbolID = String(opt.rootOverrides.valueForKey(symbolLayer.objectID()).valueForKey('symbolID'))
+
+        //hide symbol
+        if(!symbolID || !symbolID.length) {
+
+          //get existing nested overrides
+          let existingNestedOverrides = overrides.valueForKey(symbolLayer.objectID())
+          if (!existingNestedOverrides) {
+            existingNestedOverrides = NSDictionary.alloc().init()
+          }
+          let nestedOverrides = NSMutableDictionary.dictionaryWithDictionary(existingNestedOverrides)
+
+          //set empty symbol override
+          //no need to keep populating recursively
+          nestedOverrides.setValue_forKey('', 'symbolID')
+          overrides.setValue_forKey(nestedOverrides, symbolLayer.objectID())
+        }
+        else {
+
+          //get all symbol masters
+          let symbolMasters = Layers.findLayersInLayers('*', false, Layers.SYMBOL_MASTER, Context().document.pages(), true, null)
+          let overriddenSymbolLayer = null
+          for(let i = 0; i < symbolMasters.length; ++i) {
+            if(symbolMasters[i].symbolID() == symbolID) {
+              overriddenSymbolLayer = symbolMasters[i]
+              break
+            }
+          }
+
+          //prepare nested root overrides
+          let nestedRootOverrides = opt.rootOverrides.valueForKey(symbolLayer.objectID())
+          let nestedOpt = Object.assign({}, opt)
+          nestedOpt.rootOverrides = nestedRootOverrides
+
+          //get nested overrides
+          let nestedOverrides = populateSymbolLayer(overriddenSymbolLayer, data, nestedOpt, true)
+          nestedOverrides.setValue_forKey(symbolID, 'symbolID')
+          overrides.setValue_forKey(nestedOverrides, symbolLayer.objectID())
+        }
+      }
+
+      //nested symbol is not overridden
+      else {
+
+        //prepare nested root overrides
+        let nestedRootOverrides = opt.rootOverrides.valueForKey(symbolLayer.objectID())
+        let nestedOpt = Object.assign({}, opt)
+        nestedOpt.rootOverrides = nestedRootOverrides
+
+        //get nested overrides
+        let nestedOverrides = populateSymbolLayer(symbolLayer, data, nestedOpt, true)
+        overrides.setValue_forKey(nestedOverrides, symbolLayer.objectID())
+      }
     }
   })
 
