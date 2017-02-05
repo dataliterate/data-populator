@@ -122,13 +122,19 @@ You can force your data to be UPPERCASE after populating by appending your {plac
 `{name | upper}`  
 **→ PETER**
 
-### 2. Maximum characters
+### 2. lowercase
+You can force your data to be lowercase after populating by appending your {placeholder} with `| lower`.
+
+`{name | lower}`  
+**→ peter**
+
+### 3. Maximum characters
 You can set the maximum number of characters of your {placeholder} by appending it with `| max n`, 'n' representing the desired number of characters.
 
 `{name | max 3}`  
 **→ Pet**
 
-### 3. Join
+### 4. Join
 Imagine you want to concatenate the keys _name_, _price_, _date_ and _time_ seperated by a `·` (interpunct/middle dot). Usually, you would create a string in a Text Layer like this:  
 `{name} · {price} · {date} · {time}`
 
@@ -165,8 +171,10 @@ _assuming firstname = Peter, lastname = Miller_
 `{(firstname | upper | max 3), (lastname | max 1) | & · }`  
 **→ PET · M**  
 
-## Conditional actions
-Conditional Actions can be used to execute certain actions within Sketch based on data. This can be done by adding available actions to the Layer Name in the Layer List – for example to show (or hide) a certain Layer based on the used string or the number of characters.
+## Conditional Actions
+A data-driven "if this than that" for Sketch Data Populator: triggers in the data lead to actions in Sketch.
+
+A Conditional Action performs a certain action on a Layer Group or Symbol based on data and a conditional expression. The Conditional Action is controlled by the name of the Layer Group (or Symbol Instance).
 
 We will add more Conditional Actions in the future and you can add some yourself, too.
 
@@ -189,6 +197,9 @@ deletes the layer if the condition is true
 runs the specified plugin command if condition is true.  
 _Use the command path like this: 'Plugin > Command'_
 
+### 7. `#swapSymbol[condition, symbol name]`  
+swaps the affected symbol to the via _symbol name_ specified symbol.  
+
 ### Examples
 `#show["{firstname}".length > 3]`  
 shows layer if {firstname} has more than 3 characters and hides otherwise
@@ -205,10 +216,17 @@ shows layer if {firstname} starts with 'Pe' and hides otherwise
 `#show["{firstname}".endsWith('r')]`  
 shows layer if {firstname} ends with 'r' and hides otherwise  
 
-##### You can also combine several conditions:
+`#swapSymbol[true, bg/{color}]`  
+swaps the affected symbol to 'bg/red' (assuming {color} delivers 'red' from the data). 'true' can be replaced with any conditional expression.
+
+##### You can combine several conditions:
 
 `#show["{firstname}".includes('e') || "{firstname}".length > 3]`  
 shows layer if {firstname} includes 'e' and has more than 3 characters, hides otherwise  
+
+##### Or several Conditional Actions:
+
+`#swapSymbol["{status}" == "regular", bg/white] #swapSymbol["{status}" == "VIP", bg/yellow]`
 
 Pure _JavaScript_ syntax is being used for _Conditional Actions_, so you can basically use anything available in _JavaScript_.
 
