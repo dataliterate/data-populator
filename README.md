@@ -15,6 +15,10 @@ _Sketch Data Populator_ not only makes you more productive (probably around [60x
 ## How to install
 Download the latest version from the [releases page](https://github.com/preciousforever/sketch-data-populator/releases), unzip it and double-click the `Sketch Data Populator.sketchplugin` file to install it in Sketch.
 
+<a href="http://bit.ly/SketchRunnerWebsite">
+  <img width="160" height="40" src="http://sketchrunner.com/img/badge_blue.png" >
+</a>
+
 ## Testing & Credits
 
 Please report bugs, observations, ideas & feature requests as [issues](https://github.com/preciousforever/sketch-data-populator/issues) or [get in touch](mailto:feedback@datapopulator.com).
