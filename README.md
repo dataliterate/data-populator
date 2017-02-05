@@ -235,8 +235,7 @@ shows layer if {firstname} includes 'e' and has more than 3 characters, hides ot
 Pure _JavaScript_ syntax is being used for _Conditional Actions_, so you can basically use anything available in _JavaScript_.
 
 ## Demo
-Check out the **demo.sketch** file to get an idea.  
-_The demo.sketch will be updated soon._
+Check out the **demo.sketch** file to get an idea. The demo makes use of the _Google Material Design Iconfont_ – please get it [here](https://github.com/google/material-design-icons/tree/master/iconfont) before opening the document.
 
 ## Plugin Development
 
