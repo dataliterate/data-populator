@@ -1003,7 +1003,7 @@ function populateImageLayer(layer, data, opt) {
 
   //set fill properties
   fill.setFillType(4)
-  fill.setPatternFillType(1)
+  // fill.setPatternFillType(1)
 
   //set image as an override for image layer within a symbol
   if (inSymbol) {
