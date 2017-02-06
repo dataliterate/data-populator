@@ -429,7 +429,7 @@ function populateSymbolLayer(layer, data, opt, nested) {
 
       //replace top level symbol
       if(!nested) {
-        layer.changeInstanceToSymbol(symbolToUse)
+        layer.changeInstanceToSymbol(symbolToSwapWith)
       }
     }
     else {
