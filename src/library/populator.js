@@ -22,7 +22,8 @@ import * as SwapSymbolAction from './actions/swapSymbol'
 export const POPULATE_TYPE = {
   PRESET: 'preset',
   JSON: 'json',
-  TABLE: 'table'
+  TABLE: 'table',
+  CLOUDSTITCH: 'cloudstitch'
 }
 
 

@@ -45,6 +45,44 @@ export function askForJSON(path) {
   }
 }
 
+/**
+ * Prompts user to select the Cloudstitch username, appname, and worksheet name
+ * so that the plugin may download the spreadsheet data as JSON.
+ *
+ * @returns {string} The URL for the JSON to download
+ */
+export function askForCloudstitch() {
+
+  //create panel
+  let panel = NSOpenPanel.openPanel()
+
+  //set panel properties
+  panel.setTitle("Select JSON")
+  panel.setMessage("Please select the JSON file you'd like to use.")
+  panel.setPrompt("Select")
+  panel.setCanCreateDirectories(false)
+  panel.setCanChooseFiles(true)
+  panel.setCanChooseDirectories(false)
+  panel.setAllowsMultipleSelection(false)
+  panel.setShowsHiddenFiles(false)
+  panel.setExtensionHidden(false)
+
+  //set initial panel path
+  if (path) {
+    panel.setDirectoryURL(NSURL.fileURLWithPath(path))
+  }
+  else {
+    panel.setDirectoryURL(NSURL.fileURLWithPath('/Users/' + NSUserName()))
+  }
+
+  //show panel
+  let pressedButton = panel.runModal()
+  if (pressedButton == NSOKButton) {
+    // TODO(eob) Fix this dialogue to dynamically generate data.
+    return "https://api.cloudstitch.com/ted/iot-button-test/datasources/sheet/Sheet1"
+  }
+}
+
 
 /**
  * Prompts user to select the TSV file and returns the path of the file.
