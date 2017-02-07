@@ -2,21 +2,21 @@
     {
         "icon": "face",
         "text": "I'm a pink button",
-        "bg": "button/pink"
+        "color": "pink"
     },
     {
         "icon": "goat",
         "text": "I'm a cyan button",
-        "bg": "button/cyan"
+        "color": "cyan"
     },
     {
         "icon": "loyalty",
         "text": "I'm a blue button",
-        "bg": "button/blue"
+        "color": "blue"
     },
     {
         "icon": "mood",
         "text": "I'm a deep orange button",
-        "bg": "button/deeporange"
+        "color": "deeporange"
     }
 ]
