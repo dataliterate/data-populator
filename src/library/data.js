@@ -122,7 +122,6 @@ export function createCloudstitchOptionsView(opt) {
     const LabelY = ViewHeight - LabelYFlipped;
     const InputY = ViewHeight - (LabelYFlipped + LabelHeight);
 
-    log(LabelY);
     let label = createLabel(labelText, 12, false, NSMakeRect(X , LabelY, W, LabelHeight))
     optionsView.addSubview(label)
 
@@ -243,7 +242,6 @@ export function readFileAsText(path) {
 export function readUrlAsText(urlAsString) {
 
   let url = NSURL.URLWithString(urlAsString)
-  log(url)
   let data = url.resourceDataUsingCache(false)
 
   if (!data) return null;
@@ -401,20 +399,16 @@ export function loadJSONRemote(urlAsString) {
 
   //load contents
   let contents = readUrlAsText(urlAsString)
-  log("got data")
-  log(contents)
+
   //get data from JSON
   let data;
   try {
-    log("parsing")
     data = JSON.parse(contents)
   }
   catch (e) {
-    log("except")
     Context().document.showMessage("There was an error parsing data. Please make sure it's valid.")
     return
   }
-  log("yeah did it")
 
   return data
 }

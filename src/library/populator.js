@@ -145,32 +145,28 @@ export function populateLayers(layers, data, opt) {
   //keep track of already selected random indexes
   let randomIndexes = []
   let lastRandomIndex = -1
-  log(1)
+
   //process each layer
   for (let i = 0; i < layers.length; i++) {
     let layer = layers[i]
-    log(2)
+
     //get data row
     let dataRow
     if (data instanceof Array) {
-      log(3)
       if (opt.randomizeData) {
-        log(4)
         //reset random index tracking
         if (randomIndexes.length == data.length) {
           randomIndexes = []
         }
-        log(5)
+
         //get random index
         let randomIndex
         while (!randomIndex && randomIndex !== 0) {
-          log(6)
           //get random in range
           let random = Utils.randomInteger(0, data.length)
           
           //make sure index doesn't exist in already chosen random indexes
           if (randomIndexes.indexOf(random) == -1) {
-            log(7)
             //make sure it's not the same as the last chosen random index
             if (data.length > 1) {
               if (random != lastRandomIndex) {
@@ -182,14 +178,14 @@ export function populateLayers(layers, data, opt) {
             }
           }
         }
-        log(8)
+
         //store selected random index
         lastRandomIndex = randomIndex
         randomIndexes.push(randomIndex)
 
         //get data row for random index
         dataRow = data[randomIndex]
-        log(9)
+
         //reset random index (so next iteration generates a new one)
         randomIndex = null
       }
@@ -200,7 +196,7 @@ export function populateLayers(layers, data, opt) {
     else {
       dataRow = data
     }
-    log(10)
+
     //populate layer
     populateLayer(layer, dataRow, {
       rootDir: opt.rootDir,
@@ -227,7 +223,6 @@ export function populateLayers(layers, data, opt) {
  * }
  */
 export function populateLayer(layer, data, opt) {
-  log('AA')
   //populate group layer
   //artboards are also layer groups
   if (Layers.isLayerGroup(layer)) {
@@ -240,7 +235,7 @@ export function populateLayer(layer, data, opt) {
       })
       Actions.performActions(artboardLayer, data)
     })
-    log("BB")
+
     //populate text layers
     let textLayers = Layers.findLayersInLayer('*', false, Layers.TEXT, layer, false, null)
     textLayers.forEach((textLayer) => {
@@ -251,7 +246,6 @@ export function populateLayer(layer, data, opt) {
       })
       Actions.performActions(textLayer, data)
     })
-    log("CC")
 
     //populate images
     let imageLayers = Layers.findLayersInLayer('*', false, Layers.SHAPE, layer, false, null)
@@ -262,7 +256,6 @@ export function populateLayer(layer, data, opt) {
       })
       Actions.performActions(imageLayer, data)
     })
-    log("CC")
 
     //populate symbols
     let symbolLayers = Layers.findLayersInLayer('*', false, Layers.SYMBOL, layer, false, null)
@@ -270,7 +263,6 @@ export function populateLayer(layer, data, opt) {
       populateSymbolLayer(symbolLayer, data, opt)
       Actions.performActions(symbolLayer, data)
     })
-    log("DD")
 
     //perform actions on group
     Actions.performActions(layer, data)

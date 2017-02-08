@@ -330,13 +330,7 @@ export function populatePlaceholder(placeholder, data, defaultSubstitute) {
   else {
 
     //populate with data for keypath
-    try {
-      populated = getValue(data, placeholder.keypath)
-    } catch(e) {
-      populated = '';
-      log("Value not in there")
-      log(placeholder.keypath)      
-    }
+    populated = getValue(data, placeholder.keypath)
 
     //check if substitute is needed
     if (!populated) {
