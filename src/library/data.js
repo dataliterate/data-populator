@@ -107,8 +107,8 @@ export function createCloudstitchOptionsView(opt) {
   //create options view
 
   const ViewWidth = 300, ViewHeight = 200;
-  const X = 0, W = 300, LabelHeight = 18, InputHeight = 22;
-  const InternalPadding = 1, ExternalPadding = 10, TopPadding = 25;
+  const X = 0, W = 300, LabelHeight = 20, InputHeight = 22;
+  const ExternalPadding = 6, TopPadding = 25;
   const BlockHeight = LabelHeight + InputHeight;
 
   let optionsView = NSView.alloc().initWithFrame(NSMakeRect(0, 0, ViewWidth, ViewHeight))
@@ -122,11 +122,11 @@ export function createCloudstitchOptionsView(opt) {
     const LabelY = ViewHeight - LabelYFlipped;
     const InputY = ViewHeight - (LabelYFlipped + LabelHeight);
 
-    let label = createLabel(labelText, 12, false, NSMakeRect(X , LabelY, W, LabelHeight))
+    let label = createLabel(labelText, 12, true, NSMakeRect(X , LabelY, W, LabelHeight))
     optionsView.addSubview(label)
 
     //create substitute text field
-    let textField = NSTextField.alloc().initWithFrame(NSMakeRect(X , InputY, W, InputHeight))
+    let textField = NSTextField.alloc().initWithFrame(NSMakeRect(X , InputY, W*0.6, InputHeight))
     optionsView.addSubview(textField)
 
     //set substitute
