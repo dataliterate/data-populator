@@ -3,5 +3,5 @@ dist
 build
 src/custom-presets
 .idea
-.DB_Store
+.DS_Store
 *.log
