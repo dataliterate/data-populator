@@ -82,6 +82,10 @@ export default (context, populateAgain) => {
   //save options
   Options(options)
 
+  log(typeof presetData)
+  log(presetData)
+  log(options)
+
   //populate selected layers
   Populator.populateLayers(selectedLayers, presetData, options)
 

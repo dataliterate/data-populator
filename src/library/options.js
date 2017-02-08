@@ -30,13 +30,20 @@ export const LAST_JSON_PATH = 'lastJSONPath'
 export const LAST_TSV_PATH = 'lastTSVPath'
 export const LAST_DATA_PATH = 'lastDataPath'
 
+// cloudstitch options
+export const LAST_CLOUDSTITCH_URL = 'lastCloudstitchURL'
+export const LAST_CLOUDSTITCH_USERNAME = 'lastCloudstitchUsername'
+export const LAST_CLOUDSTITCH_APPNAME = 'lastCloudstitchAppname'
+export const LAST_CLOUDSTITCH_WORKSHEET = 'lastCloudstitchWorksheet'
+
 let OPTIONS = [
   RANDOMIZE_DATA, TRIM_TEXT, INSERT_ELLIPSIS, DEFAULT_SUBSTITUTE,
   CREATE_GRID, ROWS_COUNT, ROWS_MARGIN, COLUMNS_COUNT, COLUMNS_MARGIN,
   LAST_POPULATE_TYPE, SELECTED_PRESET_INDEX,
-  LAST_JSON_PATH, LAST_TSV_PATH, LAST_DATA_PATH
+  LAST_JSON_PATH, LAST_TSV_PATH, LAST_DATA_PATH,
+  LAST_CLOUDSTITCH_URL, LAST_CLOUDSTITCH_USERNAME, LAST_CLOUDSTITCH_APPNAME,
+  LAST_CLOUDSTITCH_WORKSHEET
 ]
-
 
 /**
  * Gets or sets the stored options in user defaults.

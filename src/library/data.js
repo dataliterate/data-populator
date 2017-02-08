@@ -6,7 +6,8 @@
 
 
 import Context from '../context'
-
+import {createAlert, createLabel} from './gui'
+import Options, * as OPTIONS from './options'
 
 /**
  * Prompts user to select the JSON file and returns the path of the file.
@@ -51,38 +52,138 @@ export function askForJSON(path) {
  *
  * @returns {string} The URL for the JSON to download
  */
-export function askForCloudstitch() {
+export function askForCloudstitch(lastUsername, lastAppname, lastWorksheet) {
 
-  //create panel
-  let panel = NSOpenPanel.openPanel()
+  let alert = createAlert("Select Spreadsheet", "Enter the details the Cloudstitch project that contains your Spreadsheet", 'icon.png')
 
-  //set panel properties
-  panel.setTitle("Select JSON")
-  panel.setMessage("Please select the JSON file you'd like to use.")
-  panel.setPrompt("Select")
-  panel.setCanCreateDirectories(false)
-  panel.setCanChooseFiles(true)
-  panel.setCanChooseDirectories(false)
-  panel.setAllowsMultipleSelection(false)
-  panel.setShowsHiddenFiles(false)
-  panel.setExtensionHidden(false)
+  //create data options view (disable randomize if populating table)
+  let cloudstitchOptionsView = createCloudstitchOptionsView({})
+  alert.addAccessoryView(cloudstitchOptionsView.view)
 
-  //set initial panel path
-  if (path) {
-    panel.setDirectoryURL(NSURL.fileURLWithPath(path))
-  }
-  else {
-    panel.setDirectoryURL(NSURL.fileURLWithPath('/Users/' + NSUserName()))
-  }
+  //add bottom buttons
+  alert.addButtonWithTitle('Populate')
+  alert.addButtonWithTitle('Cancel')
 
-  //show panel
-  let pressedButton = panel.runModal()
-  if (pressedButton == NSOKButton) {
-    // TODO(eob) Fix this dialogue to dynamically generate data.
-    return "https://api.cloudstitch.com/ted/iot-button-test/datasources/sheet/Sheet1"
+  //show alert
+  let responseCode = alert.runModal()
+  if (responseCode == '1000') {
+    //get cloudstitch username
+    let usernameTextField = cloudstitchOptionsView.usernameTextField
+    let username = String(usernameTextField.stringValue())
+
+    //get cloudstitch appname
+    let appnameTextField = cloudstitchOptionsView.appnameTextField
+    let appname = String(appnameTextField.stringValue())
+
+    //get cloudstitch worksheet
+    let worksheetTextField = cloudstitchOptionsView.worksheetTextField
+    let worksheet = String(worksheetTextField.stringValue())
+
+    return {
+      username: username,
+      appname: appname,
+      worksheet: worksheet
+    }
+  } else {
+    return null;
   }
 }
 
+/**
+ * Creates a set of views that comprise the inputs required to fetch data from Cloudstitch.
+ *
+ * @param {Object} opt
+ * @returns {Object}
+ *
+ */
+export function createCloudstitchOptionsView(opt) {
+
+  //get options
+  let options = {
+    ...Options(),
+    ...opt
+  }
+
+  //create options view
+
+  const ViewWidth = 300, ViewHeight = 200;
+  const X = 0, W = 300, LabelHeight = 18, InputHeight = 22;
+  const InternalPadding = 1, ExternalPadding = 10, TopPadding = 25;
+  const BlockHeight = LabelHeight + InputHeight;
+
+  let optionsView = NSView.alloc().initWithFrame(NSMakeRect(0, 0, ViewWidth, ViewHeight))
+  
+  optionsView.backgroundColor = NSColor.colorWithCalibratedRed_green_blue_alpha(0.227, 0.251, 0.337,0.8);
+
+  var addField = function(labelText, defaultValue, i) {
+    //create substitute label
+    // 0,0 is bottom left, so need to subtract from heights
+    const LabelYFlipped = i * (BlockHeight + ExternalPadding) + TopPadding;
+    const LabelY = ViewHeight - LabelYFlipped;
+    const InputY = ViewHeight - (LabelYFlipped + LabelHeight);
+
+    log(LabelY);
+    let label = createLabel(labelText, 12, false, NSMakeRect(X , LabelY, W, LabelHeight))
+    optionsView.addSubview(label)
+
+    //create substitute text field
+    let textField = NSTextField.alloc().initWithFrame(NSMakeRect(X , InputY, W, InputHeight))
+    optionsView.addSubview(textField)
+
+    //set substitute
+    if (defaultValue) {
+      textField.setStringValue(defaultValue)
+    }
+    else {
+      textField.setStringValue('')
+    }
+    return textField;
+  }
+
+  // Create the fields
+  let defaultUsername = opt[OPTIONS.LAST_CLOUDSTITCH_USERNAME] || 'project-templates';
+  let defaultAppname = opt[OPTIONS.LAST_CLOUDSTITCH_APPNAME] || 'sketch-data';
+  let defaultWorksheet = opt[OPTIONS.LAST_CLOUDSTITCH_WORKSHEET] || 'People';
+
+  let usernameTextField = addField('Cloudstitch username:', defaultUsername, 0);
+  let appnameTextField = addField('Cloudstitch appname:', defaultAppname, 1);
+  let worksheetTextField = addField('Cloudstitch worksheet:', defaultWorksheet, 2);
+
+  // Create help URL.
+  // let helpString = NSMutableAttributedString.alloc().initWithString("Help and Video Tutorial");
+
+  // var s = "Help and Video Tutorial";
+
+  // let range = NSMakeRange(0, s.length);
+  // let linkAttr = NSLinkAttributeName.alloc().initWithValue_range("http://docs.cloudstitch.com/integrations/sketch", range);
+  // helpString.addAttribute(linkAttr)
+
+  // let helpString = NSAttributedString.alloc().initWithString_attributes(s, []);
+
+  // Create the label and then override with attributed string containing URL
+  // let helpLabel = createLabel("<a href='#'>foo<a>", 12, false, NSMakeRect(0 , 2*TopPadding + 3*BlockHeight, W, LabelHeight));
+
+  // helpLabel.setAllowsEditingTextAttributes = true;
+  // let t = helpLabel.attributedStringValue().mutableCopy();
+  // let d = {};
+  // d[NSLinkAttributeName] = 
+
+  // }
+
+
+  // optionsView.addSubview(helpLabel)
+
+// NSAttributedString.hyperlinkFromString_withURL
+// NSAttributedString.hyperlinkFromString_withURL
+
+  //return configured view
+  return {
+    view: optionsView,
+    usernameTextField: usernameTextField,
+    appnameTextField: appnameTextField,
+    worksheetTextField: worksheetTextField
+  };
+}
 
 /**
  * Prompts user to select the TSV file and returns the path of the file.
@@ -130,6 +231,25 @@ export function askForTableTSV(path) {
  */
 export function readFileAsText(path) {
   return NSString.stringWithContentsOfFile_encoding_error(path, NSUTF8StringEncoding, false)
+}
+
+
+/**
+ * Reads the contexts of a HTTP-hosted file at the provided URL.
+ *
+ * @param {string} urlAsString
+ * @returns {string}
+ */
+export function readUrlAsText(urlAsString) {
+
+  let url = NSURL.URLWithString(urlAsString)
+  log(url)
+  let data = url.resourceDataUsingCache(false)
+
+  if (!data) return null;
+
+  var dataString = NSString.alloc().initWithData_encoding(data, NSUTF8StringEncoding);
+  return dataString;
 }
 
 
@@ -266,6 +386,35 @@ export function loadJSONData(path) {
     Context().document.showMessage("There was an error parsing data. Please make sure it's valid.")
     return
   }
+
+  return data
+}
+
+
+/**
+ * Loads the JSON file at the specified URL and parses and returns its content.
+ *
+ * @param {string} urlAsString
+ * @returns {Object/Array}
+ */
+export function loadJSONRemote(urlAsString) {
+
+  //load contents
+  let contents = readUrlAsText(urlAsString)
+  log("got data")
+  log(contents)
+  //get data from JSON
+  let data;
+  try {
+    log("parsing")
+    data = JSON.parse(contents)
+  }
+  catch (e) {
+    log("except")
+    Context().document.showMessage("There was an error parsing data. Please make sure it's valid.")
+    return
+  }
+  log("yeah did it")
 
   return data
 }
