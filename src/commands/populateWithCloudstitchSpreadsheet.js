@@ -74,20 +74,15 @@ export default (context, populateAgain) => {
   let jsonData = Data.loadJSONRemote(dataUrl)
   if (!jsonData) return
 
-  log("HI")
   //save type of populate command
   options[OPTIONS.LAST_POPULATE_TYPE] = Populator.POPULATE_TYPE.CLOUDSTITCH
-  log("J")
+
   //save options
   Options(options)
-  log("E")
-  log(jsonData)
-  log(typeof jsonData)
-  log(options)
 
   //populate selected layers
   Populator.populateLayers(selectedLayers, jsonData, options)
-  log("G")
+
   //restore selected layers
   Layers.selectLayers(selectedLayers)
 }
