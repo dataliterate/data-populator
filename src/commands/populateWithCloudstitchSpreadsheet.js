@@ -41,7 +41,7 @@ export default (context, populateAgain) => {
 
     if (!cOpts) return
     
-    dataUrl = `https://api.cloudstitch.com/${cOpts.username}/${cOpts.appname}/${cOpts.worksheet}`; 
+    dataUrl = `https://api.cloudstitch.com/${cOpts.username}/${cOpts.appname}/${cOpts.worksheet}?dev=true`; 
 
     //show dialog
     options = Gui.showPopulatorDialog(Populator.POPULATE_TYPE.JSON)
