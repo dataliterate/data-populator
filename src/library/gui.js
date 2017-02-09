@@ -24,12 +24,14 @@ export function showPopulatorDialog(type, opt) {
   let alertTitle = {
     json: 'Populate with JSON',
     preset: 'Populate with Preset',
-    table: 'Populate Table'
+    table: 'Populate Table',
+    cloudstitch: 'Populate with Spreadsheet Data'
   }
 
   //define descriptions
   let alertDesc = {
     json: "Please configure the options below.",
+    cloudstitch: "Please configure the options below.",
     preset: "Please select the Preset you'd like to use to populate your design and configure the options.",
     table: "Please configure the options below."
   }

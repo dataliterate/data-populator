@@ -22,7 +22,8 @@ import * as SwapSymbolAction from './actions/swapSymbol'
 export const POPULATE_TYPE = {
   PRESET: 'preset',
   JSON: 'json',
-  TABLE: 'table'
+  TABLE: 'table',
+  CLOUDSTITCH: 'cloudstitch'
 }
 
 
@@ -153,7 +154,6 @@ export function populateLayers(layers, data, opt) {
     let dataRow
     if (data instanceof Array) {
       if (opt.randomizeData) {
-
         //reset random index tracking
         if (randomIndexes.length == data.length) {
           randomIndexes = []
@@ -162,13 +162,11 @@ export function populateLayers(layers, data, opt) {
         //get random index
         let randomIndex
         while (!randomIndex && randomIndex !== 0) {
-
           //get random in range
           let random = Utils.randomInteger(0, data.length)
           
           //make sure index doesn't exist in already chosen random indexes
           if (randomIndexes.indexOf(random) == -1) {
-
             //make sure it's not the same as the last chosen random index
             if (data.length > 1) {
               if (random != lastRandomIndex) {
@@ -225,7 +223,6 @@ export function populateLayers(layers, data, opt) {
  * }
  */
 export function populateLayer(layer, data, opt) {
-
   //populate group layer
   //artboards are also layer groups
   if (Layers.isLayerGroup(layer)) {

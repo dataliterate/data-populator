@@ -21,9 +21,11 @@ export const HKSketchFusionExtension = {
     'items': [
       'populateWithPreset',
       'populateWithJSON',
+      'populateWithCloudstitchSpreadsheet',
       'populateTable',
       'populateAgain',
       'revealPresets',
+      'createCloudstitchSpreadsheet',
       'clearLayers'
     ]
   },
@@ -41,6 +43,13 @@ export const HKSketchFusionExtension = {
       description: 'Pick a local JSON file',
       icon: '../Resources/populateWithJSON.png',
       run: commands.populateWithJSON
+    },
+    populateWithCloudstitchSpreadsheet: {
+      name: 'Populate with Spreadsheet',
+      shortcut: '',
+      description: 'Pick a Cloud-hosted Google Sheet or Excel File',
+      icon: '../Resources/populateWithCloudstitchSpreadsheet.png',
+      run: commands.populateWithCloudstitchSpreadsheet
     },
     populateTable: {
       name: 'Populate Table',
@@ -62,6 +71,13 @@ export const HKSketchFusionExtension = {
       description: 'Show Data Populator\'s Presets in Finder',
       icon: '../Resources/revealPresets.png',
       run: commands.revealPresets
+    },
+    createCloudstitchSpreadsheet: {
+      name: 'Create Spreadsheet',
+      shortcut: '',
+      description: 'Create a linked spreadsheet to supply data',
+      icon: '../Resources/createCloudstitchSpreadsheet.png',
+      run: commands.createCloudstitchSpreadsheet
     },
     clearLayers: {
       name: 'Clear Layers',

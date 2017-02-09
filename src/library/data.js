@@ -6,7 +6,8 @@
 
 
 import Context from '../context'
-
+import {createAlert, createLabel} from './gui'
+import Options, * as OPTIONS from './options'
 
 /**
  * Prompts user to select the JSON file and returns the path of the file.
@@ -45,6 +46,126 @@ export function askForJSON(path) {
   }
 }
 
+/**
+ * Prompts user to select the Cloudstitch username, appname, and worksheet name
+ * so that the plugin may download the spreadsheet data as JSON.
+ *
+ * @returns {string} The URL for the JSON to download
+ */
+export function askForCloudstitch(lastUsername, lastAppname, lastWorksheet) {
+
+  let alert = createAlert("Select Spreadsheet", "Cloudstitch.com wraps Google Sheets and Excel with an easy to use API. Enter your wrapper project details: ", 'icon.png')
+
+  //create data options view (disable randomize if populating table)
+  let cloudstitchOptionsView = createCloudstitchOptionsView({})
+  alert.addAccessoryView(cloudstitchOptionsView.view)
+
+  //add bottom buttons
+  alert.addButtonWithTitle('Populate')
+  alert.addButtonWithTitle('Cancel')
+
+  //show alert
+  let responseCode = alert.runModal()
+  if (responseCode == '1000') {
+    //get cloudstitch username
+    let usernameTextField = cloudstitchOptionsView.usernameTextField
+    let username = String(usernameTextField.stringValue())
+
+    //get cloudstitch appname
+    let appnameTextField = cloudstitchOptionsView.appnameTextField
+    let appname = String(appnameTextField.stringValue())
+
+    //get cloudstitch worksheet
+    let worksheetTextField = cloudstitchOptionsView.worksheetTextField
+    let worksheet = String(worksheetTextField.stringValue())
+
+    return {
+      username: username,
+      appname: appname,
+      worksheet: worksheet
+    }
+  } else {
+    return null;
+  }
+}
+
+/**
+ * Creates a set of views that comprise the inputs required to fetch data from Cloudstitch.
+ *
+ * @param {Object} opt
+ * @returns {Object}
+ *
+ */
+export function createCloudstitchOptionsView(opt) {
+
+  //get options
+  let options = {
+    ...Options(),
+    ...opt
+  }
+
+  //create options view
+
+  const ViewWidth = 300, ViewHeight = 200;
+  const X = 0, W = 300, LabelHeight = 20, InputHeight = 22;
+  const ExternalPadding = 6, TopPadding = 25;
+  const BlockHeight = LabelHeight + InputHeight;
+
+  let optionsView = NSView.alloc().initWithFrame(NSMakeRect(0, 0, ViewWidth, ViewHeight))
+  
+  optionsView.backgroundColor = NSColor.colorWithCalibratedRed_green_blue_alpha(0.227, 0.251, 0.337,0.8);
+
+  var addField = function(labelText, defaultValue, i) {
+    //create substitute label
+    // 0,0 is bottom left, so need to subtract from heights
+    const LabelYFlipped = i * (BlockHeight + ExternalPadding) + TopPadding;
+    const LabelY = ViewHeight - LabelYFlipped;
+    const InputY = ViewHeight - (LabelYFlipped + LabelHeight);
+
+    let label = createLabel(labelText, 12, true, NSMakeRect(X , LabelY, W, LabelHeight))
+    optionsView.addSubview(label)
+
+    //create substitute text field
+    let textField = NSTextField.alloc().initWithFrame(NSMakeRect(X , InputY, W*0.6, InputHeight))
+    optionsView.addSubview(textField)
+
+    //set substitute
+    if (defaultValue) {
+      textField.setStringValue(defaultValue)
+    }
+    else {
+      textField.setStringValue('')
+    }
+    return textField;
+  }
+
+  // Create the fields
+  let defaultUsername = opt[OPTIONS.LAST_CLOUDSTITCH_USERNAME] || 'project-templates';
+  let defaultAppname = opt[OPTIONS.LAST_CLOUDSTITCH_APPNAME] || 'sketch-data';
+  let defaultWorksheet = opt[OPTIONS.LAST_CLOUDSTITCH_WORKSHEET] || 'People';
+
+  let usernameTextField = addField('Cloudstitch username:', defaultUsername, 0);
+  let appnameTextField = addField('Cloudstitch appname:', defaultAppname, 1);
+  let worksheetTextField = addField('Cloudstitch worksheet:', defaultWorksheet, 2);
+
+  // Create help URL.
+  let HelpY = (2*TopPadding + 3*BlockHeight);
+  optionsView.addSubview(
+    createLabel("For help, visit:", 12, true, NSMakeRect(X ,  ViewHeight - HelpY, W, LabelHeight))
+  )
+  optionsView.addSubview(
+    createLabel("docs.cloudstitch.com/integrations/sketch", 12, false, NSMakeRect(X ,  ViewHeight - (HelpY+17), W, LabelHeight))
+  )
+
+
+  //return configured view
+  return {
+    view: optionsView,
+    usernameTextField: usernameTextField,
+    appnameTextField: appnameTextField,
+    worksheetTextField: worksheetTextField
+  };
+}
 
 /**
  * Prompts user to select the TSV file and returns the path of the file.
@@ -92,6 +213,24 @@ export function askForTableTSV(path) {
  */
 export function readFileAsText(path) {
   return NSString.stringWithContentsOfFile_encoding_error(path, NSUTF8StringEncoding, false)
+}
+
+
+/**
+ * Reads the contexts of a HTTP-hosted file at the provided URL.
+ *
+ * @param {string} urlAsString
+ * @returns {string}
+ */
+export function readUrlAsText(urlAsString) {
+
+  let url = NSURL.URLWithString(urlAsString)
+  let data = url.resourceDataUsingCache(false)
+
+  if (!data) return null;
+
+  var dataString = NSString.alloc().initWithData_encoding(data, NSUTF8StringEncoding);
+  return dataString;
 }
 
 
@@ -221,6 +360,31 @@ export function loadJSONData(path) {
 
   //get data from JSON
   let data
+  try {
+    data = JSON.parse(contents)
+  }
+  catch (e) {
+    Context().document.showMessage("There was an error parsing data. Please make sure it's valid.")
+    return
+  }
+
+  return data
+}
+
+
+/**
+ * Loads the JSON file at the specified URL and parses and returns its content.
+ *
+ * @param {string} urlAsString
+ * @returns {Object/Array}
+ */
+export function loadJSONRemote(urlAsString) {
+
+  //load contents
+  let contents = readUrlAsText(urlAsString)
+
+  //get data from JSON
+  let data;
   try {
     data = JSON.parse(contents)
   }
