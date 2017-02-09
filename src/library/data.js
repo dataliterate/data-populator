@@ -54,7 +54,7 @@ export function askForJSON(path) {
  */
 export function askForCloudstitch(lastUsername, lastAppname, lastWorksheet) {
 
-  let alert = createAlert("Select Spreadsheet", "Enter the details the Cloudstitch project that contains your Spreadsheet", 'icon.png')
+  let alert = createAlert("Select Spreadsheet", "Cloudstitch.com wraps Google Sheets and Excel with an easy to use API. Enter your wrapper project details: ", 'icon.png')
 
   //create data options view (disable randomize if populating table)
   let cloudstitchOptionsView = createCloudstitchOptionsView({})
@@ -149,31 +149,14 @@ export function createCloudstitchOptionsView(opt) {
   let worksheetTextField = addField('Cloudstitch worksheet:', defaultWorksheet, 2);
 
   // Create help URL.
-  // let helpString = NSMutableAttributedString.alloc().initWithString("Help and Video Tutorial");
+  let HelpY = (2*TopPadding + 3*BlockHeight);
+  optionsView.addSubview(
+    createLabel("For help, visit:", 12, true, NSMakeRect(X ,  ViewHeight - HelpY, W, LabelHeight))
+  )
+  optionsView.addSubview(
+    createLabel("docs.cloudstitch.com/integrations/sketch", 12, false, NSMakeRect(X ,  ViewHeight - (HelpY+17), W, LabelHeight))
+  )
 
-  // var s = "Help and Video Tutorial";
-
-  // let range = NSMakeRange(0, s.length);
-  // let linkAttr = NSLinkAttributeName.alloc().initWithValue_range("http://docs.cloudstitch.com/integrations/sketch", range);
-  // helpString.addAttribute(linkAttr)
-
-  // let helpString = NSAttributedString.alloc().initWithString_attributes(s, []);
-
-  // Create the label and then override with attributed string containing URL
-  // let helpLabel = createLabel("<a href='#'>foo<a>", 12, false, NSMakeRect(0 , 2*TopPadding + 3*BlockHeight, W, LabelHeight));
-
-  // helpLabel.setAllowsEditingTextAttributes = true;
-  // let t = helpLabel.attributedStringValue().mutableCopy();
-  // let d = {};
-  // d[NSLinkAttributeName] = 
-
-  // }
-
-
-  // optionsView.addSubview(helpLabel)
-
-// NSAttributedString.hyperlinkFromString_withURL
-// NSAttributedString.hyperlinkFromString_withURL
 
   //return configured view
   return {
