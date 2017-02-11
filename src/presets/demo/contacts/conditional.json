@@ -1,0 +1,82 @@
+[
+    {
+        "status": "regular",
+        "image": "assets/Female/Cheryl-Carter.jpg",
+        "icon": "person",
+        "name": "Cheryl Carter",
+        "email": "ccarter0@1und1.de",
+        "phone": "2-(017)772-7449"
+    },
+    {
+        "status": "VIP",
+        "image": "assets/Female/Heather-Morales.jpg",
+        "icon": "person",
+        "name": "Heather Morales",
+        "email": "",
+        "phone": ""
+    },
+    {
+        "status": "VIP",
+        "image": "assets/Male/Sean-Jackson.jpg",
+        "icon": "phone",
+        "name": "",
+        "email": "",
+        "phone": "6-(527)389-6219"
+    },
+    {
+        "status": "regular",
+        "image": "assets/Female/Catherine-Anderson.jpg",
+        "icon": "email",
+        "name": "",
+        "email": "canderson3@theguardian.com",
+        "phone": ""
+    },
+    {
+        "status": "regular",
+        "image": "assets/Male/Jack-Phillips.jpg",
+        "icon": "email",
+        "name": "Jack Phillips",
+        "email": "jphillips4@addthis.com",
+        "phone": ""
+    },
+    {
+        "status": "VIP",
+        "image": "assets/Female/Julia-Williamson.jpg",
+        "icon": "phone",
+        "name": "Julia Williamson",
+        "email": "",
+        "phone": "5-(363)496-4627"
+    },
+    {
+        "status": "regular",
+        "image": "assets/Male/Jonathan-Martin.jpg",
+        "icon": "email",
+        "name": "",
+        "email": "jmartin6@cnn.com",
+        "phone": "0-(497)996-6818"
+    },
+    {
+        "status": "regular",
+        "image": "",
+        "icon": "person_outline",
+        "name": "",
+        "email": "",
+        "phone": ""
+    },
+    {
+        "status": "regular",
+        "image": "assets/Female/Sarah-Garrett.jpg",
+        "icon": "person_outline",
+        "name": "",
+        "email": "",
+        "phone": ""
+    },
+    {
+        "status": "regular",
+        "image": "assets/Male/Carl-Barnes.jpg",
+        "icon": "person_outline",
+        "name": "",
+        "email": "",
+        "phone": ""
+    }
+]
