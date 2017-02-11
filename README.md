@@ -235,7 +235,13 @@ shows layer if {firstname} includes 'e' and has more than 3 characters, hides ot
 Pure _JavaScript_ syntax is being used for _Conditional Actions_, so you can basically use anything available in _JavaScript_.
 
 ## Demo
-Check out the **demo.sketch** file to get an idea. The demo makes use of the _Google Material Design Iconfont_ – please get it [here](https://github.com/google/material-design-icons/tree/master/iconfont) before opening the document.
+![Screenshot of demo.sketch](images/demo-screenshot.png)
+
+Please check out the [demo.sketch](demo.sketch) file to get an idea.
+
+The demo makes use of the _Google Material Design Iconfont_ – please get it [here](https://github.com/google/material-design-icons/tree/master/iconfont) before opening the document. It also applies this wonderful [button hack](https://medium.com/sketch-app-sources/hacking-the-button-in-sketch-5cbce8526b3f#.53cohdc5a) and the Symbols Page is tightly organized by [Symbol Organizer](https://github.com/sonburn/symbol-organizer).
+
+If you have _Sketch Data Populator_ real world usage examples you'd like to share with the world so everybody can learn from your data populating wisdom, please [let us know](https://github.com/preciousforever/sketch-data-populator/issues/80)!
 
 ## Plugin Development
 
