@@ -18,6 +18,8 @@ Download the latest version from the [releases page](https://github.com/precious
 ### Install with Sketch Runner
 With Sketch Runner, just go to the `install` command and search for `Sketch Data Populator`. Runner allows you to manage plugins and do much more to speed up your workflow in Sketch. [Download Runner here](http://www.sketchrunner.com).
 
+![Install Sketch Data Populator via Runner](images/data-populator-runner.png)
+
 <a href="http://bit.ly/SketchRunnerWebsite">
   <img width="160" height="40" src="http://sketchrunner.com/img/badge_blue.png" >
 </a>
