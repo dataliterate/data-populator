@@ -52,7 +52,7 @@ will display a dialog that allows you to select one of your Presets as well as c
 ![Populate with Preset](images/populate-with-preset-dialog.png)
 
 ### Populate with JSON
-will ask you to choose a JSON file that can sit anywhere on your Computer. After picking a JSON file, you can configure Data and Layout options:
+will ask you to choose a JSON file that can sit anywhere on your Computer. Each object in your JSON file must have a unique `id`. After picking a JSON file, you can configure Data and Layout options:
 
 ![Populate with JSON](images/populate-with-json-dialog.png)
 
