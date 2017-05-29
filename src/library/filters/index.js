@@ -63,6 +63,10 @@ export function extractFilters(string) {
  */
 export function parseFilter(filterString) {
 
+  //remove leading spaces in filter string
+  while (filterString.substring(0,1) == ' ')
+        filterString = filterString.substring(1, filterString.length)
+
   //get command
   let command = null
   for (let i = 0; i < filters.length; i++) {
