@@ -5,6 +5,18 @@
  */
 
 
+
+ /**
+  * Gets the Sketch version.
+  *
+  * @returns {Number}
+  */
+ export function sketchVersion() {
+   let sketchVersion = NSBundle.mainBundle().objectForInfoDictionaryKey('CFBundleShortVersionString')
+   return Number(sketchVersion)
+ }
+
+
 /**
  * Converts the native Objective-C array to a Javascript Array.
  *

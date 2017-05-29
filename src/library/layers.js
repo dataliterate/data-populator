@@ -346,6 +346,51 @@ export function isArtboard(layer) {
 
 
 /**
+ * Retrieves overrides for a symbol instance.
+ *
+ * @param {MSSymbolInstance} layer
+ * @returns {NSDictionary}
+ */
+export function getSymbolOverrides(layer) {
+  let overrides
+  if(Utils.sketchVersion() < 44) {
+
+    //get main overrides dictionary
+    overrides = layer.overrides()
+    if (!overrides) {
+      overrides = NSDictionary.alloc().init()
+    }
+
+    overrides = overrides.objectForKey(NSNumber.numberWithInt(0))
+  }
+  else {
+
+    overrides = layer.overrides()
+  }
+  return overrides
+}
+
+
+/**
+ * Sets overrides for a symbol instance.
+ *
+ * @param {MSSymbolInstance} layer
+ * @param {NSDictionary} overrides
+ */
+export function setSymbolOverrides(layer, overrides) {
+  if(Utils.sketchVersion() < 44) {
+
+    layer.setOverrides(NSDictionary.dictionaryWithObject_forKey(overrides, NSNumber.numberWithInt(0)))
+  }
+  else {
+
+    layer.setOverrides(overrides)
+  }
+  return overrides
+}
+
+
+/**
  * Creates a grid from layers.
  *
  * @param selectedLayers

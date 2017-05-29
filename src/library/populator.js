@@ -165,7 +165,7 @@ export function populateLayers(layers, data, opt) {
 
           //get random in range
           let random = Utils.randomInteger(0, data.length)
-          
+
           //make sure index doesn't exist in already chosen random indexes
           if (randomIndexes.indexOf(random) == -1) {
 
@@ -448,9 +448,9 @@ function populateSymbolLayer(layer, data, opt, nested) {
   else {
 
     //get existing overrides
-    let existingOverrides = layer.overrides()
+    let existingOverrides = Layers.getSymbolOverrides(layer)
     if (existingOverrides) {
-      existingOverrides = layer.overrides().objectForKey(NSNumber.numberWithInt(0))
+      existingOverrides = Layers.getSymbolOverrides(layer)
     } else {
       existingOverrides = NSDictionary.alloc().init()
     }
@@ -588,7 +588,7 @@ function populateSymbolLayer(layer, data, opt, nested) {
   })
 
   //set new overrides
-  if(!nested) layer.setOverrides(NSDictionary.dictionaryWithObject_forKey(overrides, NSNumber.numberWithInt(0)))
+  if(!nested) Layers.setSymbolOverrides(layer, overrides)
 
   //return overrides
   return overrides
@@ -603,9 +603,9 @@ function populateSymbolLayer(layer, data, opt, nested) {
 function clearSymbolLayer(layer) {
 
   //get existing overrides
-  let existingOverrides = layer.overrides()
+  let existingOverrides = Layers.getSymbolOverrides(layer)
   if (existingOverrides) {
-    existingOverrides = layer.overrides().objectForKey(NSNumber.numberWithInt(0))
+    existingOverrides = Layers.getSymbolOverrides(layer)
   } else return
 
   //clear overrides except for symbol overrides
@@ -615,7 +615,7 @@ function clearSymbolLayer(layer) {
   removeLayerMetadata(layer)
 
   //set cleared overrides
-  layer.setOverrides(NSDictionary.dictionaryWithObject_forKey(clearedOverrides, NSNumber.numberWithInt(0)))
+  Layers.setSymbolOverrides(layer, clearedOverrides)
 }
 
 
