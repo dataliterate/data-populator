@@ -4,7 +4,7 @@
 
 
 export const name = 'upper'
-export const alias = ''
+export const alias = 'upper'
 
 
 /**

@@ -4,7 +4,7 @@
 
 
 export const name = 'max'
-export const alias = ''
+export const alias = 'max'
 
 
 /**

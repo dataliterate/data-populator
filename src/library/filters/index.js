@@ -70,6 +70,7 @@ export function parseFilter(filterString) {
   //get command
   let command = null
   for (let i = 0; i < filters.length; i++) {
+
     if (filterString.startsWith(filters[i].name)) {
       command = filters[i].name
       break;
@@ -79,6 +80,8 @@ export function parseFilter(filterString) {
       break;
     }
   }
+
+  if(!command || !command.length) return {}
 
   //get param by removing the command from the string
   let param = filterString.substring(command.length)
