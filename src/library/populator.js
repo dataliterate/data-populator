@@ -568,6 +568,14 @@ function populateSymbolLayer(layer, data, opt, nested) {
           //get nested overrides
           let nestedOverrides = populateSymbolLayer(overriddenSymbolLayer, data, nestedOpt, true)
           nestedOverrides.setValue_forKey(symbolID, 'symbolID')
+
+          //keep overrides if not overwritten
+          Object.keys(nestedRootOverrides).forEach((key) => {
+            if(!nestedOverrides.objectForKey(key)) {
+              nestedOverrides.setObject_forKey(nestedRootOverrides.objectForKey(key), key)
+            }
+          })
+
           overrides.setValue_forKey(nestedOverrides, symbolLayer.objectID())
         }
       }
@@ -582,6 +590,7 @@ function populateSymbolLayer(layer, data, opt, nested) {
 
         //get nested overrides
         let nestedOverrides = populateSymbolLayer(symbolLayer, data, nestedOpt, true)
+
         overrides.setValue_forKey(nestedOverrides, symbolLayer.objectID())
       }
     }
