@@ -591,6 +591,13 @@ function populateSymbolLayer(layer, data, opt, nested) {
         //get nested overrides
         let nestedOverrides = populateSymbolLayer(symbolLayer, data, nestedOpt, true)
 
+        //keep overrides if not overwritten
+        Object.keys(nestedRootOverrides).forEach((key) => {
+          if(!nestedOverrides.objectForKey(key)) {
+            nestedOverrides.setObject_forKey(nestedRootOverrides.objectForKey(key), key)
+          }
+        })
+
         overrides.setValue_forKey(nestedOverrides, symbolLayer.objectID())
       }
     }
