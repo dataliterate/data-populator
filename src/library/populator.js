@@ -516,6 +516,9 @@ function populateSymbolLayer(layer, data, opt, nested) {
 
       //prepare nested root overrides
       let nestedRootOverrides = opt.rootOverrides.valueForKey(symbolLayer.objectID())
+      if (!nestedRootOverrides) {
+        nestedRootOverrides = NSMutableDictionary.alloc().init()
+      }
       let nestedOpt = Object.assign({}, opt)
       nestedOpt.rootOverrides = nestedRootOverrides
 
@@ -562,6 +565,9 @@ function populateSymbolLayer(layer, data, opt, nested) {
 
           //prepare nested root overrides
           let nestedRootOverrides = opt.rootOverrides.valueForKey(symbolLayer.objectID())
+          if (!nestedRootOverrides) {
+            nestedRootOverrides = NSMutableDictionary.alloc().init()
+          }
           let nestedOpt = Object.assign({}, opt)
           nestedOpt.rootOverrides = nestedRootOverrides
 
@@ -585,6 +591,9 @@ function populateSymbolLayer(layer, data, opt, nested) {
 
         //prepare nested root overrides
         let nestedRootOverrides = opt.rootOverrides.valueForKey(symbolLayer.objectID())
+        if (!nestedRootOverrides) {
+          nestedRootOverrides = NSMutableDictionary.alloc().init()
+        }
         let nestedOpt = Object.assign({}, opt)
         nestedOpt.rootOverrides = nestedRootOverrides
 
