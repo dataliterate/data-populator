@@ -16,6 +16,7 @@ export const HKSketchFusionExtension = {
   version: '2.1.4',
   identifier: 'com.precious-forever.sketch.datapopulator2',
   compatibleVersion: '43',
+  appcast: 'https://github.com/preciousforever/sketch-data-populator/blob/master/appcast.xml',
   menu: {
     'isRoot': false,
     'items': [
