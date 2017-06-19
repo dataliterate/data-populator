@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle"  xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Sketch Data Populator</title>
+    <link>https://raw.githubusercontent.com/preciousforever/sketch-data-populator/master/appcast.xml</link>
+    <description>Say goodbye to Lorem Ipsum: populate your Sketch documents with meaningful data.</description>
+    <language>en</language>
+      <item>
+        <title>Version 2.1.3</title>
+        <description>
+          <![CDATA[
+            <ul>
+              <li>Improvements for Sketch 44 and 45 compatibility</li>
+              <li>Bug fixes</li>
+            </ul>
+          ]]>
+        </description>
+        <enclosure url="https://github.com/preciousforever/sketch-data-populator/releases/download/v2.1.3/SketchDataPopulator.zip" sparkle:version="1.1" />
+      </item>
+  </channel>
+</rss>
