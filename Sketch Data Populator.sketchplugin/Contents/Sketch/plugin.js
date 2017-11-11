@@ -4932,7 +4932,7 @@ function getImageData(image) {
   if (!image) return;
 
   //create image data with image
-  return MSImageData.alloc().initWithImage_convertColorSpace(image, false);
+  return MSImageData.alloc().initWithImageConvertingColorSpace(image);
 }
 
 /**
@@ -8463,9 +8463,9 @@ var HKSketchFusionExtension = exports.HKSketchFusionExtension = {
   description: 'Say goodbye to Lorem Ipsum: populate your Sketch documents with meaningful data.',
   author: 'precious design studio',
   authorEmail: 'info@precious-forever.com',
-  version: '2.2.0',
+  version: '2.2.1',
   identifier: 'com.precious-forever.sketch.datapopulator2',
-  compatibleVersion: '43',
+  compatibleVersion: '47',
   appcast: 'https://github.com/preciousforever/sketch-data-populator/blob/master/appcast.xml',
   menu: {
     'isRoot': false,
@@ -8552,9 +8552,9 @@ __globals.___clearLayers_run_handler_ = function (context, params) {
     "description": "Say goodbye to Lorem Ipsum: populate your Sketch documents with meaningful data.",
     "author": "precious design studio",
     "authorEmail": "info@precious-forever.com",
-    "version": "2.2.0",
+    "version": "2.2.1",
     "identifier": "com.precious-forever.sketch.datapopulator2",
-    "compatibleVersion": "43",
+    "compatibleVersion": "47",
     "appcast": "https://github.com/preciousforever/sketch-data-populator/blob/master/appcast.xml",
     "menu": {
         "isRoot": false,
