@@ -3242,7 +3242,7 @@ module.exports = testValue;
  * @param {any} - a value to test
  * @param {any} - the test query
  * @param [options] {object}
- * @param [options.strict] {boolean} - Treat an object like a value not a query. 
+ * @param [options.strict] {boolean} - Treat an object like a value not a query.
  * @returns {boolean}
  */
 function testValue(value, test, options) {
@@ -6042,7 +6042,7 @@ function createLayoutOptionsView() {
   optionsView.addSubview(rowsMarginTextField);
 
   //set rows margin
-  if (options[OPTIONS.ROWS_MARGIN]) {
+  if (options[OPTIONS.ROWS_MARGIN] !== undefined) {
     rowsMarginTextField.setStringValue(options[OPTIONS.ROWS_MARGIN]);
   } else {
     rowsMarginTextField.setStringValue('10');
@@ -6057,7 +6057,7 @@ function createLayoutOptionsView() {
   optionsView.addSubview(columnsCountTextField);
 
   //set columns count
-  if (options[OPTIONS.COLUMNS_COUNT]) {
+  if (options[OPTIONS.COLUMNS_COUNT] !== undefined) {
     columnsCountTextField.setStringValue(options[OPTIONS.COLUMNS_COUNT]);
   } else {
     columnsCountTextField.setStringValue('1');
@@ -6072,7 +6072,7 @@ function createLayoutOptionsView() {
   optionsView.addSubview(columnsMarginTextField);
 
   //set columns margin
-  if (options[OPTIONS.COLUMNS_MARGIN]) {
+  if (options[OPTIONS.COLUMNS_MARGIN] !== undefined) {
     columnsMarginTextField.setStringValue(options[OPTIONS.COLUMNS_MARGIN]);
   } else {
     columnsMarginTextField.setStringValue('10');
