@@ -6,6 +6,18 @@
     <description>Say goodbye to Lorem Ipsum: populate your Sketch documents with meaningful data.</description>
     <language>en</language>
       <item>
+        <title>Version 2.2.2</title>
+        <description>
+          <![CDATA[
+            <ul>
+              <li>Added support for Sketch 48.</li>
+              <li>Minor bug fixes when configuring grid settings.</li>
+            </ul>
+          ]]>
+        </description>
+        <enclosure url="https://github.com/preciousforever/sketch-data-populator/releases/download/v2.2.2/SketchDataPopulator.zip" sparkle:version="2.2.2" />
+      </item>
+      <item>
         <title>Version 2.2.1</title>
         <description>
           <![CDATA[

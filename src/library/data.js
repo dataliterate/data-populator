@@ -204,7 +204,7 @@ export function getImageData(image) {
   if (!image) return
 
   //create image data with image
-  return MSImageData.alloc().initWithImageConvertingColorSpace(image)
+  return MSImageData.alloc().initWithImage(image)
 }
 
 

@@ -314,7 +314,7 @@ export function createLayoutOptionsView() {
   optionsView.addSubview(rowsCountTextField)
 
   //set rows count
-  if (options[OPTIONS.ROWS_COUNT]) {
+  if (options[OPTIONS.ROWS_COUNT] !== undefined) {
     rowsCountTextField.setStringValue(options[OPTIONS.ROWS_COUNT])
   }
   else {
@@ -330,7 +330,7 @@ export function createLayoutOptionsView() {
   optionsView.addSubview(rowsMarginTextField)
 
   //set rows margin
-  if (options[OPTIONS.ROWS_MARGIN]) {
+  if (options[OPTIONS.ROWS_MARGIN] !== undefined) {
     rowsMarginTextField.setStringValue(options[OPTIONS.ROWS_MARGIN])
   }
   else {
@@ -346,7 +346,7 @@ export function createLayoutOptionsView() {
   optionsView.addSubview(columnsCountTextField)
 
   //set columns count
-  if (options[OPTIONS.COLUMNS_COUNT]) {
+  if (options[OPTIONS.COLUMNS_COUNT] !== undefined) {
     columnsCountTextField.setStringValue(options[OPTIONS.COLUMNS_COUNT])
   }
   else {
@@ -362,7 +362,7 @@ export function createLayoutOptionsView() {
   optionsView.addSubview(columnsMarginTextField)
 
   //set columns margin
-  if (options[OPTIONS.COLUMNS_MARGIN]) {
+  if (options[OPTIONS.COLUMNS_MARGIN] !== undefined) {
     columnsMarginTextField.setStringValue(options[OPTIONS.COLUMNS_MARGIN])
   }
   else {
