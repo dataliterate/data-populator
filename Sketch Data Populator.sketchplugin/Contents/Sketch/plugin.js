@@ -3242,7 +3242,7 @@ module.exports = testValue;
  * @param {any} - a value to test
  * @param {any} - the test query
  * @param [options] {object}
- * @param [options.strict] {boolean} - Treat an object like a value not a query.
+ * @param [options.strict] {boolean} - Treat an object like a value not a query. 
  * @returns {boolean}
  */
 function testValue(value, test, options) {
@@ -4932,7 +4932,7 @@ function getImageData(image) {
   if (!image) return;
 
   //create image data with image
-  return MSImageData.alloc().initWithImageConvertingColorSpace(image);
+  return MSImageData.alloc().initWithImage(image);
 }
 
 /**
@@ -6027,7 +6027,7 @@ function createLayoutOptionsView() {
   optionsView.addSubview(rowsCountTextField);
 
   //set rows count
-  if (options[OPTIONS.ROWS_COUNT]) {
+  if (options[OPTIONS.ROWS_COUNT] !== undefined) {
     rowsCountTextField.setStringValue(options[OPTIONS.ROWS_COUNT]);
   } else {
     rowsCountTextField.setStringValue('1');
@@ -8463,9 +8463,9 @@ var HKSketchFusionExtension = exports.HKSketchFusionExtension = {
   description: 'Say goodbye to Lorem Ipsum: populate your Sketch documents with meaningful data.',
   author: 'precious design studio',
   authorEmail: 'info@precious-forever.com',
-  version: '2.2.1',
+  version: '2.2.2',
   identifier: 'com.precious-forever.sketch.datapopulator2',
-  compatibleVersion: '47',
+  compatibleVersion: '48',
   appcast: 'https://github.com/preciousforever/sketch-data-populator/blob/master/appcast.xml',
   menu: {
     'isRoot': false,
@@ -8552,9 +8552,9 @@ __globals.___clearLayers_run_handler_ = function (context, params) {
     "description": "Say goodbye to Lorem Ipsum: populate your Sketch documents with meaningful data.",
     "author": "precious design studio",
     "authorEmail": "info@precious-forever.com",
-    "version": "2.2.1",
+    "version": "2.2.2",
     "identifier": "com.precious-forever.sketch.datapopulator2",
-    "compatibleVersion": "47",
+    "compatibleVersion": "48",
     "appcast": "https://github.com/preciousforever/sketch-data-populator/blob/master/appcast.xml",
     "menu": {
         "isRoot": false,
