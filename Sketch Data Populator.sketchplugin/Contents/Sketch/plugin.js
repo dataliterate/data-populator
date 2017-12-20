@@ -8466,7 +8466,7 @@ var HKSketchFusionExtension = exports.HKSketchFusionExtension = {
   version: '2.2.2',
   identifier: 'com.precious-forever.sketch.datapopulator2',
   compatibleVersion: '48',
-  appcast: 'https://github.com/preciousforever/sketch-data-populator/blob/master/appcast.xml',
+  appcast: 'https://raw.githubusercontent.com/preciousforever/sketch-data-populator/master/appcast.xml',
   menu: {
     'isRoot': false,
     'items': ['populateWithPreset', 'populateWithJSON', 'populateTable', 'populateAgain', 'revealPresets', 'clearLayers']
@@ -8555,7 +8555,7 @@ __globals.___clearLayers_run_handler_ = function (context, params) {
     "version": "2.2.2",
     "identifier": "com.precious-forever.sketch.datapopulator2",
     "compatibleVersion": "48",
-    "appcast": "https://github.com/preciousforever/sketch-data-populator/blob/master/appcast.xml",
+    "appcast": "https://raw.githubusercontent.com/preciousforever/sketch-data-populator/master/appcast.xml",
     "menu": {
         "isRoot": false,
         "items": [
