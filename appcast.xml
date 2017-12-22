@@ -6,6 +6,17 @@
     <description>Say goodbye to Lorem Ipsum: populate your Sketch documents with meaningful data.</description>
     <language>en</language>
       <item>
+        <title>Version 2.3.0</title>
+        <description>
+          <![CDATA[
+            <ul>
+              <li>It is now possible to select the location of your presets library.</li>
+            </ul>
+          ]]>
+        </description>
+        <enclosure url="https://github.com/preciousforever/sketch-data-populator/releases/download/v2.3.0/SketchDataPopulator.zip" sparkle:version="2.3.0" />
+      </item>
+      <item>
         <title>Version 2.2.2</title>
         <description>
           <![CDATA[

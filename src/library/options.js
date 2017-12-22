@@ -29,12 +29,13 @@ export const SELECTED_PRESET_INDEX = 'selectedPresetIndex'
 export const LAST_JSON_PATH = 'lastJSONPath'
 export const LAST_TSV_PATH = 'lastTSVPath'
 export const LAST_DATA_PATH = 'lastDataPath'
+export const PRESETS_LIBRARY_PATH = 'presetsLibraryPath'
 
 let OPTIONS = [
   RANDOMIZE_DATA, TRIM_TEXT, INSERT_ELLIPSIS, DEFAULT_SUBSTITUTE,
   CREATE_GRID, ROWS_COUNT, ROWS_MARGIN, COLUMNS_COUNT, COLUMNS_MARGIN,
   LAST_POPULATE_TYPE, SELECTED_PRESET_INDEX,
-  LAST_JSON_PATH, LAST_TSV_PATH, LAST_DATA_PATH
+  LAST_JSON_PATH, LAST_TSV_PATH, LAST_DATA_PATH, PRESETS_LIBRARY_PATH
 ]
 
 
@@ -74,5 +75,3 @@ export default function(newOptions) {
 
   return options
 }
-
-

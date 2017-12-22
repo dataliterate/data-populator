@@ -13,7 +13,7 @@ export const HKSketchFusionExtension = {
   description: 'Say goodbye to Lorem Ipsum: populate your Sketch documents with meaningful data.',
   author: 'precious design studio',
   authorEmail: 'info@precious-forever.com',
-  version: '2.2.2',
+  version: '2.3.0',
   identifier: 'com.precious-forever.sketch.datapopulator2',
   compatibleVersion: '48',
   appcast: 'https://raw.githubusercontent.com/preciousforever/sketch-data-populator/master/appcast.xml',
@@ -25,6 +25,7 @@ export const HKSketchFusionExtension = {
       'populateTable',
       'populateAgain',
       'revealPresets',
+      'setPresetsLibrary',
       'clearLayers'
     ]
   },
@@ -60,9 +61,16 @@ export const HKSketchFusionExtension = {
     revealPresets: {
       name: 'Reveal Presets',
       shortcut: '',
-      description: 'Show Data Populator\'s Presets in Finder',
+      description: 'Show Data Populator\'s presets in Finder',
       icon: '../Resources/revealPresets.png',
       run: commands.revealPresets
+    },
+    setPresetsLibrary: {
+      name: 'Set Presets Library',
+      shortcut: '',
+      description: 'Set the location of Data Populator\'s presets',
+      icon: '../Resources/revealPresets.png',
+      run: commands.setPresetsLibrary
     },
     clearLayers: {
       name: 'Clear Layers',

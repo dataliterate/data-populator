@@ -6,6 +6,7 @@
 
 
 import Context from '../context'
+import Options, * as OPTIONS from './options'
 
 
 /**
@@ -26,6 +27,45 @@ export function askForJSON(path) {
   panel.setCanCreateDirectories(false)
   panel.setCanChooseFiles(true)
   panel.setCanChooseDirectories(false)
+  panel.setAllowsMultipleSelection(false)
+  panel.setShowsHiddenFiles(false)
+  panel.setExtensionHidden(false)
+
+  //set initial panel path
+  if (path) {
+    panel.setDirectoryURL(NSURL.fileURLWithPath(path))
+  }
+  else {
+    panel.setDirectoryURL(NSURL.fileURLWithPath('/Users/' + NSUserName()))
+  }
+
+  //show panel
+  let pressedButton = panel.runModal()
+  if (pressedButton == NSOKButton) {
+    return panel.URL().path()
+  }
+}
+
+
+/**
+ * Prompts user to select a directory
+ * @param {string} title
+ * @param {string} message
+ * @param {string} path - Path to set for the file browser.
+ * @returns {string}
+ */
+export function askForDirectory(title, message, path) {
+
+  //create panel
+  let panel = NSOpenPanel.openPanel()
+
+  //set panel properties
+  panel.setTitle(title)
+  panel.setMessage(message)
+  panel.setPrompt("Select")
+  panel.setCanCreateDirectories(true)
+  panel.setCanChooseFiles(false)
+  panel.setCanChooseDirectories(true)
   panel.setAllowsMultipleSelection(false)
   panel.setShowsHiddenFiles(false)
   panel.setExtensionHidden(false)
@@ -96,11 +136,11 @@ export function readFileAsText(path) {
 
 
 /**
- * Returns the path to the presets dir.
+ * Returns the default path to the presets dir.
  *
  * @returns {string}
  */
-export function getPresetsDir() {
+export function getDefaultPresetsDir() {
 
   //get script path
   let scriptPath = Context().scriptPath
@@ -110,6 +150,26 @@ export function getPresetsDir() {
   presetsDirPath = presetsDirPath.stringByStandardizingPath()
 
   return presetsDirPath
+}
+
+
+/**
+ * Returns the path to the presets dir.
+ *
+ * @returns {string}
+ */
+export function getPresetsDir() {
+
+  //load path from settings
+  let options = Options()
+  let presetsLibraryPath = options[OPTIONS.PRESETS_LIBRARY_PATH]
+
+  //if no path is set, use default
+  if(!presetsLibraryPath) {
+    presetsLibraryPath = getDefaultPresetsDir()
+  }
+
+  return presetsLibraryPath
 }
 
 

@@ -17,5 +17,11 @@ export default (context) => {
 
   //open dir
   let url = NSURL.fileURLWithPath(presetDir)
-  NSWorkspace.sharedWorkspace().openURL(url)
+
+  if(NSFileManager.defaultManager().fileExistsAtPath(url.path())) {
+    NSWorkspace.sharedWorkspace().openURL(url)
+  }
+  else {
+    Context().document.showMessage("Your presets library has been moved or deleted. Please set it via 'Set Presets Library'")
+  }
 }

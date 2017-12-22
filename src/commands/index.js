@@ -3,6 +3,7 @@ import populateWithJSON from './populateWithJSON.js'
 import populateTable from './populateTable.js'
 import populateAgain from './populateAgain.js'
 import revealPresets from './revealPresets.js'
+import setPresetsLibrary from './setPresetsLibrary.js'
 import clearLayers from './clearLayers.js'
 
 export {
@@ -11,5 +12,6 @@ export {
   populateTable,
   populateAgain,
   revealPresets,
+  setPresetsLibrary,
   clearLayers
 }
