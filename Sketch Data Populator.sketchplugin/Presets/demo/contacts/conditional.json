@@ -1,7 +1,7 @@
 [
     {
         "status": "regular",
-        "image": "assets/Female/Cheryl-Carter.jpg",
+        "image": "https://raw.githubusercontent.com/preciousforever/sketch-data-populator/master/images/demo/contacts/Female/Cheryl-Carter.jpg",
         "icon": "person",
         "name": "Cheryl Carter",
         "email": "ccarter0@1und1.de",
@@ -9,7 +9,7 @@
     },
     {
         "status": "VIP",
-        "image": "assets/Female/Heather-Morales.jpg",
+        "image": "https://raw.githubusercontent.com/preciousforever/sketch-data-populator/master/images/demo/contacts/Female/Heather-Morales.jpg",
         "icon": "person",
         "name": "Heather Morales",
         "email": "",
@@ -17,7 +17,7 @@
     },
     {
         "status": "VIP",
-        "image": "assets/Male/Sean-Jackson.jpg",
+        "image": "https://raw.githubusercontent.com/preciousforever/sketch-data-populator/master/images/demo/contacts/Male/Sean-Jackson.jpg",
         "icon": "phone",
         "name": "",
         "email": "",
@@ -25,7 +25,7 @@
     },
     {
         "status": "regular",
-        "image": "assets/Female/Catherine-Anderson.jpg",
+        "image": "https://raw.githubusercontent.com/preciousforever/sketch-data-populator/master/images/demo/contacts/Female/Catherine-Anderson.jpg",
         "icon": "email",
         "name": "",
         "email": "canderson3@theguardian.com",
@@ -33,7 +33,7 @@
     },
     {
         "status": "regular",
-        "image": "assets/Male/Jack-Phillips.jpg",
+        "image": "https://raw.githubusercontent.com/preciousforever/sketch-data-populator/master/images/demo/contacts/Male/Jack-Phillips.jpg",
         "icon": "email",
         "name": "Jack Phillips",
         "email": "jphillips4@addthis.com",
@@ -41,7 +41,7 @@
     },
     {
         "status": "VIP",
-        "image": "assets/Female/Julia-Williamson.jpg",
+        "image": "https://raw.githubusercontent.com/preciousforever/sketch-data-populator/master/images/demo/contacts/Female/Julia-Williamson.jpg",
         "icon": "phone",
         "name": "Julia Williamson",
         "email": "",
@@ -49,7 +49,7 @@
     },
     {
         "status": "regular",
-        "image": "assets/Male/Jonathan-Martin.jpg",
+        "image": "https://raw.githubusercontent.com/preciousforever/sketch-data-populator/master/images/demo/contacts/Male/Jonathan-Martin.jpg",
         "icon": "email",
         "name": "",
         "email": "jmartin6@cnn.com",
@@ -65,7 +65,7 @@
     },
     {
         "status": "regular",
-        "image": "assets/Female/Sarah-Garrett.jpg",
+        "image": "https://raw.githubusercontent.com/preciousforever/sketch-data-populator/master/images/demo/contacts/Female/Sarah-Garrett.jpg",
         "icon": "person_outline",
         "name": "",
         "email": "",
@@ -73,7 +73,7 @@
     },
     {
         "status": "regular",
-        "image": "assets/Male/Carl-Barnes.jpg",
+        "image": "https://raw.githubusercontent.com/preciousforever/sketch-data-populator/master/images/demo/contacts/Male/Carl-Barnes.jpg",
         "icon": "person_outline",
         "name": "",
         "email": "",
