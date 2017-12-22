@@ -13,7 +13,7 @@ export const HKSketchFusionExtension = {
   description: 'Say goodbye to Lorem Ipsum: populate your Sketch documents with meaningful data.',
   author: 'precious design studio',
   authorEmail: 'info@precious-forever.com',
-  version: '2.3.0',
+  version: '2.3.1',
   identifier: 'com.precious-forever.sketch.datapopulator2',
   compatibleVersion: '48',
   appcast: 'https://raw.githubusercontent.com/preciousforever/sketch-data-populator/master/appcast.xml',

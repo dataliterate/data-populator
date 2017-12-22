@@ -640,19 +640,23 @@ var Argv = function () {
   }, {
     key: 'expandOptionEqualsNotation',
     value: function expandOptionEqualsNotation() {
+      var _this = this;
+
       var optEquals = option.optEquals;
       if (this.list.some(optEquals.test.bind(optEquals))) {
-        var expandedArgs = [];
-        this.list.forEach(function (arg) {
-          var matches = arg.match(optEquals.re);
-          if (matches) {
-            expandedArgs.push(matches[1], option.VALUE_MARKER + matches[2]);
-          } else {
-            expandedArgs.push(arg);
-          }
-        });
-        this.clear();
-        this.list = expandedArgs;
+        (function () {
+          var expandedArgs = [];
+          _this.list.forEach(function (arg) {
+            var matches = arg.match(optEquals.re);
+            if (matches) {
+              expandedArgs.push(matches[1], option.VALUE_MARKER + matches[2]);
+            } else {
+              expandedArgs.push(arg);
+            }
+          });
+          _this.clear();
+          _this.list = expandedArgs;
+        })();
       }
     }
 
@@ -3201,12 +3205,6 @@ process.off = noop;
 process.removeListener = noop;
 process.removeAllListeners = noop;
 process.emit = noop;
-process.prependListener = noop;
-process.prependOnceListener = noop;
-
-process.listeners = function (name) {
-    return [];
-};
 
 process.binding = function (name) {
     throw new Error('process.binding is not supported');
@@ -3487,7 +3485,7 @@ function isPrimitive(input) {
 }
 
 /**
- * Returns true if the input is a Promise.
+ * Returns true if the input is a string, number, symbol, boolean, null or undefined value.
  * @param {*} - the input to test
  * @returns {boolean}
  * @static
@@ -5882,34 +5880,36 @@ function showPopulatorDialog(type, opt) {
   //add preset options
   var presetList = void 0;
   if (type == Populator.POPULATE_TYPE.PRESET) {
+    (function () {
 
-    //get preset names array
-    var presetNames = [];
-    opt.presets.forEach(function (preset) {
-      presetNames.push(preset.name);
-    });
+      //get preset names array
+      var presetNames = [];
+      opt.presets.forEach(function (preset) {
+        presetNames.push(preset.name);
+      });
 
-    //create list view
-    var listView = NSView.alloc().initWithFrame(NSMakeRect(0, 0, 300, 50));
-    alert.addAccessoryView(listView);
+      //create list view
+      var listView = NSView.alloc().initWithFrame(NSMakeRect(0, 0, 300, 50));
+      alert.addAccessoryView(listView);
 
-    //create preset list title
-    var presetListTitle = createLabel('Select Preset', 12, true, NSMakeRect(0, 30, 300, 20));
-    listView.addSubview(presetListTitle);
+      //create preset list title
+      var presetListTitle = createLabel('Select Preset', 12, true, NSMakeRect(0, 30, 300, 20));
+      listView.addSubview(presetListTitle);
 
-    //create preset list
-    presetList = createSelect(presetNames, 0, NSMakeRect(0, 0, 300, 25));
-    listView.addSubview(presetList);
+      //create preset list
+      presetList = createSelect(presetNames, 0, NSMakeRect(0, 0, 300, 25));
+      listView.addSubview(presetList);
 
-    //select last selected preset
-    var lastSelectedPresetIndex = options[OPTIONS.SELECTED_PRESET_INDEX];
-    if (lastSelectedPresetIndex && lastSelectedPresetIndex < presetNames.length) {
-      presetList.selectItemAtIndex(lastSelectedPresetIndex);
-    }
+      //select last selected preset
+      var lastSelectedPresetIndex = options[OPTIONS.SELECTED_PRESET_INDEX];
+      if (lastSelectedPresetIndex && lastSelectedPresetIndex < presetNames.length) {
+        presetList.selectItemAtIndex(lastSelectedPresetIndex);
+      }
 
-    //add space
-    var spacerView = NSView.alloc().initWithFrame(NSMakeRect(0, 0, 300, 5));
-    alert.addAccessoryView(spacerView);
+      //add space
+      var spacerView = NSView.alloc().initWithFrame(NSMakeRect(0, 0, 300, 5));
+      alert.addAccessoryView(spacerView);
+    })();
   }
 
   //create data options view (disable randomize if populating table)
@@ -7836,62 +7836,66 @@ function populateSymbolLayer(layer, data, opt, nested) {
           _nestedOverrides.setValue_forKey('', 'symbolID');
           overrides.setValue_forKey(_nestedOverrides, symbolLayer.objectID());
         } else {
+          (function () {
 
-          //get all symbol masters
-          var symbolMasters = Layers.findLayersInLayers('*', false, Layers.SYMBOL_MASTER, (0, _context2.default)().document.pages(), true, null);
-          var overriddenSymbolLayer = null;
-          for (var i = 0; i < symbolMasters.length; ++i) {
-            if (symbolMasters[i].symbolID() == symbolID) {
-              overriddenSymbolLayer = symbolMasters[i];
-              break;
+            //get all symbol masters
+            var symbolMasters = Layers.findLayersInLayers('*', false, Layers.SYMBOL_MASTER, (0, _context2.default)().document.pages(), true, null);
+            var overriddenSymbolLayer = null;
+            for (var i = 0; i < symbolMasters.length; ++i) {
+              if (symbolMasters[i].symbolID() == symbolID) {
+                overriddenSymbolLayer = symbolMasters[i];
+                break;
+              }
             }
-          }
 
-          //prepare nested root overrides
-          var _nestedRootOverrides = opt.rootOverrides.valueForKey(symbolLayer.objectID());
-          if (!_nestedRootOverrides) {
-            _nestedRootOverrides = NSMutableDictionary.alloc().init();
-          }
-          var _nestedOpt = Object.assign({}, opt);
-          _nestedOpt.rootOverrides = _nestedRootOverrides;
-
-          //get nested overrides
-          var _nestedOverrides2 = populateSymbolLayer(overriddenSymbolLayer, data, _nestedOpt, true);
-          _nestedOverrides2.setValue_forKey(symbolID, 'symbolID');
-
-          //keep overrides if not overwritten
-          Object.keys(_nestedRootOverrides).forEach(function (key) {
-            if (!_nestedOverrides2.objectForKey(key)) {
-              _nestedOverrides2.setObject_forKey(_nestedRootOverrides.objectForKey(key), key);
+            //prepare nested root overrides
+            var nestedRootOverrides = opt.rootOverrides.valueForKey(symbolLayer.objectID());
+            if (!nestedRootOverrides) {
+              nestedRootOverrides = NSMutableDictionary.alloc().init();
             }
-          });
+            var nestedOpt = Object.assign({}, opt);
+            nestedOpt.rootOverrides = nestedRootOverrides;
 
-          overrides.setValue_forKey(_nestedOverrides2, symbolLayer.objectID());
+            //get nested overrides
+            var nestedOverrides = populateSymbolLayer(overriddenSymbolLayer, data, nestedOpt, true);
+            nestedOverrides.setValue_forKey(symbolID, 'symbolID');
+
+            //keep overrides if not overwritten
+            Object.keys(nestedRootOverrides).forEach(function (key) {
+              if (!nestedOverrides.objectForKey(key)) {
+                nestedOverrides.setObject_forKey(nestedRootOverrides.objectForKey(key), key);
+              }
+            });
+
+            overrides.setValue_forKey(nestedOverrides, symbolLayer.objectID());
+          })();
         }
       }
 
       //nested symbol is not overridden
       else {
+          (function () {
 
-          //prepare nested root overrides
-          var _nestedRootOverrides2 = opt.rootOverrides.valueForKey(symbolLayer.objectID());
-          if (!_nestedRootOverrides2) {
-            _nestedRootOverrides2 = NSMutableDictionary.alloc().init();
-          }
-          var _nestedOpt2 = Object.assign({}, opt);
-          _nestedOpt2.rootOverrides = _nestedRootOverrides2;
-
-          //get nested overrides
-          var _nestedOverrides3 = populateSymbolLayer(symbolLayer, data, _nestedOpt2, true);
-
-          //keep overrides if not overwritten
-          Object.keys(_nestedRootOverrides2).forEach(function (key) {
-            if (!_nestedOverrides3.objectForKey(key)) {
-              _nestedOverrides3.setObject_forKey(_nestedRootOverrides2.objectForKey(key), key);
+            //prepare nested root overrides
+            var nestedRootOverrides = opt.rootOverrides.valueForKey(symbolLayer.objectID());
+            if (!nestedRootOverrides) {
+              nestedRootOverrides = NSMutableDictionary.alloc().init();
             }
-          });
+            var nestedOpt = Object.assign({}, opt);
+            nestedOpt.rootOverrides = nestedRootOverrides;
 
-          overrides.setValue_forKey(_nestedOverrides3, symbolLayer.objectID());
+            //get nested overrides
+            var nestedOverrides = populateSymbolLayer(symbolLayer, data, nestedOpt, true);
+
+            //keep overrides if not overwritten
+            Object.keys(nestedRootOverrides).forEach(function (key) {
+              if (!nestedOverrides.objectForKey(key)) {
+                nestedOverrides.setObject_forKey(nestedRootOverrides.objectForKey(key), key);
+              }
+            });
+
+            overrides.setValue_forKey(nestedOverrides, symbolLayer.objectID());
+          })();
         }
     }
   });
@@ -8583,7 +8587,7 @@ var HKSketchFusionExtension = exports.HKSketchFusionExtension = {
   description: 'Say goodbye to Lorem Ipsum: populate your Sketch documents with meaningful data.',
   author: 'precious design studio',
   authorEmail: 'info@precious-forever.com',
-  version: '2.3.0',
+  version: '2.3.1',
   identifier: 'com.precious-forever.sketch.datapopulator2',
   compatibleVersion: '48',
   appcast: 'https://raw.githubusercontent.com/preciousforever/sketch-data-populator/master/appcast.xml',
@@ -8683,7 +8687,7 @@ __globals.___clearLayers_run_handler_ = function (context, params) {
     "description": "Say goodbye to Lorem Ipsum: populate your Sketch documents with meaningful data.",
     "author": "precious design studio",
     "authorEmail": "info@precious-forever.com",
-    "version": "2.3.0",
+    "version": "2.3.1",
     "identifier": "com.precious-forever.sketch.datapopulator2",
     "compatibleVersion": "48",
     "appcast": "https://raw.githubusercontent.com/preciousforever/sketch-data-populator/master/appcast.xml",

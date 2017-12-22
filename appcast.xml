@@ -6,6 +6,17 @@
     <description>Say goodbye to Lorem Ipsum: populate your Sketch documents with meaningful data.</description>
     <language>en</language>
       <item>
+        <title>Version 2.3.1</title>
+        <description>
+          <![CDATA[
+            <ul>
+              <li>Removed all image assets from the plugin bundle for faster internal updates. They're now URLs in the demo JSON.</li>
+            </ul>
+          ]]>
+        </description>
+        <enclosure url="https://github.com/preciousforever/sketch-data-populator/releases/download/v2.3.1/SketchDataPopulator.zip" sparkle:version="2.3.1" />
+      </item>
+      <item>
         <title>Version 2.3.0</title>
         <description>
           <![CDATA[
