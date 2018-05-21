@@ -12,12 +12,14 @@ import * as JoinFilter from './join'
 import * as MaxFilter from './max'
 import * as UppercaseFilter from './uppercase'
 import * as LowercaseFilter from './lowercase'
+import * as CapitalizeFilter from './capitalize'
 
 let filters = [
   JoinFilter,
   MaxFilter,
   UppercaseFilter,
-  LowercaseFilter
+  LowercaseFilter,
+  CapitalizeFilter
 ]
 
 
