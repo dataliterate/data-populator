@@ -129,19 +129,29 @@ By appending your {placeholder} with one of the following available filters, sep
 You can force your data to be UPPERCASE after populating by appending your {placeholder} with `| upper`.
 
 `{name | upper}`  
-**→ PETER**
+**→ PETER**  
+_assuming firstname = peter_
 
 ### 2. lowercase
 You can force your data to be lowercase after populating by appending your {placeholder} with `| lower`.
 
 `{name | lower}`  
-**→ peter**
+**→ peter**  
+_assuming firstname = PETER_
+
+### 2. Capitalize
+You can capitalize the first character of your data by appending your {placeholder} with `| capitalize`.
+
+`{name | capitalize}`  
+**→ Peter**   
+_assuming firstname = peter_
 
 ### 3. Maximum characters
 You can set the maximum number of characters of your {placeholder} by appending it with `| max n`, 'n' representing the desired number of characters.
 
 `{name | max 3}`  
-**→ Pet**
+**→ Pet**   
+_assuming firstname = Peter_
 
 ### 4. Join
 Imagine you want to concatenate the keys _name_, _price_, _date_ and _time_ seperated by a `·` (interpunct/middle dot). Usually, you would create a string in a Text Layer like this:  
@@ -179,6 +189,7 @@ _assuming firstname = Peter, lastname = Miller_
 
 `{(firstname | upper | max 3), (lastname | max 1) | & · }`  
 **→ PET · M**  
+_assuming firstname = Peter, lastname = Miller_
 
 ## Conditional Actions
 A data-driven "if this than that" for Sketch Data Populator: triggers in the data lead to actions in Sketch.
