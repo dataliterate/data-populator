@@ -3559,7 +3559,7 @@ exports.default = function (context) {
     * Clears the selected layers of any populated data and removes any metadata.
     */
 
-},{"../context":78,"../library/layers":95,"../library/populator":98}],71:[function(require,module,exports){
+},{"../context":78,"../library/layers":96,"../library/populator":99}],71:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3676,7 +3676,7 @@ exports.default = function (context) {
   }
 };
 
-},{"../context":78,"../library/options":96,"../library/populator":98,"./populateTable":73,"./populateWithJSON":74,"./populateWithPreset":75}],73:[function(require,module,exports){
+},{"../context":78,"../library/options":97,"../library/populator":99,"./populateTable":73,"./populateWithJSON":74,"./populateWithPreset":75}],73:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3776,7 +3776,7 @@ exports.default = function (context, populateAgain) {
   Layers.selectLayers([tableLayerGroup]);
 };
 
-},{"../context":78,"../library/data":88,"../library/gui":94,"../library/layers":95,"../library/options":96,"../library/populator":98}],74:[function(require,module,exports){
+},{"../context":78,"../library/data":88,"../library/gui":95,"../library/layers":96,"../library/options":97,"../library/populator":99}],74:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3886,7 +3886,7 @@ exports.default = function (context, populateAgain) {
   Layers.selectLayers(selectedLayers);
 };
 
-},{"../context":78,"../library/data":88,"../library/gui":94,"../library/layers":95,"../library/options":96,"../library/populator":98}],75:[function(require,module,exports){
+},{"../context":78,"../library/data":88,"../library/gui":95,"../library/layers":96,"../library/options":97,"../library/populator":99}],75:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -4002,7 +4002,7 @@ exports.default = function (context, populateAgain) {
   Layers.selectLayers(selectedLayers);
 };
 
-},{"../context":78,"../library/data":88,"../library/gui":94,"../library/layers":95,"../library/options":96,"../library/populator":98}],76:[function(require,module,exports){
+},{"../context":78,"../library/data":88,"../library/gui":95,"../library/layers":96,"../library/options":97,"../library/populator":99}],76:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -4088,7 +4088,7 @@ exports.default = function (context) {
     * Sets the location of the presets library.
     */
 
-},{"../context":78,"../library/data":88,"../library/options":96}],78:[function(require,module,exports){
+},{"../context":78,"../library/data":88,"../library/options":97}],78:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4481,7 +4481,7 @@ function performAction(action, layer, data) {
   }
 }
 
-},{"../../context":78,"../placeholders":97,"./delete":79,"./hide":80,"./lock":82,"./plugin":83,"./show":84,"./swapSymbol":85,"./unlock":86}],82:[function(require,module,exports){
+},{"../../context":78,"../placeholders":98,"./delete":79,"./hide":80,"./lock":82,"./plugin":83,"./show":84,"./swapSymbol":85,"./unlock":86}],82:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -4641,7 +4641,7 @@ function removeCommandParamsFromMetadata(layer) {
   layer.setUserInfo(userInfo);
 }
 
-},{"../layers":95,"../utils":99}],84:[function(require,module,exports){
+},{"../layers":96,"../utils":100}],84:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5536,7 +5536,33 @@ function flattenTable(data) {
   }
 }
 
-},{"../context":78,"./options":96}],89:[function(require,module,exports){
+},{"../context":78,"./options":97}],89:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.apply = apply;
+/**
+ * Capitalize filter
+ */
+
+var name = exports.name = 'capitalize';
+var alias = exports.alias = 'capitalize';
+
+/**
+ * Converts the input string lowercase with the first char capitalized.
+ *
+ * @param {string} string
+ * @param {string} param
+ * @returns {string}
+ */
+function apply(string, param) {
+  return String(string).charAt(0) + String(string).slice(1).toLowerCase();
+  console.log(string);
+}
+
+},{}],90:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5563,8 +5589,20 @@ var _lowercase = require('./lowercase');
 
 var LowercaseFilter = _interopRequireWildcard(_lowercase);
 
+var _capitalize = require('./capitalize');
+
+var CapitalizeFilter = _interopRequireWildcard(_capitalize);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
+var filters = [JoinFilter, MaxFilter, UppercaseFilter, LowercaseFilter, CapitalizeFilter];
+
+/**
+ * Extracts filters from the placeholder string, e.g. firstName, lastName | & •
+ *
+ * @param {string} string
+ * @returns {Array}
+ */
 /**
  * Filters library
  *
@@ -5573,14 +5611,6 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 /**
  * Load filter functions
- */
-var filters = [JoinFilter, MaxFilter, UppercaseFilter, LowercaseFilter];
-
-/**
- * Extracts filters from the placeholder string, e.g. firstName, lastName | & •
- *
- * @param {string} string
- * @returns {Array}
  */
 function extractFilters(string) {
 
@@ -5688,7 +5718,7 @@ function applyFilter(filter, input) {
   return applyFunction(input, filter.param);
 }
 
-},{"./join":90,"./lowercase":91,"./max":92,"./uppercase":93}],90:[function(require,module,exports){
+},{"./capitalize":89,"./join":91,"./lowercase":92,"./max":93,"./uppercase":94}],91:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5729,7 +5759,7 @@ function apply(inputStrings, param) {
   return inputStrings.join(delimiter);
 }
 
-},{}],91:[function(require,module,exports){
+},{}],92:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5754,7 +5784,7 @@ function apply(string, param) {
   return String(string).toLowerCase();
 }
 
-},{}],92:[function(require,module,exports){
+},{}],93:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5785,7 +5815,7 @@ function apply(string, param) {
   return string.substring(0, maxCharacters);
 }
 
-},{}],93:[function(require,module,exports){
+},{}],94:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5810,7 +5840,7 @@ function apply(string, param) {
   return String(string).toUpperCase();
 }
 
-},{}],94:[function(require,module,exports){
+},{}],95:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -6282,7 +6312,7 @@ function createSelect(items, selectedIndex, frame) {
   return select;
 }
 
-},{"../context":78,"./options":96,"./populator":98}],95:[function(require,module,exports){
+},{"../context":78,"./options":97,"./populator":99}],96:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -6779,7 +6809,7 @@ function createGrid(selectedLayers, opt) {
   return newSelectedLayers;
 }
 
-},{"../context":78,"./utils":99}],96:[function(require,module,exports){
+},{"../context":78,"./utils":100}],97:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -6861,7 +6891,7 @@ var OPTIONS = [RANDOMIZE_DATA, TRIM_TEXT, INSERT_ELLIPSIS, DEFAULT_SUBSTITUTE, C
  * @returns {Object}
  */
 
-},{"./utils":99}],97:[function(require,module,exports){
+},{"./utils":100}],98:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -7264,7 +7294,7 @@ function isRootPlaceholder(placeholder) {
   return placeholder && placeholder[0] == '{' && placeholder[placeholder.length - 1] == '}';
 }
 
-},{"./filters":89,"lodash/get":59}],98:[function(require,module,exports){
+},{"./filters":90,"lodash/get":59}],99:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -8438,7 +8468,7 @@ function clearArtboard(layer) {
   removeLayerMetadata(layer);
 }
 
-},{"../context":78,"./actions":81,"./actions/swapSymbol":85,"./args":87,"./data":88,"./layers":95,"./placeholders":97,"./utils":99}],99:[function(require,module,exports){
+},{"../context":78,"./actions":81,"./actions/swapSymbol":85,"./args":87,"./data":88,"./layers":96,"./placeholders":98,"./utils":100}],100:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -8567,7 +8597,7 @@ function parsePrimitives(value) {
   return value;
 }
 
-},{}],100:[function(require,module,exports){
+},{}],101:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -8586,8 +8616,8 @@ var HKSketchFusionExtension = exports.HKSketchFusionExtension = {
   bundleName: 'Sketch Data Populator',
   description: 'Say goodbye to Lorem Ipsum: populate your Sketch documents with meaningful data.',
   author: 'precious design studio',
-  authorEmail: 'info@precious-forever.com',
-  version: '2.3.1',
+  authorEmail: 'feedback@datapopulator.com',
+  version: '2.3.2',
   identifier: 'com.precious-forever.sketch.datapopulator2',
   compatibleVersion: '48',
   appcast: 'https://raw.githubusercontent.com/preciousforever/sketch-data-populator/master/appcast.xml',
@@ -8686,8 +8716,8 @@ __globals.___clearLayers_run_handler_ = function (context, params) {
     "bundleName": "Sketch Data Populator",
     "description": "Say goodbye to Lorem Ipsum: populate your Sketch documents with meaningful data.",
     "author": "precious design studio",
-    "authorEmail": "info@precious-forever.com",
-    "version": "2.3.1",
+    "authorEmail": "feedback@datapopulator.com",
+    "version": "2.3.2",
     "identifier": "com.precious-forever.sketch.datapopulator2",
     "compatibleVersion": "48",
     "appcast": "https://raw.githubusercontent.com/preciousforever/sketch-data-populator/master/appcast.xml",
@@ -8772,4 +8802,4 @@ __globals.___clearLayers_run_handler_ = function (context, params) {
 }__$end_of_manifest_
 */
 
-},{"./commands":71}]},{},[100]);
+},{"./commands":71}]},{},[101]);
