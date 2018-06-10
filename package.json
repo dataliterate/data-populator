@@ -32,7 +32,7 @@
     "run-sequence": "^1.1.5",
     "standard": "^7.1.2",
     "vinyl-source-stream": "^1.1.0",
-    "gulp-sketch": "^1.0.3"
+    "gulp-sketch": "^1.0.5"
   },
   "standard": {
     "ignore": [
