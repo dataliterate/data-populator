@@ -53,6 +53,16 @@ gulp.task('icon', function(){
     .pipe(gulp.dest('./src/resources/'));
 });
 
+//export command icons for sketch runner
+gulp.task('commandicons', function(){
+  return gulp.src('./images/commands.sketch')
+    .pipe(sketch({
+      export: 'artboards',
+      formats: 'png'
+    }))
+    .pipe(gulp.dest('./src/resources/'));
+});
+
 //export logo
 gulp.task('logo', function(){
   return gulp.src('./images/sketch-data-populator.sketch')
@@ -64,7 +74,7 @@ gulp.task('logo', function(){
 });
 
 gulp.task('assets',function(callback) {
-    runSequence('icon','logo',callback);
+    runSequence('icon','commandicons','logo',callback);
 });
 
 gulp.task('clean', function () {
@@ -146,8 +156,14 @@ gulp.task('install-plugin',function(){
         .pipe(gulp.dest(SKETCH_PLUGINS_FOLDER));
 });
 
+//copy plugin bundle to repo root
+gulp.task('copy-plugin',function(){
+    return gulp.src("dist/**/*.*")
+        .pipe(gulp.dest("./"));
+});
+
 gulp.task('build',function(callback) {
-    runSequence('clean','prepare-folders','bundle','prepare-manifest','assemble-plugin-bundle','assemble-plugin-resources','assemble-plugin-presets','install-plugin',callback);
+    runSequence('clean','prepare-folders','bundle','prepare-manifest','assemble-plugin-bundle','assemble-plugin-resources','assemble-plugin-presets','install-plugin','copy-plugin',callback);
 });
 
 gulp.task('build-custom',function(callback) {
