@@ -5563,8 +5563,7 @@ var alias = exports.alias = 'capitalize';
  * @returns {string}
  */
 function apply(string, param) {
-  return String(string).charAt(0) + String(string).slice(1).toLowerCase();
-  console.log(string);
+  return String(string).charAt(0).toUpperCase() + String(string).slice(1).toLowerCase();
 }
 
 },{}],90:[function(require,module,exports){
@@ -8622,7 +8621,7 @@ var HKSketchFusionExtension = exports.HKSketchFusionExtension = {
   description: 'Say goodbye to Lorem Ipsum: populate your Sketch documents with meaningful data.',
   author: 'precious design studio',
   authorEmail: 'feedback@datapopulator.com',
-  version: '2.3.2',
+  version: '2.3.3',
   identifier: 'com.precious-forever.sketch.datapopulator2',
   compatibleVersion: '48',
   icon: 'icon.png',
@@ -8723,7 +8722,7 @@ __globals.___clearLayers_run_handler_ = function (context, params) {
     "description": "Say goodbye to Lorem Ipsum: populate your Sketch documents with meaningful data.",
     "author": "precious design studio",
     "authorEmail": "feedback@datapopulator.com",
-    "version": "2.3.2",
+    "version": "2.3.3",
     "identifier": "com.precious-forever.sketch.datapopulator2",
     "compatibleVersion": "48",
     "icon": "icon.png",
