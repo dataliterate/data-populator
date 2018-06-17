@@ -6,6 +6,17 @@
     <description>Say goodbye to Lorem Ipsum: populate your Sketch documents with meaningful data.</description>
     <language>en</language>
     <item>
+      <title>Version 2.3.3</title>
+      <description>
+        <![CDATA[
+          <ul>
+            <li>Fixed <em>Capitalize</em> Filter.</li>
+          </ul>
+        ]]>
+      </description>
+      <enclosure url="https://github.com/preciousforever/sketch-data-populator/releases/download/v2.3.3/SketchDataPopulator.zip" sparkle:version="2.3.3" />
+    </item>
+    <item>
       <title>Version 2.3.2</title>
       <description>
         <![CDATA[
