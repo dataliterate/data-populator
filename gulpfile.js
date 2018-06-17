@@ -151,10 +151,10 @@ gulp.task('assemble-plugin-custompresets',function(callback) {
         .pipe(gulp.dest(path.join(__dirname,'dist',normalizePluginFileName(currentManifest.bundleName || currentManifest.name)+'.sketchplugin','Presets')));
 });
 
-gulp.task('install-plugin',function(){
-    return gulp.src("dist/**/*.*")
-        .pipe(gulp.dest(SKETCH_PLUGINS_FOLDER));
-});
+//gulp.task('install-plugin',function(){
+//    return gulp.src("dist/**/*.*")
+//        .pipe(gulp.dest(SKETCH_PLUGINS_FOLDER));
+//});
 
 //copy plugin bundle to repo root
 gulp.task('copy-plugin',function(){
@@ -163,11 +163,11 @@ gulp.task('copy-plugin',function(){
 });
 
 gulp.task('build',function(callback) {
-    runSequence('clean','prepare-folders','bundle','prepare-manifest','assemble-plugin-bundle','assemble-plugin-resources','assemble-plugin-presets','install-plugin','copy-plugin',callback);
+    runSequence('clean','prepare-folders','bundle','prepare-manifest','assemble-plugin-bundle','assemble-plugin-resources','assemble-plugin-presets','copy-plugin',callback);
 });
 
 gulp.task('build-custom',function(callback) {
-    runSequence('clean','assets','prepare-folders','bundle','prepare-manifest','assemble-plugin-bundle','assemble-plugin-resources','assemble-plugin-presets','assemble-plugin-custompresets','install-plugin',callback);
+    runSequence('clean','assets','prepare-folders','bundle','prepare-manifest','assemble-plugin-bundle','assemble-plugin-resources','assemble-plugin-presets','assemble-plugin-custompresets',callback);
 });
 
 gulp.task('bundle',function() {
