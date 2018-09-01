@@ -13,7 +13,7 @@
     "lodash": "^4.17.10"
   },
   "devDependencies": {
-    "async": "^1.5.2",
+    "async": "^2.6.1",
     "babel": "^6.3.26",
     "babel-cli": "^6.4.5",
     "babel-plugin-sketch-manifest-processor": "^0.1.1",
