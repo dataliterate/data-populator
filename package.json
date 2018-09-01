@@ -23,7 +23,7 @@
     "browserify": "^13.3.0",
     "del": "^2.2.0",
     "expand-tilde": "^1.2.0",
-    "fs-extra": "^0.26.5",
+    "fs-extra": "^7.0.0",
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.3",
     "gulp-github-release": "^1.1.2",
@@ -38,6 +38,8 @@
     "ignore": [
       "src/vendor/"
     ],
-    "globals": []
+    "globals": [
+
+    ]
   }
 }
