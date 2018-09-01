@@ -1,4 +1,4 @@
-<img src="images/sketch-data-populator.png" width="418" alt ="Sketch Data Populator">
+<img src="images/data-populator.png" width="500" alt ="Data Populator">
 
 ## Why Data Populator
 
@@ -10,15 +10,15 @@ We believe designers should work with _meaningful_ and _realistic_ data as early
 
 Read more about [designing with meaningful data](https://medium.com/sketch-app-sources/designing-with-meaningful-data-5456b40e172e#.1mft9hyv2).
 
-_Sketch Data Populator_ not only makes you more productive (probably around [60x faster](https://vimeo.com/131896485)), it changes the way you design user interfaces (at least that's what happened to us).
+_Data Populator_ not only makes you more productive (probably around [60x faster](https://vimeo.com/131896485)), it changes the way you design user interfaces (at least that's what happened to us).
 
 ## How to install
-Download the latest version from the [releases page](https://github.com/preciousforever/sketch-data-populator/releases), unzip it and double-click the `Sketch Data Populator.sketchplugin` file to install it in Sketch.
+Download the latest version from the [releases page](https://github.com/preciousforever/data-populator/releases), unzip it and double-click the `Data Populator.sketchplugin` file to install it in Sketch.
 
 ### Install with Sketch Runner
-With Sketch Runner, just go to the `install` command and search for `Sketch Data Populator`. Runner allows you to manage plugins and do much more to speed up your workflow in Sketch. [Download Runner here](http://www.sketchrunner.com).
+With Sketch Runner, just go to the `install` command and search for `Data Populator`. Runner allows you to manage plugins and do much more to speed up your workflow in Sketch. [Download Runner here](http://www.sketchrunner.com).
 
-![Install Sketch Data Populator via Runner](images/data-populator-runner.png)
+![Install Data Populator via Runner](images/data-populator-runner.png)
 
 <a href="http://bit.ly/SketchRunnerWebsite">
   <img width="160" height="40" src="http://sketchrunner.com/img/badge_blue.png" >
@@ -26,17 +26,17 @@ With Sketch Runner, just go to the `install` command and search for `Sketch Data
 
 ## Testing & Credits
 
-Please report bugs, observations, ideas & feature requests as [issues](https://github.com/preciousforever/sketch-data-populator/issues) or [get in touch](mailto:feedback@datapopulator.com).
+Please report bugs, observations, ideas & feature requests as [issues](https://github.com/preciousforever/data-populator/issues) or [get in touch](mailto:feedback@datapopulator.com).
 
-We conceived _Sketch Data Populator_ to improve our design process for working with data at [precious design studio](http://precious-forever.com/) and developed the plugin in collaboration with [Lukas Ondrej](https://github.com/lukasondrej).
+We conceived _Data Populator_ to improve our design process for working with data at [precious design studio](http://precious-forever.com/) and developed the plugin in collaboration with [Lukas Ondrej](https://github.com/lukasondrej).
 
 Please get in touch if you have questions or comments via [@preciousforever](https://twitter.com/preciousforever) or [our website](http://precious-forever.com/contact).
 
 ## How to use
 
-The _Sketch Data Populator_ plugin creates a grid from a selected Layer, Layer Group or Artboard and replaces text and image {placeholders} with data from a JSON source:
+The _Data Populator_ plugin creates a grid from a selected Layer, Layer Group or Artboard and replaces text and image {placeholders} with data from a JSON source:
 
-![Sketch Data Populator](images/sketch-data-populator.gif)
+![Data Populator](images/data-populator.gif)
 
 ## How it works
 
@@ -70,7 +70,7 @@ This is useful because populating a Text Layer means the initially used {placeho
 ### Reveal Presets
 will point you into the plugin's location for its Presets. Presets are simply JSON files and folders with image assets that live inside the plugin bundle. In there, you can use any desired folder structure.
 
-To find the "Preset" folder inside the plugin bundle, right click _Sketch Data Populator.sketchplugin_ and select _Show Package Contents_.
+To find the "Preset" folder inside the plugin bundle, right click _Data Populator.sketchplugin_ and select _Show Package Contents_.
 
 ## Data & Layout Options for 'Populate with…' commands
 
@@ -192,7 +192,7 @@ _assuming firstname = Peter, lastname = Miller_
 _assuming firstname = Peter, lastname = Miller_
 
 ## Conditional Actions
-A data-driven "if this than that" for Sketch Data Populator: triggers in the data lead to actions in Sketch.
+A data-driven "if this than that" for Data Populator: triggers in the data lead to actions in Sketch.
 
 A Conditional Action performs a certain action on a Layer Group or Symbol based on data and a conditional expression. The Conditional Action is controlled by the name of the Layer Group (or Symbol Instance).
 
@@ -257,11 +257,11 @@ Please check out the [demo.sketch](demo.sketch) file to get an idea.
 
 The demo makes use of the _Google Material Design Iconfont_ – please get it [here](https://github.com/google/material-design-icons/tree/master/iconfont) before opening the document. It also applies this wonderful [button hack](https://medium.com/sketch-app-sources/hacking-the-button-in-sketch-5cbce8526b3f#.53cohdc5a) and the Symbols Page is tightly organized by [Symbol Organizer](https://github.com/sonburn/symbol-organizer).
 
-If you have _Sketch Data Populator_ real world usage examples you'd like to share with the world so everybody can learn from your data populating wisdom, please [let us know](https://github.com/preciousforever/sketch-data-populator/issues/80)!
+If you have _Data Populator_ real world usage examples you'd like to share with the world so everybody can learn from your data populating wisdom, please [let us know](https://github.com/preciousforever/data-populator/issues/80)!
 
 ## Plugin Development
 
-_Sketch Data Populator_ is based on _Sketch Fusion_ by [Andrey Shakhmin, @turbobabr](https://github.com/turbobabr), as presented at [#SketcHHackday 2016](http://designtoolshackday.com).
+_Data Populator_ is based on _Sketch Fusion_ by [Andrey Shakhmin, @turbobabr](https://github.com/turbobabr), as presented at [#SketcHHackday 2016](http://designtoolshackday.com).
 
 Development
 ```

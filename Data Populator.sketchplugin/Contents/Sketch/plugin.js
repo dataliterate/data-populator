@@ -8616,16 +8616,16 @@ var commands = _interopRequireWildcard(_commands);
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 var HKSketchFusionExtension = exports.HKSketchFusionExtension = {
-  name: 'Sketch Data Populator',
-  bundleName: 'Sketch Data Populator',
-  description: 'Say goodbye to Lorem Ipsum: populate your Sketch documents with meaningful data.',
+  name: 'Data Populator',
+  bundleName: 'Data Populator',
+  description: 'A plugin to populate your design documents with meaningful data. Good Bye Lorem Ipsum. Hello JSON.',
   author: 'precious design studio',
   authorEmail: 'feedback@datapopulator.com',
-  version: '2.3.3',
+  version: '2.3.4',
   identifier: 'com.precious-forever.sketch.datapopulator2',
   compatibleVersion: '48',
   icon: 'icon.png',
-  appcast: 'https://raw.githubusercontent.com/preciousforever/sketch-data-populator/master/appcast.xml',
+  appcast: 'https://raw.githubusercontent.com/preciousforever/data-populator/master/appcast.xml',
   menu: {
     'isRoot': false,
     'items': ['populateWithPreset', 'populateWithJSON', 'populateTable', 'populateAgain', 'revealPresets', 'setPresetsLibrary', 'clearLayers']
@@ -8717,16 +8717,16 @@ __globals.___clearLayers_run_handler_ = function (context, params) {
 
 /*__$begin_of_manifest_
 {
-    "name": "Sketch Data Populator",
-    "bundleName": "Sketch Data Populator",
-    "description": "Say goodbye to Lorem Ipsum: populate your Sketch documents with meaningful data.",
+    "name": "Data Populator",
+    "bundleName": "Data Populator",
+    "description": "A plugin to populate your design documents with meaningful data. Good Bye Lorem Ipsum. Hello JSON.",
     "author": "precious design studio",
     "authorEmail": "feedback@datapopulator.com",
-    "version": "2.3.3",
+    "version": "2.3.4",
     "identifier": "com.precious-forever.sketch.datapopulator2",
     "compatibleVersion": "48",
     "icon": "icon.png",
-    "appcast": "https://raw.githubusercontent.com/preciousforever/sketch-data-populator/master/appcast.xml",
+    "appcast": "https://raw.githubusercontent.com/preciousforever/data-populator/master/appcast.xml",
     "menu": {
         "isRoot": false,
         "items": [
