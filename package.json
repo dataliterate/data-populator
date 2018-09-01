@@ -9,7 +9,7 @@
   "scripts": {},
   "license": "MIT",
   "dependencies": {
-    "command-line-args": "^3.0.1",
+    "command-line-args": "^5.0.2",
     "lodash": "^4.17.10"
   },
   "devDependencies": {
@@ -38,6 +38,8 @@
     "ignore": [
       "src/vendor/"
     ],
-    "globals": []
+    "globals": [
+
+    ]
   }
 }
