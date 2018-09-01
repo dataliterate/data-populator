@@ -1,6 +1,6 @@
 {
   "name": "data-populator",
-  "version": "2.3.3",
+  "version": "2.3.4",
   "description": "A plugin to populate your design documents with meaningful data. Good Bye Lorem Ipsum. Hello JSON.",
   "author": "precious design studio",
   "authorEmail": "feedback@datapopulator.com",
@@ -18,18 +18,21 @@
     "babel-cli": "^6.4.5",
     "babel-plugin-sketch-manifest-processor": "^0.1.1",
     "babel-plugin-transform-object-rest-spread": "^6.8.0",
+    "babel-preset-env": "^1.7.0",
     "babel-preset-es2015": "^6.3.13",
-    "fs-extra": "^7.0.0",
-    "expand-tilde": "^2.0.2",
-    "del": "^3.0.0",
-    "browserify": "^16.2.2",
     "babelify": "^8.0.0",
+    "browserify": "^16.2.2",
+    "del": "^3.0.0",
+    "expand-tilde": "^2.0.2",
+    "fs-extra": "^7.0.0",
     "gulp": "^3.9.1",
     "gulp-babel": "^8.0.0",
     "gulp-github-release": "^1.1.2",
     "gulp-sketch": "^1.0.5",
     "gulp-zip": "^4.2.0",
+    "install": "^0.12.1",
     "lodash": "^4.2.1",
+    "npm": "^6.4.1",
     "run-sequence": "^2.2.1",
     "standard": "^12.0.1",
     "vinyl-source-stream": "^2.0.0"
@@ -38,8 +41,6 @@
     "ignore": [
       "src/vendor/"
     ],
-    "globals": [
-
-    ]
+    "globals": []
   }
 }
