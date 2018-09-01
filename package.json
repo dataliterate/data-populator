@@ -32,12 +32,14 @@
     "lodash": "^4.2.1",
     "run-sequence": "^1.1.5",
     "standard": "^7.1.2",
-    "vinyl-source-stream": "^1.1.2"
+    "vinyl-source-stream": "^2.0.0"
   },
   "standard": {
     "ignore": [
       "src/vendor/"
     ],
-    "globals": []
+    "globals": [
+
+    ]
   }
 }
