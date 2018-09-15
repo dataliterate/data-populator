@@ -5,3 +5,5 @@ is_partial: false
 fields:
 - type: textarea
   default: Hey there…
+pages:
+- docs/index.md
