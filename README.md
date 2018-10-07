@@ -1,4 +1,4 @@
-<img src="images/data-populator.png" width="500" alt ="Data Populator">
+<img src="https://www.datapopulator.com/datapopulator-appicon.svg" width="480" alt ="Data Populator">
 
 ## Why Data Populator
 
