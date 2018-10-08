@@ -8624,7 +8624,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 var HKSketchFusionExtension = exports.HKSketchFusionExtension = {
   name: 'Data Populator',
   bundleName: 'Data Populator',
-  description: 'A plugin to populate your design documents with meaningful data. Good Bye Lorem Ipsum. Hello JSON.',
+  description: 'A plugin to populate your design mockups with meaningful data. Good Bye Lorem Ipsum. Hello JSON.',
   author: 'precious design studio',
   authorEmail: 'feedback@datapopulator.com',
   version: '2.3.5',
@@ -8725,7 +8725,7 @@ __globals.___clearLayers_run_handler_ = function (context, params) {
 {
     "name": "Data Populator",
     "bundleName": "Data Populator",
-    "description": "A plugin to populate your design documents with meaningful data. Good Bye Lorem Ipsum. Hello JSON.",
+    "description": "A plugin to populate your design mockups with meaningful data. Good Bye Lorem Ipsum. Hello JSON.",
     "author": "precious design studio",
     "authorEmail": "feedback@datapopulator.com",
     "version": "2.3.5",

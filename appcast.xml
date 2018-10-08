@@ -3,7 +3,7 @@
   <channel>
     <title>Data Populator</title>
     <link>https://raw.githubusercontent.com/preciousforever/data-populator/master/appcast.xml</link>
-    <description>A plugin to populate your design documents with meaningful data. Good Bye Lorem Ipsum. Hello JSON.</description>
+    <description>A plugin to populate your design mockups with meaningful data. Good Bye Lorem Ipsum. Hello JSON.</description>
     <language>en</language>
     <item>
       <title>Version 2.3.5</title>

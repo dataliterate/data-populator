@@ -63,18 +63,8 @@ gulp.task('commandicons', function(){
     .pipe(gulp.dest('./src/resources/'));
 });
 
-//export logo
-gulp.task('logo', function(){
-  return gulp.src('./images/data-populator.sketch')
-    .pipe(sketch({
-      export: 'artboards',
-      formats: 'png'
-    }))
-    .pipe(gulp.dest('./images/'));
-});
-
 gulp.task('assets',function(callback) {
-    runSequence('icon','commandicons','logo',callback);
+    runSequence('icon','commandicons',callback);
 });
 
 gulp.task('clean', function () {
