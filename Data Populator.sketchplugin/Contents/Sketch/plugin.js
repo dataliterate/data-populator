@@ -6410,10 +6410,14 @@ function findLayersInLayer(name, exactMatch, type, rootLayer, subLayersOnly, lay
 
   //type
   if (type) {
-    formatRules.push('(className == %@)');
+    if (type === SHAPE) {
+      formatRules.push('(className == "MSRectangleShape" OR className == "MSTriangleShape" OR className == "MSOvalShape" OR className == "MSStarShape" OR className == "MSPolygonShape" OR className == "MSShapeGroup")');
+    } else {
+      formatRules.push('(className == %@)');
+    }
     args.push(type);
   } else {
-    formatRules.push('(className == "MSLayerGroup" OR className == "MSShapeGroup" OR className == "MSArtboardGroup" OR className == "MSTextLayer")');
+    formatRules.push('(className == "MSLayerGroup" OR className == "MSShapeGroup" OR className == "MSArtboardGroup" OR className == "MSTextLayer" OR className == "MSRectangleShape" OR className == "MSTriangleShape" OR className == "MSOvalShape" OR className == "MSStarShape" OR className == "MSPolygonShape")');
   }
 
   //layers to exclude
@@ -6537,10 +6541,10 @@ function findPageWithName(name, fullMatch) {
  */
 function refreshTextLayer(layer) {
   layer.adjustFrameToFit();
-  layer.select_byExpandingSelection(true, false);
+  layer.select_byExtendingSelection(true, false);
   layer.setIsEditingText(true);
   layer.setIsEditingText(false);
-  layer.select_byExpandingSelection(false, false);
+  layer.select_byExtendingSelection(false, false);
 }
 
 /**
@@ -6562,12 +6566,12 @@ function selectLayers(layers) {
   //deselect all layers
   var selectedLayers = getSelectedLayers();
   selectedLayers.forEach(function (layer) {
-    layer.select_byExpandingSelection(false, false);
+    layer.select_byExtendingSelection(false, false);
   });
 
   //select layers
   layers.forEach(function (layer) {
-    layer.select_byExpandingSelection(true, true);
+    layer.select_byExtendingSelection(true, true);
   });
 }
 
@@ -6652,7 +6656,7 @@ function isLayerGroup(layer) {
  * @returns {boolean}
  */
 function isLayerShapeGroup(layer) {
-  return layer.isKindOfClass(MSShapeGroup.class());
+  return layer.isKindOfClass(MSShapeGroup.class()) || layer.isKindOfClass(MSRectangleShape.class()) || layer.isKindOfClass(MSTriangleShape.class()) || layer.isKindOfClass(MSOvalShape.class()) || layer.isKindOfClass(MSStarShape.class()) || layer.isKindOfClass(MSPolygonShape.class());
 }
 
 /**
@@ -8623,9 +8627,9 @@ var HKSketchFusionExtension = exports.HKSketchFusionExtension = {
   description: 'A plugin to populate your design documents with meaningful data. Good Bye Lorem Ipsum. Hello JSON.',
   author: 'precious design studio',
   authorEmail: 'feedback@datapopulator.com',
-  version: '2.3.4',
+  version: '2.3.5',
   identifier: 'com.precious-forever.sketch.datapopulator2',
-  compatibleVersion: '48',
+  compatibleVersion: '52',
   icon: 'icon.png',
   appcast: 'https://raw.githubusercontent.com/preciousforever/data-populator/master/appcast.xml',
   menu: {
@@ -8724,9 +8728,9 @@ __globals.___clearLayers_run_handler_ = function (context, params) {
     "description": "A plugin to populate your design documents with meaningful data. Good Bye Lorem Ipsum. Hello JSON.",
     "author": "precious design studio",
     "authorEmail": "feedback@datapopulator.com",
-    "version": "2.3.4",
+    "version": "2.3.5",
     "identifier": "com.precious-forever.sketch.datapopulator2",
-    "compatibleVersion": "48",
+    "compatibleVersion": "52",
     "icon": "icon.png",
     "appcast": "https://raw.githubusercontent.com/preciousforever/data-populator/master/appcast.xml",
     "menu": {

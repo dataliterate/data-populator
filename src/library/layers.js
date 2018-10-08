@@ -51,11 +51,16 @@ export function findLayersInLayer(name, exactMatch, type, rootLayer, subLayersOn
 
   //type
   if (type) {
-    formatRules.push('(className == %@)')
+    if(type === SHAPE) {
+      formatRules.push('(className == "MSRectangleShape" OR className == "MSTriangleShape" OR className == "MSOvalShape" OR className == "MSStarShape" OR className == "MSPolygonShape" OR className == "MSShapeGroup")')
+    }
+    else {
+      formatRules.push('(className == %@)')
+    }
     args.push(type)
   }
   else {
-    formatRules.push('(className == "MSLayerGroup" OR className == "MSShapeGroup" OR className == "MSArtboardGroup" OR className == "MSTextLayer")')
+    formatRules.push('(className == "MSLayerGroup" OR className == "MSShapeGroup" OR className == "MSArtboardGroup" OR className == "MSTextLayer" OR className == "MSRectangleShape" OR className == "MSTriangleShape" OR className == "MSOvalShape" OR className == "MSStarShape" OR className == "MSPolygonShape")')
   }
 
   //layers to exclude
@@ -185,10 +190,10 @@ export function findPageWithName(name, fullMatch) {
  */
 export function refreshTextLayer(layer) {
   layer.adjustFrameToFit()
-  layer.select_byExpandingSelection(true, false)
+  layer.select_byExtendingSelection(true, false)
   layer.setIsEditingText(true)
   layer.setIsEditingText(false)
-  layer.select_byExpandingSelection(false, false)
+  layer.select_byExtendingSelection(false, false)
 }
 
 
@@ -212,12 +217,12 @@ export function selectLayers(layers) {
   //deselect all layers
   let selectedLayers = getSelectedLayers()
   selectedLayers.forEach((layer) => {
-    layer.select_byExpandingSelection(false, false)
+    layer.select_byExtendingSelection(false, false)
   })
 
   //select layers
   layers.forEach(function (layer) {
-    layer.select_byExpandingSelection(true, true)
+    layer.select_byExtendingSelection(true, true)
   })
 }
 
@@ -307,9 +312,14 @@ export function isLayerGroup(layer) {
  * @param {MSLayer} layer
  * @returns {boolean}
  */
-export function isLayerShapeGroup(layer) {
-  return layer.isKindOfClass(MSShapeGroup.class())
-}
+ export function isLayerShapeGroup (layer) {
+   return layer.isKindOfClass(MSShapeGroup.class()) ||
+   layer.isKindOfClass(MSRectangleShape.class()) ||
+   layer.isKindOfClass(MSTriangleShape.class()) ||
+   layer.isKindOfClass(MSOvalShape.class()) ||
+   layer.isKindOfClass(MSStarShape.class()) ||
+   layer.isKindOfClass(MSPolygonShape.class())
+ }
 
 
 /**

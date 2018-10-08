@@ -4,9 +4,9 @@
   "description": "A plugin to populate your design documents with meaningful data. Good Bye Lorem Ipsum. Hello JSON.",
   "author": "precious design studio",
   "authorEmail": "feedback@datapopulator.com",
-  "version": "2.3.4",
+  "version": "2.3.5",
   "identifier": "com.precious-forever.sketch.datapopulator2",
-  "compatibleVersion": "48",
+  "compatibleVersion": "52",
   "icon": "icon.png",
   "appcast": "https://raw.githubusercontent.com/preciousforever/data-populator/master/appcast.xml",
   "menu": {

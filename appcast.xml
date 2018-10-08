@@ -6,6 +6,17 @@
     <description>A plugin to populate your design documents with meaningful data. Good Bye Lorem Ipsum. Hello JSON.</description>
     <language>en</language>
     <item>
+      <title>Version 2.3.5</title>
+      <description>
+        <![CDATA[
+          <ul>
+            <li>Fixed compatibility issues for populating images in Sketch 52.</li>
+          </ul>
+        ]]>
+      </description>
+      <enclosure url="https://github.com/preciousforever/data-populator/releases/download/v2.3.5/DataPopulator.zip" sparkle:version="2.3.5" />
+    </item>
+    <item>
       <title>Version 2.3.4</title>
       <description>
         <![CDATA[
