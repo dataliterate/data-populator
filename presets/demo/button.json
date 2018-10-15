@@ -1,0 +1,22 @@
+[
+    {
+        "icon": "face",
+        "text": "I'm a pink button",
+        "color": "pink"
+    },
+    {
+        "icon": "goat",
+        "text": "I'm a cyan button",
+        "color": "cyan"
+    },
+    {
+        "icon": "loyalty",
+        "text": "I'm a blue button",
+        "color": "blue"
+    },
+    {
+        "icon": "mood",
+        "text": "I'm a deep orange button",
+        "color": "deeporange"
+    }
+]
