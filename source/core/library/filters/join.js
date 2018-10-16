@@ -17,6 +17,16 @@ export function apply (inputStrings, param) {
   // make sure that input strings is an array
   if (!(inputStrings instanceof Array)) return inputStrings
 
+  // TODO fix this upstream, in populator
+  inputStrings = inputStrings.map(str => {
+    if (str instanceof Object && str.hasOwnProperty('hasValueForKey')) {
+      return str.populated
+    }
+    else {
+      return str
+    }
+  })
+
   // get delimiter
   let delimiter = param
 
