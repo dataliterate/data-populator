@@ -3,6 +3,9 @@ name: Bug report
 about: Create a report to help us improve
 
 ---
+**Which version of the plugin are you using?**
+[ ] Data Populator for Sketch
+[ ] Data Populator for Adobe XD
 
 **Describe the bug**
 A clear and concise description of what the bug is.
