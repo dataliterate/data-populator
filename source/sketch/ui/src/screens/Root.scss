@@ -1,0 +1,135 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video, textarea {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  font-family: 'Helvetica Neue', -apple-system, BlinkMacSystemFont, sans-serif;
+  vertical-align: baseline;
+}
+
+article, aside, details, figcaption, figure,
+footer, header, menu, nav, section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol, ul {
+  list-style: none;
+}
+blockquote, q {
+  quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+input[type=text], input[type=password], textarea {
+  box-shadow: none;
+  border: none;
+  outline: none;
+  margin: 0;
+  -webkit-appearance: none;
+  padding: 0;
+  background: transparent;
+
+  font-family: 'Helvetica Neue', -apple-system, BlinkMacSystemFont, sans-serif;
+  vertical-align: baseline;
+  user-select: auto;
+  -webkit-user-select: auto;
+}
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+html, body {
+  position: relative;
+}
+
+html {
+  overflow: hidden;
+}
+
+body {
+  // height: 100%;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#root {
+  width: 868px;
+  height: 680px;
+
+  .root {
+    width: 100%;
+    height: 100%;
+
+    .page {
+      .left, .right {
+        position: relative;
+        height: 680px;
+
+        display: inline-block;
+        vertical-align: top;
+      }
+
+      .left {
+        width: 368px;
+        border-right: 1px solid #EAEAEA;
+        padding: 40px;
+        background-color: #F7F7F7;
+
+        overflow-y: auto;
+
+        .content {
+          padding-left: 2px;
+        }
+      }
+
+      .right {
+        width: 500px;
+        background-color: #FBFBFB;
+
+        .footer {
+          background-color: rgba(251, 251, 251, 0.9);
+          border-top: 1px solid #EAEAEA;
+
+          width: 500px;
+          height: 65px;
+
+          position: absolute;
+          bottom: 0;
+          right: 0;
+
+          .button-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+
+            height: 24px;
+          }
+        }
+      }
+    }
+  }
+}

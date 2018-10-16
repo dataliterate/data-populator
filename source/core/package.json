@@ -1,0 +1,30 @@
+{
+  "name": "data-populator-core",
+  "version": "1.0.0",
+  "description": "Common functionality shared between plugins for different platforms.",
+  "author": "precious design studio",
+  "authorEmail": "feedback@datapopulator.com",
+  "repository": "https://github.com/preciousforever/data-populator",
+  "main": "index.js",
+  "scripts": {},
+  "license": "MIT",
+  "dependencies": {
+    "command-line-args": "^3.0.1",
+    "lodash": "^4.17.10"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-object-rest-spread": "^6.8.0",
+    "babel-preset-es2015": "^6.3.13"
+  },
+  "eslintConfig": {
+    "globals": {},
+    "extends": [
+      "standard"
+    ],
+    "rules": {
+      "padded-blocks": 0,
+      "brace-style": 0,
+      "standard/no-callback-literal": 0
+    }
+  }
+}

@@ -1,0 +1,36 @@
+.file-browse-field {
+  width: 100%;
+  height: 26px;
+  margin-bottom: 20px;
+
+  input[type='text'] {
+    display: inline-block;
+    vertical-align: top;
+
+    height: 24px;
+
+    font-size: 12px;
+    line-height: 18px;
+
+    background-color: #FFF;
+    border: 1px solid #E4E4E4;
+
+    padding: 3px 9px;
+    border-radius: 4px;
+
+    color: #525252;
+
+    &:focus {
+      border: 1px solid #14A6C7;
+    }
+  }
+
+  input[type='file'] {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+
+    width: 1px;
+    height: 1px;
+  }
+}
