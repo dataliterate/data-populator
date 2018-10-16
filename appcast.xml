@@ -6,6 +6,19 @@
     <description>A plugin to populate your design mockups with meaningful data. Good Bye Lorem Ipsum. Hello JSON.</description>
     <language>en</language>
     <item>
+      <title>Version 3.0.0</title>
+      <description>
+        <![CDATA[
+          <ul>
+            <li>Revamped UI</li>
+            <li>New command: Last used data</li>
+            <li>New command: Populate from URL</li>
+          </ul>
+        ]]>
+      </description>
+      <enclosure url="https://www.datapopulator.com/releases/datapopulator-sketch.zip" sparkle:version="3.0.0" />
+    </item>
+    <item>
       <title>Version 2.3.5</title>
       <description>
         <![CDATA[
