@@ -1,14 +1,14 @@
 [
   {
     "id": 1,
-    "image": "https://raw.githubusercontent.com/preciousforever/data-populator/master/demos/img/products/Apple iPad Air 2.jpg",
+    "image": "https://raw.githubusercontent.com/preciousforever/data-populator/master/images/demo/products/Apple iPad Air 2.jpg",
     "name": "Apple iPad Air 2",
     "description": "Gold · Wifi + Cellular · 16GB",
     "price": "560,00 €"
   },
   {
     "id": 2,
-    "image": "https://raw.githubusercontent.com/preciousforever/data-populator/master/demos/img/products/Apple TV incl. Apple Remote.jpg",
+    "image": "https://raw.githubusercontent.com/preciousforever/data-populator/master/images/demo/products/Apple TV incl. Apple Remote.jpg",
     "name": "Apple TV incl. Apple Remote",
     "description": "Media Streaming to your TV",
     "price": "71,91 €",
@@ -17,42 +17,42 @@
   },
   {
     "id": 3,
-    "image": "https://raw.githubusercontent.com/preciousforever/data-populator/master/demos/img/products/Apple MacBook 12.jpg",
+    "image": "https://raw.githubusercontent.com/preciousforever/data-populator/master/images/demo/products/Apple MacBook 12.jpg",
     "name": "Apple MacBook 12",
     "description": "Space Gray · 1.3 GHz · 512 GB Flash Memory",
     "price": "1.948,99 €"
   },
   {
     "id": 4,
-    "image": "https://raw.githubusercontent.com/preciousforever/data-populator/master/demos/img/products/AppleCare Protection Plan.jpg",
+    "image": "https://raw.githubusercontent.com/preciousforever/data-populator/master/images/demo/products/AppleCare Protection Plan.jpg",
     "name": "AppleCare Protection Plan",
     "description": "for MacBook 12 · 2 years of premium support",
     "price": "19,90 €"
   },
   {
     "id": 5,
-    "image": "https://raw.githubusercontent.com/preciousforever/data-populator/master/demos/img/products/Apple Lightning to USB Cable.jpg",
+    "image": "https://raw.githubusercontent.com/preciousforever/data-populator/master/images/demo/products/Apple Lightning to USB Cable.jpg",
     "name": "Apple Lightning to USB Cable",
     "description": "Adapter for iPhone and iPod · 1m",
     "price": "18,90 €"
   },
   {
     "id": 6,
-    "image": "https://raw.githubusercontent.com/preciousforever/data-populator/master/demos/img/products/Apple MDP to DVI Adapter.jpg",
+    "image": "https://raw.githubusercontent.com/preciousforever/data-populator/master/images/demo/products/Apple MDP to DVI Adapter.jpg",
     "name": "Apple MDP to DVI Adapter",
     "description": "for MacBook and MacBook Pro",
     "price": "28,89 €"
   },
   {
     "id": 7,
-    "image": "https://raw.githubusercontent.com/preciousforever/data-populator/master/demos/img/products/Apple Watch 38mm.jpg",
+    "image": "https://raw.githubusercontent.com/preciousforever/data-populator/master/images/demo/products/Apple Watch 38mm.jpg",
     "name": "Apple Watch 38mm",
     "description": "Stainless Steel Case with Black Sport Band",
     "price": "549,00 €"
   },
   {
     "id": 8,
-    "image": "https://raw.githubusercontent.com/preciousforever/data-populator/master/demos/img/products/Apple iMac with Retina 5K display.jpg",
+    "image": "https://raw.githubusercontent.com/preciousforever/data-populator/master/images/demo/products/Apple iMac with Retina 5K display.jpg",
     "name": "Apple iMac with Retina 5K display",
     "description": "27-inch: 3.5GHz with Retina 5K display",
     "price": "1.999,20 €",
@@ -61,14 +61,14 @@
   },
   {
     "id": 9,
-    "image": "https://raw.githubusercontent.com/preciousforever/data-populator/master/demos/img/products/Apple Airport Extreme.jpg",
+    "image": "https://raw.githubusercontent.com/preciousforever/data-populator/master/images/demo/products/Apple Airport Extreme.jpg",
     "name": "Apple Airport Extreme",
     "description": "Dual-band Wifi Base Station",
     "price": "199,00 €"
   },
   {
     "id": 10,
-    "image": "https://raw.githubusercontent.com/preciousforever/data-populator/master/demos/img/products/Apple iPhone 6 Plus.jpg",
+    "image": "https://raw.githubusercontent.com/preciousforever/data-populator/master/images/demo/products/Apple iPhone 6 Plus.jpg",
     "name": "Apple iPhone 6 Plus",
     "description": "Space Gray · 5.5-inch display · 128 GB",
     "price": "749,00 €"
