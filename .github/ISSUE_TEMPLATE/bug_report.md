@@ -22,8 +22,8 @@ If applicable, add screenshots to help explain your problem.
 
 **Environment (please complete the following information):**
  - macOS Version: [e.g. macOS High Sierra 10.13.5]
- - Sketch Version [e.g. Sketch 50.2]
- - Plugin Version [e.g. 2.3.2]
+ - Sketch Version [e.g. Sketch 52.2] or Adobe XD Version [e.g. Adobe XD 13.0.0.0]
+ - Plugin Version [e.g. 3.0.0]
 
 **Additional context**
 Add any other context about the problem here.
