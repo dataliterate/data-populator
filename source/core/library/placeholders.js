@@ -24,17 +24,13 @@ export function extractPlaceholders (string) {
   while (match) {
 
     // parse placeholder
-    let parsedPlaceholder = parsePlaceholder(match[0])
-    // if (match[0].split('{').length - 1 === match[0].split('}').length - 1) {
-    //   let parsedPlaceholder = parsePlaceholder(match[0])
-    //
-    //   // console.log(parsedPlaceholder)
-    //   // add to placeholders array
-    //   placeholders.push(parsedPlaceholder)
-    // }
+    if (match[0].split('{').length - 1 === match[0].split('}').length - 1) {
+       let parsedPlaceholder = parsePlaceholder(match[0])
 
-    // add to placeholders array
-    placeholders.push(parsedPlaceholder)
+       // console.log(parsedPlaceholder)
+       // add to placeholders array
+       placeholders.push(parsedPlaceholder)
+     }
 
     // parse next placeholder
     match = regex.exec(string)
