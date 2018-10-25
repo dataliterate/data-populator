@@ -31,10 +31,18 @@ export default async (context, populateAgain) => {
     // load preset data
     if (!options[OPTIONS.JSON_PATH]) return
     data = Data.loadJSONData(options[OPTIONS.JSON_PATH])
+    if (!data) return
     data = Utils.accessObjectByString(data, options[OPTIONS.DATA_PATH] || '')
     if (!data) return
 
   } else {
+
+    // check that any existing JSON file still exists
+    if (options[OPTIONS.JSON_PATH]) {
+      if (!Data.readFileAsText(options[OPTIONS.JSON_PATH])) {
+        options[OPTIONS.JSON_PATH] = null
+      }
+    }
 
     // wait for user response including options and json data to be used
     let response = await Gui.showWindow({

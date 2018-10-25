@@ -25,12 +25,11 @@ export function extractPlaceholders (string) {
 
     // parse placeholder
     if (match[0].split('{').length - 1 === match[0].split('}').length - 1) {
-       let parsedPlaceholder = parsePlaceholder(match[0])
+      let parsedPlaceholder = parsePlaceholder(match[0])
 
-       // console.log(parsedPlaceholder)
-       // add to placeholders array
-       placeholders.push(parsedPlaceholder)
-     }
+      // add to placeholders array
+      placeholders.push(parsedPlaceholder)
+    }
 
     // parse next placeholder
     match = regex.exec(string)
@@ -278,7 +277,8 @@ export function parsePlaceholder (placeholderString) {
     let nestedPlaceholder = nestedPlaceholders[0]
 
     // split into components, dividing into the keypath and substitute
-    let placeholderComponents = nestedPlaceholder.split('?')
+    let substituteMarkerIndex = nestedPlaceholder.indexOf('?')
+    let placeholderComponents = [nestedPlaceholder.slice(0, substituteMarkerIndex), nestedPlaceholder.slice(substituteMarkerIndex + 1)]
 
     // check if has substitute
     if (placeholderComponents.length === 2) {
@@ -289,6 +289,7 @@ export function parsePlaceholder (placeholderString) {
       // set substitute
       if (placeholderComponents[1]) {
         placeholder.substitute = placeholderComponents[1].trim()
+
       } else {
 
         // set to true to signify that a default substitute should be used
@@ -345,7 +346,16 @@ export function populatePlaceholder (placeholder, data, defaultSubstitute, xd) {
 
       // use specified substitute
       else if (placeholder.substitute && placeholder.substitute.length) {
-        populated = placeholder.substitute
+
+        if (placeholder.substitute[0] === '?') {
+          populated = getValue(data, placeholder.substitute.substring(1))
+
+          // use default if placeholder substitute didn't return any data
+          if (!populated) populated = defaultSubstitute
+        }
+        else {
+          populated = placeholder.substitute
+        }
       }
 
       // return empty string when no substitute should be used

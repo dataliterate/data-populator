@@ -88,6 +88,10 @@ export function askForDirectory (title, message, path) {
  * @returns {String}
  */
 export function readFileAsText (path) {
+
+  // make sure file exists
+  if (!NSFileManager.defaultManager().fileExistsAtPath_isDirectory(path, null)) return
+
   return NSString.stringWithContentsOfFile_encoding_error(path, NSUTF8StringEncoding, false)
 }
 

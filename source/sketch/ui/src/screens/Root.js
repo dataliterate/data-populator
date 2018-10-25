@@ -32,6 +32,9 @@ class Root extends React.Component {
       // shows loading animation
       loading: false,
 
+      // track whether a file dialog is opened
+      fileDialogOpen: false,
+
       // additional state for specific populate types
       presets: [],
       urlInvalid: false,
@@ -96,7 +99,11 @@ class Root extends React.Component {
         Utils.callPlugin('cancel')
 
       } else if (e.keyCode === 13) {
-        this.handlePopulateButtonClick()
+
+        // ignore enter key when selecting files
+        if (!this.state.fileDialogOpen) {
+          this.handlePopulateButtonClick()
+        }
       }
     })
   }
@@ -110,6 +117,7 @@ class Root extends React.Component {
 
     this.setState({
       viewOnly: params.viewOnly,
+      fileDialogOpen: false,
 
       presets: params.presets,
       urlInvalid: false,
@@ -208,6 +216,10 @@ class Root extends React.Component {
 
   handleJSONBrowse () {
 
+    this.setState({
+      fileDialogOpen: true
+    })
+
     // ask for JSON file
     Utils.callPlugin('selectJSON', {
       path: this.state.options[OPTIONS.JSON_PATH]
@@ -276,7 +288,8 @@ class Root extends React.Component {
       // stop loading
       setTimeout(() => {
         this.setState({
-          loading: false
+          loading: false,
+          fileDialogOpen: false
         })
       }, 300)
     })
