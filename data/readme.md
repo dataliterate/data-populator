@@ -10,5 +10,5 @@ A generic Boarding Pass template with examples for Adobe XD and Sketch. Created 
 ## Contribution
 Feel free to add your own Data Packs by doing a [Pull Request](https://github.com/preciousforever/data-populator/pulls).
 
-## Data Sources & Credits
+## Get in touch
 Follow [@datapopulator](https://twitter.com/datapopulator) for updates and [get in touch](mailto:feedback@datapopulator.com) with requests and questions.
