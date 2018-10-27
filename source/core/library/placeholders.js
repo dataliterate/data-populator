@@ -278,7 +278,7 @@ export function parsePlaceholder (placeholderString) {
 
     // split into components, dividing into the keypath and substitute
     let substituteMarkerIndex = nestedPlaceholder.indexOf('?')
-    let placeholderComponents = [nestedPlaceholder.slice(0, substituteMarkerIndex), nestedPlaceholder.slice(substituteMarkerIndex + 1)]
+    let placeholderComponents = (substituteMarkerIndex === -1) ? [nestedPlaceholder] : [nestedPlaceholder.slice(0, substituteMarkerIndex), nestedPlaceholder.slice(substituteMarkerIndex + 1)]
 
     // check if has substitute
     if (placeholderComponents.length === 2) {
