@@ -1,0 +1,4 @@
+Language,Passenger,Gate,Seat,Class,Flight,Boarding,Date,frequency
+"US","Passenger","Gate","Seat","Class","Flight","Boarding","Date",100
+"DE","Reisender","Gate","Sitz","Klasse","Flug","Boarding","Datum",50
+"FR","Passager","Porte","Siège","Classe","Vol","Embarquement","Date",25
