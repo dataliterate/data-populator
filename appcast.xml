@@ -6,6 +6,19 @@
     <description>A plugin to populate your design mockups with meaningful data. Good Bye Lorem Ipsum. Hello JSON.</description>
     <language>en</language>
     <item>
+      <title>Version 3.0.1</title>
+      <description>
+        <![CDATA[
+          <ul>
+            <li>no more crashes when running populate with JSON and the previously selected JSON file no longer exists</li>
+            <li>pressing enter key to select JSON files no longer automatically runs populate (you didn't even get a chance to look at the settings before and it would just populate immediately)</li>
+            <li>it's now possible to use data for substitutes! For example, {something?name} will insert 'name' but {something??name} will use the data for the 'name' key in the data</li>
+          </ul>
+        ]]>
+      </description>
+      <enclosure url="https://www.datapopulator.com/releases/datapopulator-sketch-v3.0.1.zip" sparkle:version="3.0.1" />
+    </item>
+    <item>
       <title>Version 3.0.0</title>
       <description>
         <![CDATA[
@@ -16,7 +29,7 @@
           </ul>
         ]]>
       </description>
-      <enclosure url="https://www.datapopulator.com/releases/datapopulator-sketch.zip" sparkle:version="3.0.0" />
+      <enclosure url="https://www.datapopulator.com/releases/datapopulator-sketch-v3.0.0.zip" sparkle:version="3.0.0" />
     </item>
     <item>
       <title>Version 2.3.5</title>
