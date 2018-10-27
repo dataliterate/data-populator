@@ -8,33 +8,33 @@ While working on the next generation of [Data Populator](http://www.datapopulato
 
 I also wanted to explore the process of creating such dataset from scratch – as this is one of the major question many Data Populator users are asking us: "The demo data isn't enough and I don't have a live API with real data yet. I hate Lorem Ipsum though, where can I find realistic and meaningful mock data for my design mockups?". As I love [mockaroo.com](https://www.mockaroo.com) for its very wide and flexible offering, this is where I went. It has a lot of limitations though, being mainly focused on text based mock data (and of course, there could be way more data sets for so many more topics!). But as they let you extend their 'Data Schemes' with custom CSV and you can also use 'Template' fields in which you can use URLs in combination with variables coming from other fields, there's a lot of possibility here. So for example, this is how the URL for an Airline logo looks like: `https://www.gstatic.com/flights/airline_logos/70px/{airline.code}.png` – so if you replace {airline.code} with eg. 'LH', you'll get the [image](https://www.gstatic.com/flights/airline_logos/70px/LH.png) that is being used by [Google Flights](https://www.google.com/flights).
 
-## Content
-
-### Data Set
-boardingpass.json
-
-### Demo Mockups
-boardingpass.xd
-boardingpass.sketch
-
-### Custom CSV
-boardingpass-labels.csv
-airports.csv
-airlines.csv
-
-'Boarding Pass' Schema on mockaroo.com
+**'Boarding Pass' Schema on mockaroo.com**  
 https://www.mockaroo.com/854ad870
 
-'Boarding Pass' Mock API on mockaroo.com
+**'Boarding Pass' Mock API on mockaroo.com**  
 https://my.api.mockaroo.com/boardingpass.json?key=aa343f30
+
+## Content
+
+**Data Set**  
+[boardingpass.json](boardingpass.json)
+
+**Demo Mockups**  
+[boardingpass.xd](boardingpass.xd)  
+[boardingpass.sketch](boardingpass.sketch)
+
+**Custom CSV**  
+[boardingpass-labels.csv](boardingpass-labels.csv)  
+[airports.csv](airports.csv)  
+[airlines.csv](airlines.csv)
 
 ## Author
 Christophe Stoll of [precious design studio](http://www.precious-forever.com), makers of [Data Populator](http://www.datapopulator.com)
 
 ## Data Sources & Credits
-https://www.mockaroo.com
-https://www.google.com/flights
-https://www.countryflags.io
-http://goqr.me/api/
-https://github.com/beanumber/airlines
+https://www.mockaroo.com  
+https://www.google.com/flights  
+https://www.countryflags.io  
+http://goqr.me/api/  
+https://github.com/beanumber/airlines  
 https://github.com/jpatokal/openflights
