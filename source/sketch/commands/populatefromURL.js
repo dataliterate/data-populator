@@ -80,4 +80,6 @@ export default async (context, populateAgain) => {
 
   // restore selected layers
   Layers.selectLayers(selectedLayers)
+
+  context.document.reloadInspector()
 }

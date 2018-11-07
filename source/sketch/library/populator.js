@@ -240,6 +240,24 @@ function removeLayerMetadata (layer) {
 }
 
 /**
+ * Retrieves the symbol swap action if present.
+ *
+ * @param {MSSymbolInstance} layer
+ * @param {Object} data
+ * @returns {Object}
+ */
+function getSymbolSwapAction (layer, data) {
+
+  return Actions.extractActions(String(layer.name())).filter((swapAction) => {
+    return (swapAction.command === SwapSymbolAction.name || swapAction.command === SwapSymbolAction.alias)
+  }).map((swapAction) => {
+    return Actions.resolveAction(swapAction, data)
+  }).filter((swapAction) => {
+    return swapAction.condition
+  })[0]
+}
+
+/**
  * Populates a symbol instance layer.
  *
  * @param {MSSymbolInstance} layer
@@ -257,49 +275,35 @@ function removeLayerMetadata (layer) {
 function populateSymbolLayer (layer, data, opt, nested) {
 
   // get swap action on symbol
-  let swapAction = Actions.extractActions(String(layer.name())).filter((swapAction) => {
-    return (swapAction.command === SwapSymbolAction.name || swapAction.command === SwapSymbolAction.alias)
-  }).map((swapAction) => {
-    return Actions.resolveAction(swapAction, data)
-  }).filter((swapAction) => {
-    return swapAction.condition
-  })[0]
-
-  // swap symbol
+  let swapAction = getSymbolSwapAction(layer, data)
   if (swapAction) {
 
-    // find symbol master with specified name
-    let symbolToSwapWith = Layers.findLayerInLayers(swapAction.params[0], true, Layers.SYMBOL_MASTER, Context().document.pages(), true, null)
+    let symbolName = swapAction.params[0]
+    let symbolToSwapWith = Layers.findSymbolMasterWithName(symbolName)
     if (symbolToSwapWith) {
 
-      // replace top level symbol
       if (!nested) {
-        layer.changeInstanceToSymbol(symbolToSwapWith)
-      }
-    } else {
 
+        // convert to JS wrapped object and swap symbol master
+        Sketch.fromNative(layer).master = symbolToSwapWith
+      }
     }
   }
 
   let overrides = null
   let symbolMaster = null
 
+  // get overrides and symbol master
   // layer might be a symbol master if populating target symbol override
   if (Layers.isSymbolMaster(layer)) {
+
     overrides = NSMutableDictionary.alloc().init()
     symbolMaster = layer
+
   } else {
 
-    // get existing overrides
-    let existingOverrides = Layers.getSymbolOverrides(layer)
-    if (existingOverrides) {
-      existingOverrides = Layers.getSymbolOverrides(layer)
-    } else {
-      existingOverrides = NSDictionary.alloc().init()
-    }
-
-    // create mutable overrides
-    overrides = NSMutableDictionary.dictionaryWithDictionary(existingOverrides)
+    // get overrides
+    overrides = NSMutableDictionary.dictionaryWithDictionary(Layers.getSymbolOverrides(layer) || NSDictionary.alloc().init())
 
     // get master for symbol instance
     symbolMaster = layer.symbolMaster()
@@ -309,9 +313,7 @@ function populateSymbolLayer (layer, data, opt, nested) {
   if (!nested) {
     opt.rootOverrides = overrides
   }
-  if (!opt.rootOverrides) {
-    opt.rootOverrides = NSMutableDictionary.alloc().init()
-  }
+  opt.rootOverrides = opt.rootOverrides || NSMutableDictionary.alloc().init()
 
   // populate text layers
   let textLayers = Layers.findLayersInLayer('*', false, Layers.TEXT, symbolMaster, false, null)
@@ -336,19 +338,15 @@ function populateSymbolLayer (layer, data, opt, nested) {
 
   // populate symbols
   let symbolLayers = Layers.findLayersInLayer('*', false, Layers.SYMBOL, symbolMaster, false, null)
-  symbolLayers.forEach(function (symbolLayer) {
+  symbolLayers.forEach((symbolLayer) => {
 
-    // get swap action on symbol
-    let swapAction = Actions.extractActions(String(symbolLayer.name())).filter((swapAction) => {
-      return (swapAction.command === SwapSymbolAction.name || swapAction.command === SwapSymbolAction.alias)
-    }).map((swapAction) => {
-      return Actions.resolveAction(swapAction, data)
-    }).filter((swapAction) => {
-      return swapAction.condition
-    })[0]
-
-    // find symbol master with specified name
-    let symbolToSwapWith = (swapAction) ? Layers.findLayerInLayers(swapAction.params[0], true, Layers.SYMBOL_MASTER, Context().document.pages(), true, null) : null
+    // get swap action on symbol and the symbol to swap with
+    let swapAction = getSymbolSwapAction(symbolLayer, data)
+    let symbolToSwapWith = null
+    if (swapAction) {
+      let symbolName = swapAction.params[0]
+      symbolToSwapWith = Layers.findSymbolMasterWithName(symbolName)
+    }
 
     // swap nested symbol
     // swap action always takes priority
@@ -369,6 +367,7 @@ function populateSymbolLayer (layer, data, opt, nested) {
       let nestedOverrides = populateSymbolLayer(symbolToSwapWith, data, nestedOpt, true)
       nestedOverrides.setValue_forKey(idOfSymbolToSwapWith, 'symbolID')
       overrides.setValue_forKey(nestedOverrides, symbolLayer.objectID())
+
     } else {
 
       // resolve nested symbol override
@@ -392,17 +391,10 @@ function populateSymbolLayer (layer, data, opt, nested) {
           // no need to keep populating recursively
           nestedOverrides.setValue_forKey('', 'symbolID')
           overrides.setValue_forKey(nestedOverrides, symbolLayer.objectID())
+
         } else {
 
-          // get all symbol masters
-          let symbolMasters = Layers.findLayersInLayers('*', false, Layers.SYMBOL_MASTER, Context().document.pages(), true, null)
-          let overriddenSymbolLayer = null
-          for (let i = 0; i < symbolMasters.length; ++i) {
-            if (symbolMasters[i].symbolID() === symbolID) {
-              overriddenSymbolLayer = symbolMasters[i]
-              break
-            }
-          }
+          let overriddenSymbolLayer = Layers.findSymbolMasterWithId(symbolID)
 
           // prepare nested root overrides
           let nestedRootOverrides = opt.rootOverrides.valueForKey(symbolLayer.objectID())

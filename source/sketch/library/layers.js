@@ -172,6 +172,72 @@ export function findPageWithName (name, fullMatch) {
 }
 
 /**
+ * Finds a symbol master by name.
+ *
+ * @param {String} name
+ * @returns {MSSymbolMaster}
+ */
+export function findSymbolMasterWithName (name) {
+
+  let symbolMaster = Sketch.Document.getSelectedDocument().getSymbols().filter(symbol => {
+    return symbol.name === name
+  })[0]
+
+  // continue looking for the symbol master in libraries
+  if (!symbolMaster) {
+
+    let libraries = Sketch.getLibraries()
+    for (let i = 0; i < libraries.length; ++i) {
+      let library = libraries[i]
+      if (!library.valid) return
+
+      let symbolReference = library.getImportableSymbolReferencesForDocument(Context().document).filter(reference => {
+        return reference.name === name
+      })[0]
+
+      if (symbolReference) {
+        symbolMaster = symbolReference.import()
+      }
+    }
+  }
+
+  return (symbolMaster) ? symbolMaster.sketchObject : null
+}
+
+/**
+ * Finds a symbol master by id.
+ *
+ * @param {String} id
+ * @returns {MSSymbolMaster}
+ */
+export function findSymbolMasterWithId (id) {
+
+  let symbolMaster = Sketch.Document.getSelectedDocument().getSymbols().filter(symbol => {
+    return symbol.id === id
+  })[0]
+
+  // continue looking for the symbol master in libraries
+  if (!symbolMaster) {
+
+    let libraries = Sketch.getLibraries()
+    for (let i = 0; i < libraries.length; ++i) {
+      let library = libraries[i]
+      if (!library.valid) return
+
+      let symbolReference = library.getImportableSymbolReferencesForDocument(Context().document).filter(reference => {
+        return reference.id === id
+      })[0]
+
+      if (symbolReference) {
+        symbolMaster = symbolReference.import()
+      }
+    }
+  }
+
+  return (symbolMaster) ? symbolMaster.sketchObject : null
+}
+
+/**
  * Refreshes text layer boundaries after setting text. This is used as Sketch
  * sometimes forgets to resize the text layer.
  *

@@ -86,7 +86,8 @@
       "NSThread": false,
       "NSWindow": false,
       "WebView": false,
-      "coscript": false
+      "coscript": false,
+      "Sketch": false
     },
     "extends": [
       "standard"

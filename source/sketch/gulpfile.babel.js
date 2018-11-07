@@ -186,8 +186,9 @@ gulp.task('assemble-plugin-bundle', function (callback) {
     runtime: function (callback) {
       let script = fs.readFileSync(path.join(__dirname, 'build',
         ManifestProcessorOptions.scriptFileName), 'utf8')
+
       script = ['let ' + ManifestProcessorOptions.globalVarName +
-        ' = this;', script
+        ' = this;', 'var Sketch = require("sketch");', script
       ].join('')
 
       fse.outputFile(path.join(bundlePath, 'Contents', 'Sketch',
