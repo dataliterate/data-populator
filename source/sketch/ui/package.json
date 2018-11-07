@@ -15,7 +15,7 @@
     "jquery": "3.1.1",
     "jquery.caret": "0.3.1",
     "material-colors": "1.2.5",
-    "moment": "2.17.1",
+    "moment": "2.19.3",
     "node-gyp": "3.6.2",
     "node-sass": "4.7.2",
     "nprogress": "0.2.0",

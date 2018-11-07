@@ -12,7 +12,7 @@ export const plugin = {
   description: Strings(STRINGS.DATA_POPULATOR_DESCRIPTION),
   author: 'precious design studio',
   authorEmail: 'feedback@datapopulator.com',
-  version: '1.1.3',
+  version: '1.1.4',
   identifier: '1c0ce86b',
   compatibleVersion: '13.0.11.19',
   commands: commands,
