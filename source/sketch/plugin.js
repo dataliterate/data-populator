@@ -13,7 +13,7 @@ export const HKSketchFusionExtension = {
   description: Strings(STRINGS.DATA_POPULATOR_DESCRIPTION),
   author: 'precious design studio',
   authorEmail: 'feedback@datapopulator.com',
-  version: '3.0.2',
+  version: '3.0.3',
   identifier: 'com.datapopulator.sketch',
   compatibleVersion: '52',
   icon: 'icon.png',

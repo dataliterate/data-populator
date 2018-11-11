@@ -6,6 +6,19 @@
     <description>A plugin to populate your design mockups with meaningful data. Good Bye Lorem Ipsum. Hello JSON.</description>
     <language>en</language>
     <item>
+      <title>Version 3.0.3</title>
+      <description>
+        <![CDATA[
+          <ul>
+            <li>{placeholders} can now be used in override text content!</li>
+            <li>Data substitutes can now be stacked in order of priority: for example, {name??email?phone} will use 'email if there's no data for 'name' and 'phone' if there's no data for 'email' etc.</li>
+            <li>'#swapSymbol' Conditional Action: if you don't pass a symbol name (eg. #swapSymbol[true]), it will swap the symbol to 'None', hiding the symbol effectively</li>
+          </ul>
+        ]]>
+      </description>
+      <enclosure url="https://www.datapopulator.com/releases/datapopulator-sketch-v3.0.3.zip" sparkle:version="3.0.3" />
+    </item>
+    <item>
       <title>Version 3.0.2</title>
       <description>
         <![CDATA[
