@@ -348,7 +348,14 @@ export function populatePlaceholder (placeholder, data, defaultSubstitute, xd) {
       else if (placeholder.substitute && placeholder.substitute.length) {
 
         if (placeholder.substitute[0] === '?') {
-          populated = getValue(data, placeholder.substitute.substring(1))
+
+          // iterate over substitute stack in the given order
+          // the first substitute key that returns data is used
+          let substituteStack = placeholder.substitute.substring(1).split('?')
+          for (let i = 0; i < substituteStack.length; ++i) {
+            populated = getValue(data, substituteStack[i])
+            if (populated) break
+          }
 
           // use default if placeholder substitute didn't return any data
           if (!populated) populated = defaultSubstitute

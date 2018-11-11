@@ -274,15 +274,15 @@ function getSymbolSwapAction (layer, data) {
  */
 function populateSymbolLayer (layer, data, opt, nested) {
 
-  // get swap action on symbol
-  let swapAction = getSymbolSwapAction(layer, data)
-  if (swapAction) {
+  // get swap action on top level symbol
+  if (!nested) {
 
-    let symbolName = swapAction.params[0]
-    let symbolToSwapWith = Layers.findSymbolMasterWithName(symbolName)
-    if (symbolToSwapWith) {
+    let swapAction = getSymbolSwapAction(layer, data)
+    if (swapAction) {
 
-      if (!nested) {
+      let symbolName = swapAction.params[0]
+      let symbolToSwapWith = Layers.findSymbolMasterWithName(symbolName)
+      if (symbolToSwapWith) {
 
         // convert to JS wrapped object and swap symbol master
         Sketch.fromNative(layer).master = symbolToSwapWith
@@ -322,7 +322,8 @@ function populateSymbolLayer (layer, data, opt, nested) {
       trimText: opt.trimText,
       insertEllipsis: opt.insertEllipsis,
       defaultSubstitute: opt.defaultSubstitute,
-      overrides: overrides
+      overrides: overrides,
+      rootOverrides: opt.rootOverrides
     })
   })
 
@@ -345,7 +346,7 @@ function populateSymbolLayer (layer, data, opt, nested) {
     let symbolToSwapWith = null
     if (swapAction) {
       let symbolName = swapAction.params[0]
-      symbolToSwapWith = Layers.findSymbolMasterWithName(symbolName)
+      symbolToSwapWith = (symbolName === undefined) ? 'None' : Layers.findSymbolMasterWithName(symbolName)
     }
 
     // swap nested symbol
@@ -353,7 +354,7 @@ function populateSymbolLayer (layer, data, opt, nested) {
     if (symbolToSwapWith) {
 
       // get symbol id
-      let idOfSymbolToSwapWith = symbolToSwapWith.symbolID()
+      let idOfSymbolToSwapWith = (symbolToSwapWith === 'None') ? '' : symbolToSwapWith.symbolID()
 
       // prepare nested root overrides
       let nestedRootOverrides = opt.rootOverrides.valueForKey(symbolLayer.objectID())
@@ -364,7 +365,8 @@ function populateSymbolLayer (layer, data, opt, nested) {
       nestedOpt.rootOverrides = nestedRootOverrides
 
       // get nested overrides
-      let nestedOverrides = populateSymbolLayer(symbolToSwapWith, data, nestedOpt, true)
+      let nestedOverrides = symbolToSwapWith !== 'None' ? populateSymbolLayer(symbolToSwapWith, data, nestedOpt, true) : nestedRootOverrides
+
       nestedOverrides.setValue_forKey(idOfSymbolToSwapWith, 'symbolID')
       overrides.setValue_forKey(nestedOverrides, symbolLayer.objectID())
 
@@ -461,9 +463,7 @@ function clearSymbolLayer (layer) {
 
   // get existing overrides
   let existingOverrides = Layers.getSymbolOverrides(layer)
-  if (existingOverrides) {
-    existingOverrides = Layers.getSymbolOverrides(layer)
-  } else return
+  if (!existingOverrides) return
 
   // clear overrides except for symbol overrides
   let clearedOverrides = clearOverrides(existingOverrides)
@@ -501,9 +501,20 @@ function clearOverrides (overrides) {
       }
     } else {
 
-      if (key !== 'symbolID') {
+      if (key !== 'symbolID' && (String(key).indexOf('-original') === -1)) {
         overrides.removeObjectForKey(key)
       }
+    }
+  })
+
+  // restore original overrides
+  keys = overrides.allKeys()
+  keys.forEach((key) => {
+
+    if (String(key).indexOf('-original') > -1) {
+      let value = overrides.objectForKey(key)
+      overrides.removeObjectForKey(key)
+      overrides.setValue_forKey(value, String(key).replace('-original', ''))
     }
   })
 
@@ -559,17 +570,49 @@ function populateTextLayer (layer, data, opt) {
 
     // extract placeholders from original text
     let placeholders = Core.placeholders.extractPlaceholders(originalText)
+    if (placeholders.length) {
 
-    // create populated string, starting with the original text and gradually replacing placeholders
-    populatedString = originalText
-    placeholders.forEach((placeholder) => {
+      // create populated string, starting with the original text and gradually replacing placeholders
+      populatedString = originalText
+      placeholders.forEach((placeholder) => {
 
-      // populate placeholder found in the original text
-      let populatedPlaceholder = Core.placeholders.populatePlaceholder(placeholder, data, opt.defaultSubstitute)
+        // populate placeholder found in the original text
+        let populatedPlaceholder = Core.placeholders.populatePlaceholder(placeholder, data, opt.defaultSubstitute)
 
-      // replace original placeholder string (e.g. {firstName}) with populated placeholder string
-      populatedString = populatedString.replace(placeholder.string, populatedPlaceholder)
-    })
+        // replace original placeholder string (e.g. {firstName}) with populated placeholder string
+        populatedString = populatedString.replace(placeholder.string, populatedPlaceholder)
+      })
+    }
+
+    // populate placeholders in override
+    else if (inSymbol) {
+
+      let layerId = String(layer.objectID())
+
+      // extract placeholders from original override or the current override if no original
+      let override = opt.overrides.valueForKey(layerId)
+      let rootOverride = opt.rootOverrides.valueForKey(layerId)
+      let hasRootOverride = !!rootOverride
+      let originalOverride = (hasRootOverride ? opt.rootOverrides : opt.overrides).valueForKey(layerId + '-original')
+
+      originalText = originalOverride || (hasRootOverride ? rootOverride : override)
+      let placeholders = Core.placeholders.extractPlaceholders(originalText)
+
+      // create populated string, starting with the original text and gradually replacing placeholders
+      populatedString = originalText
+      placeholders.forEach((placeholder) => {
+
+        // populate placeholder found in the original text
+        let populatedPlaceholder = Core.placeholders.populatePlaceholder(placeholder, data, opt.defaultSubstitute)
+
+        // replace original placeholder string (e.g. {firstName}) with populated placeholder string
+        populatedString = populatedString.replace(placeholder.string, populatedPlaceholder)
+      })
+
+      // set original override
+      let targetOverrides = (hasRootOverride ? opt.rootOverrides : opt.overrides)
+      targetOverrides.setValue_forKey(originalText, layerId + '-original')
+    }
   }
 
   // check if the populated string is different from original text
