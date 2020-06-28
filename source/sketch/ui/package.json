@@ -8,7 +8,7 @@
     "build": "babel-node build.js --production"
   },
   "dependencies": {
-    "axios": "0.15.3",
+    "axios": "0.19.2",
     "base-64": "0.1.0",
     "classnames": "2.2.5",
     "install": "0.10.2",
