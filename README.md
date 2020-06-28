@@ -17,7 +17,7 @@ If you're a Designer and don't know how to code, kindly ask a Developer colleagu
 
 If you like, you can also contribute to the future development of Data Populator by [buying us coffee](https://www.buymeacoffee.com/precious). Any kind of contribution is highly appreciated!
 
-<a href="https://www.buymeacoffee.com/precious" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/lato-black.png" alt="Buy Me A Coffee" style="height: 51px !important;width: 217px !important;" ></a>
+<a href="https://www.buymeacoffee.com/precious" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/lato-black.png" alt="Buy Me A Coffee" style="height: 24px !important;width: 108px !important;" ></a>
 
 ## Development
 
