@@ -17,7 +17,8 @@ If you're a Designer and don't know how to code, kindly ask a Developer colleagu
 
 If you like, you can also contribute to the future development of Data Populator by [buying us coffee](https://www.buymeacoffee.com/precious). Any kind of contribution is highly appreciated!
 
-[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/C0C51V8IY)
+[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/C0C51V8IY) 
+
 [![buy me a coffee](https://cdn.buymeacoffee.com/buttons/lato-black.png)](https://www.buymeacoffee.com/precious)
 
 ## Development
