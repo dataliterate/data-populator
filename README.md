@@ -15,7 +15,7 @@ If you have an idea or the need for a new feature for Data Populator, or run int
 
 If you're a Designer and don't know how to code, kindly ask a Developer colleague or friend of yours – they'll kindly help you, as this is an investment in improving [Designer's Data Literacy](https://medium.com/sketch-app-sources/designing-with-meaningful-data-5456b40e172e) and Designer-Developer-Collaboration.
 
-If you like, you can also contribute to the future development of Data Populator by [buying us coffee](https://www.buymeacoffee.com/datapopulator). Any kind of contribution is highly appreciated!
+If you like, you can also contribute to the future development of Data Populator by [buying us a robot](https://www.buymeacoffee.com/datapopulator). Any kind of contribution is highly appreciated!
 
 ## Development
 
