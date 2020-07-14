@@ -23,7 +23,7 @@
     "axios": "0.15.3",
     "base-64": "^0.1.0",
     "classnames": "2.2.5",
-    "jquery": "3.1.1",
+    "jquery": "3.5.1",
     "jquery.caret": "0.3.1",
     "mocha-js-delegate": "^0.2.0",
     "moment": "2.19.3",
