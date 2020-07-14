@@ -1,0 +1,84 @@
+{
+  "id": "1c0ce86b",
+  "name": "Data Populator",
+  "version": "3.5.0",
+  "releaseNotes": "",
+  "description": "",
+  "summary": "",
+  "keywords": [],
+  "languages": ["en"],
+  "author": "precious design studio",
+  "authorEmail": "feedback@datapopulator.com",
+  "icons": [
+    {
+      "width": 24,
+      "height": 24,
+      "path": "images/icon@1x.png"
+    },
+    {
+      "width": 48,
+      "height": 48,
+      "path": "images/icon@2x.png"
+    },
+    {
+      "width": 96,
+      "height": 96,
+      "path": "images/icon@3x.png"
+    },
+    {
+      "width": 144,
+      "height": 144,
+      "path": "images/icon@4x.png"
+    },
+    {
+      "width": 192,
+      "height": 192,
+      "path": "images/icon@5x.png"
+    }
+  ],
+  "host": {
+    "app": "XD",
+    "minVersion": "28.0"
+  },
+  "uiEntryPoints": [
+    {
+      "type": "menu",
+      "label": "Populate with Preset",
+      "commandId": "populateWithPreset"
+    },
+    {
+      "type": "menu",
+      "label": "Populate with JSON",
+      "commandId": "populateWithJSON"
+    },
+    {
+      "type": "menu",
+      "label": "Populate from URL",
+      "commandId": "populateFromURL"
+    },
+    {
+      "type": "menu",
+      "label": "Populate Again",
+      "commandId": "populateAgain",
+      "shortcut": {
+        "mac": "Cmd+Shift+X",
+        "win": "Ctrl+Shift+X"
+      }
+    },
+    {
+      "type": "menu",
+      "label": "Last Used Data",
+      "commandId": "lastUsedData"
+    },
+    {
+      "type": "menu",
+      "label": "Clear Layers",
+      "commandId": "clearLayers"
+    },
+    {
+      "type": "menu",
+      "label": "Need Help?",
+      "commandId": "needHelp"
+    }
+  ]
+}
