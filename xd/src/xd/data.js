@@ -155,7 +155,7 @@ export function deleteFileInDataFolder(name) {
  */
 export function loadFileWithPathInDataFolder(path, binary) {
   return new Promise(async (resolve, reject) => {
-    let splitPath = path.split('/')
+    let splitPath = path.split(global.pathSeparator)
 
     try {
       let folder = await fs.getDataFolder()
@@ -317,7 +317,7 @@ async function getJSONFilesInFolder(folder) {
  * @returns {String}
  */
 export function getPathRelativeToDataFolder(path) {
-  let splitPath = path.split('/')
+  let splitPath = path.split(global.pathSeparator)
   let result
   for (let i = 0; i < splitPath.length; i++) {
     if (splitPath[i] === '1c0ce86b') {
@@ -325,5 +325,5 @@ export function getPathRelativeToDataFolder(path) {
     }
   }
 
-  return result.join('/')
+  return result.join(global.pathSeparator)
 }

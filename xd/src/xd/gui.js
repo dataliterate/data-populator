@@ -37,7 +37,7 @@ export async function showPopulatorDialog(type, options, data) {
               '(<option value="' +
               i +
               '">' +
-              data.paths[preset.nativePath].split('presets/')[1] +
+              data.paths[preset.nativePath].split(`presets${global.pathSeparator}`)[1] +
               '</option>)'
           )}
         </select>
@@ -388,7 +388,9 @@ export async function showPopulatorDialog(type, options, data) {
         }
         nativePath = file.nativePath
 
-        JSONFileInput.value = nativePath.split('/')[nativePath.split('/').length - 1]
+        JSONFileInput.value = nativePath.split(global.pathSeparator)[
+          nativePath.split(global.pathSeparator).length - 1
+        ]
         getJSONPreview(jsonPreviewData, submitForm)
 
         JSONFile.nativePath = nativePath
@@ -407,7 +409,9 @@ export async function showPopulatorDialog(type, options, data) {
             showDataPreviewError(JSONPreviewDIV, Strings(STRINGS.INVALID_JSON_FILE))
           }
 
-          JSONFileInput.value = nativePath.split('/')[nativePath.split('/').length - 1]
+          JSONFileInput.value = nativePath.split(global.pathSeparator)[
+            nativePath.split(global.pathSeparator).length - 1
+          ]
           getJSONPreview(jsonPreviewData, submitForm)
 
           JSONFile.nativePath = nativePath
@@ -427,7 +431,9 @@ export async function showPopulatorDialog(type, options, data) {
             showDataPreviewError(JSONPreviewDIV, Strings(STRINGS.INVALID_JSON_FILE))
           }
 
-          JSONFileInput.value = nativePath.split('/')[nativePath.split('/').length - 1]
+          JSONFileInput.value = nativePath.split(global.pathSeparator)[
+            nativePath.split(global.pathSeparator).length - 1
+          ]
           getJSONPreview(jsonPreviewData, submitForm)
 
           JSONFile.nativePath = nativePath
@@ -1828,10 +1834,10 @@ export async function showActiveConfigurationDialog(
 
     // set initial values
     if (activeConfiguration.type === 'preset')
-      pathInput.value = activeConfigurationSpecific.path.split('presets/')[1]
+      pathInput.value = activeConfigurationSpecific.path.split(`presets${global.pathSeparator}`)[1]
     if (activeConfiguration.type === 'JSON')
-      jsonInput.value = activeConfigurationSpecific.nativePath.split('/')[
-        activeConfigurationSpecific.nativePath.split('/').length - 1
+      jsonInput.value = activeConfigurationSpecific.nativePath.split(global.pathSeparator)[
+        activeConfigurationSpecific.nativePath.split(global.pathSeparator).length - 1
       ]
     if (activeConfiguration.type === 'JSONURL') {
       urlInput.value = activeConfigurationSpecific.url

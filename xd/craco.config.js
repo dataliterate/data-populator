@@ -1,6 +1,6 @@
 const path = require('path')
-const fs = require('fs')
-const execSync = require('child_process').execSync
+const fs = require('fs-extra')
+const Zip = require('adm-zip')
 const { getLoader, loaderByName } = require('@craco/craco')
 
 const workspaces = JSON.parse(fs.readFileSync(path.join(__dirname, '../package.json'))).workspaces
@@ -16,42 +16,38 @@ class FinishBuild {
 }
 
 function createPluginBundle() {
-  execSync(
-    `
-    # Create plugin folder
-    rm -rf plugin
-    mkdir plugin
-    cp build/main.js plugin/main.js
-    cp manifest.json plugin/manifest.json
-    cp -r assets/* plugin/
+  // Create plugin folder
+  fs.removeSync(path.join(__dirname, 'plugin'))
+  fs.ensureDirSync(path.join(__dirname, 'plugin'))
+  fs.copySync(path.join(__dirname, 'build/main.js'), path.join(__dirname, 'plugin/main.js'))
+  fs.copySync(path.join(__dirname, 'manifest.json'), path.join(__dirname, 'plugin/manifest.json'))
+  fs.copySync(path.join(__dirname, 'assets'), path.join(__dirname, 'plugin/'))
 
-    # Create bundle
-    rm -f data-populator.xdx
-    cd plugin
-    zip -r ../data-populator.xdx ./* -x "*.DS_Store"
-  `,
-    {
-      cwd: __dirname
-    }
-  )
+  // Create bundle
+  fs.removeSync(path.join(__dirname, 'data-populator.xdx'))
+  const zip = new Zip()
+  zip.addLocalFolder(path.join(__dirname, 'plugin'), '', filename => {
+    return filename.indexOf('.DS_Store') === -1
+  })
+  zip.writeZip(path.join(__dirname, 'data-populator.xdx'))
 }
 
 function installPlugin() {
-  execSync(
-    `
-    pluginDir1="/Users/$USER/Library/Application Support/Adobe/Adobe XD (Prerelease)/develop/data-populator/"
-    pluginDir2="/Users/$USER/Library/Application Support/Adobe/Adobe XD/develop/data-populator/"
+  const name = 'data-populator'
+  const home = process.env[process.platform === 'darwin' ? 'HOME' : 'USERPROFILE']
 
-    rm -rf "$pluginDir1"
-    rm -rf "$pluginDir2"
+  const locations = {
+    darwin: [
+      'Library/Application Support/Adobe/Adobe XD/develop',
+      'Library/Application Support/Adobe/Adobe XD (Prerelease)/develop'
+    ],
+    win32: ['AppData/Local/Packages/Adobe.CC.XD_adky2gkssdxte/LocalState/develop']
+  }
 
-    cp -r plugin/ "$pluginDir1"
-    cp -r plugin/ "$pluginDir2"
-  `,
-    {
-      cwd: __dirname
-    }
-  )
+  for (let location of locations[process.platform]) {
+    fs.removeSync(path.join(home, location, name))
+    fs.copySync(path.join(__dirname, 'plugin'), path.join(home, location, name))
+  }
 }
 
 module.exports = {

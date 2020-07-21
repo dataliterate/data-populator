@@ -434,9 +434,9 @@ async function getLocalImageBase64(layer, imageUrl) {
   let presetPath = lastUsedPath
   if (!presetPath) return
 
-  let presetFolderComponents = presetPath.split('/')
+  let presetFolderComponents = presetPath.split(global.pathSeparator)
   presetFolderComponents.pop()
-  let imagePath = `${presetFolderComponents.join('/')}/${imageUrl}`
+  let imagePath = `${presetFolderComponents.join(global.pathSeparator)}/${imageUrl}`
 
   // load local data
   let imageData

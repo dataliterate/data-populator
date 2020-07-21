@@ -16,6 +16,8 @@
     "react-scripts": "^3.4.1"
   },
   "devDependencies": {
+    "adm-zip": "^0.4.16",
+    "fs-extra": "^9.0.1",
     "string-replace-loader": "^2.3.0"
   },
   "browserslist": [
