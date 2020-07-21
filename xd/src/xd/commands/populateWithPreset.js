@@ -73,20 +73,20 @@ export default async (selection, root) => {
       paths[presets[i].nativePath] = Data.getPathRelativeToDataFolder(presets[i].nativePath)
     }
 
-    await Gui.showPopulatorDialog('preset', options, {
-      lastUsedPath,
-      lastUsedJSONKey,
-      presets,
-      paths
-    })
-      .then(result => {
-        path = result.path
-        JSONKey = result.key
+    try {
+      const result = await Gui.showPopulatorDialog('preset', options, {
+        lastUsedPath,
+        lastUsedJSONKey,
+        presets,
+        paths
       })
-      .catch(async e => {
-        log(e)
-        canceled = true
-      })
+      path = result.path
+      JSONKey = result.key
+    } catch (e) {
+      log(e)
+      canceled = true
+    }
+    if (canceled) return
   } else {
     await Gui.createAlert(
       Strings(STRINGS.NO_PRESETS_FOUND),
@@ -104,7 +104,8 @@ export default async (selection, root) => {
   // load preset data as object
   let data
   try {
-    data = JSON.parse(await Data.loadFileWithPathInDataFolder(path))
+    data = await Data.loadFileWithPathInDataFolder(path)
+    data = JSON.parse(data)
     data = Utils.accessObjectByString(data, JSONKey)
   } catch (e) {
     log(e)

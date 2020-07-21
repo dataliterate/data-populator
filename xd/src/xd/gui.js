@@ -470,7 +470,7 @@ export async function showPopulatorDialog(type, options, data) {
           log(e)
           showDataPreviewError(JSONPreviewDIV, Strings(STRINGS.INVALID_JSON_FILE))
         }
-        getJSONPreview(jsonData)
+        getJSONPreview(jsonData, submitForm)
       } else {
         if (!url) showDataPreviewError(JSONPreviewDIV, Strings(STRINGS.NO_URL_ENTERED))
         else if (!Utils.isValidURL(url))
@@ -1355,7 +1355,7 @@ function getJSONPreviewSegment(refreshButton, populateButton, cancelButton, okBu
 }
 
 function getJSONPreview(_data, submitForm) {
-  console.log('get json preview')
+  log('get json preview')
   let JSONPreviewDIV = document.getElementById('json-preview-div')
   enablePopulateButton(submitForm)
 

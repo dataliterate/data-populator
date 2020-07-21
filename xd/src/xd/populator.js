@@ -230,7 +230,7 @@ async function populateRepeatGridLayer(layer, data, opt) {
               try {
                 response = await global.fetch(imageUrl)
               } catch (e) {
-                console.log(e)
+                log(e)
               }
 
               if (response) {
@@ -243,7 +243,12 @@ async function populateRepeatGridLayer(layer, data, opt) {
                 return Promise.resolve(getRectanglePlaceholderBase64(childLayer))
               }
             } else {
-              return Promise.resolve(await getLocalImageBase64(childLayer, imageUrl))
+              const base64 = null
+              try {
+                base64 = await getLocalImageBase64(childLayer, imageUrl)
+              } catch (e) {}
+
+              return Promise.resolve(base64)
             }
           })
         )
@@ -387,8 +392,12 @@ async function populateRectangleLayer(layer, data, opt) {
       xhr.send()
     })
   } else {
-    imageBase64 = await getLocalImageBase64(layer, imageUrl)
+    try {
+      imageBase64 = await getLocalImageBase64(layer, imageUrl)
+    } catch (e) {}
   }
+
+  if (!imageBase64) return
 
   // set fill
   const imageFill = new ImageFill(imageBase64)
@@ -414,6 +423,8 @@ function getRectanglePlaceholderBase64(layer) {
 }
 
 async function getLocalImageBase64(layer, imageUrl) {
+  log('GETTING LOCAL IMAGE', imageUrl)
+
   // get last used path
   let lastUsedPath
   try {
@@ -427,6 +438,7 @@ async function getLocalImageBase64(layer, imageUrl) {
     }
   } catch (e) {
     lastUsedPath = null
+    log('FAILED TO GET LOCAL IMAGE', imageUrl)
     log(e)
   }
 
@@ -436,14 +448,16 @@ async function getLocalImageBase64(layer, imageUrl) {
 
   let presetFolderComponents = presetPath.split(global.pathSeparator)
   presetFolderComponents.pop()
-  let imagePath = `${presetFolderComponents.join(global.pathSeparator)}/${imageUrl}`
+  let imagePath = `${presetFolderComponents.join(global.pathSeparator)}${
+    global.pathSeparator
+  }${imageUrl}`
 
   // load local data
   let imageData
   try {
     imageData = await Data.loadFileWithPathInDataFolder(imagePath, true)
   } catch (e) {
-    console.log(e)
+    log(e)
   }
 
   if (imageData) {

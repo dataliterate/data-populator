@@ -4,7 +4,7 @@
  * Convenience logging functionality.
  */
 
-export default function log (...strings) {
+export default function log(...strings) {
   if (!strings.length) return
 
   let indent = ''
@@ -18,11 +18,12 @@ export default function log (...strings) {
   strings = strings.map(string => {
     if (string instanceof Object && !(string instanceof Error)) {
       return JSON.stringify(string, null, 2)
-    }
-    else {
+    } else {
       return string
     }
   })
 
-  console.log(`@datapop |`, indent + strings.join(' ').trim())
+  if (process.env.NODE_ENV === 'development') {
+    console.log(`@datapop |`, indent + strings.join(' ').trim())
+  }
 }

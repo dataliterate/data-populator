@@ -21,7 +21,7 @@ export function saveFileInTemporaryFolder(name, data) {
     try {
       const tempFolder = await fs.getTemporaryFolder()
       let newFile = await tempFolder.createFile(name, { overwrite: true })
-      newFile.write(JSON.stringify(data))
+      await newFile.write(JSON.stringify(data))
       resolve()
     } catch (e) {
       reject(e)
@@ -41,7 +41,7 @@ export function saveFileInDataFolder(name, data) {
     try {
       const folder = await fs.getDataFolder()
       let newFile = await folder.createFile(name, { overwrite: true })
-      newFile.write(JSON.stringify(data))
+      await newFile.write(JSON.stringify(data))
       resolve()
     } catch (e) {
       reject(e)
@@ -94,6 +94,7 @@ export function loadFileInDataFolder(name) {
         reject(new Error('Cannot load file: File not found'))
       }
     } catch (e) {
+      log(e)
       reject(e)
     }
   })
@@ -185,6 +186,7 @@ export function loadFileWithPathInDataFolder(path, binary) {
         }
       }
     } catch (e) {
+      log(e)
       reject(e)
     }
   })
@@ -284,7 +286,7 @@ export function downloadPresets() {
       let demoFolder = await presetsFolder.createFolder('demo')
       for (let i = 0; i < presets.length; i++) {
         let presetFile = await demoFolder.createFile(urlsToDownload[i], { overwrite: true })
-        presetFile.write(JSON.stringify(presets[i]))
+        await presetFile.write(JSON.stringify(presets[i]))
       }
 
       resolve()
