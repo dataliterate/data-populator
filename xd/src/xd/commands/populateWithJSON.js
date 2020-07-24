@@ -85,8 +85,6 @@ export default async (selection, root) => {
     log(e)
   }
 
-  log(data)
-
   if (!data) {
     await Gui.createAlert(
       Strings(STRINGS.POPULATING_FAILED),

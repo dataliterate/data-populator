@@ -246,6 +246,7 @@ async function populateRepeatGridLayer(layer, data, opt) {
               const base64 = null
               try {
                 base64 = await getLocalImageBase64(childLayer, imageUrl)
+                if (!base64) base64 = getRectanglePlaceholderBase64(childLayer)
               } catch (e) {}
 
               return Promise.resolve(base64)
@@ -324,9 +325,9 @@ async function populateTextLayer(layer, data, opt) {
   layer.text = populatedString
 
   // trim text
-  if (layer.areaBox && layer.clippedByArea && populatedString.length > 1) {
-    if (opt.trimText) trimText(layer, opt.insertEllipsis)
-  }
+  // if (layer.areaBox && layer.clippedByArea && populatedString.length > 1) {
+  //   if (opt.trimText) trimText(layer, opt.insertEllipsis)
+  // }
 }
 
 function trimText(layer, insertEllipsis) {
@@ -424,6 +425,8 @@ function getRectanglePlaceholderBase64(layer) {
 
 async function getLocalImageBase64(layer, imageUrl) {
   log('GETTING LOCAL IMAGE', imageUrl)
+
+  if (!imageUrl || !imageUrl.length) return
 
   // get last used path
   let lastUsedPath

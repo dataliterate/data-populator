@@ -351,7 +351,9 @@ export async function showPopulatorDialog(type, options, data) {
         log(e)
         showDataPreviewError(JSONPreviewDIV, Strings(STRINGS.INVALID_JSON_FILE))
       }
-      getJSONPreview(jsonData, submitForm)
+      setTimeout(() => {
+        getJSONPreview(jsonData, submitForm)
+      }, 500)
     }
 
     // update json preview
@@ -391,7 +393,9 @@ export async function showPopulatorDialog(type, options, data) {
         JSONFileInput.value = nativePath.split(global.pathSeparator)[
           nativePath.split(global.pathSeparator).length - 1
         ]
-        getJSONPreview(jsonPreviewData, submitForm)
+        setTimeout(() => {
+          getJSONPreview(jsonPreviewData, submitForm)
+        }, 500)
 
         JSONFile.nativePath = nativePath
         JSONFile.json = jsonData
@@ -412,7 +416,9 @@ export async function showPopulatorDialog(type, options, data) {
           JSONFileInput.value = nativePath.split(global.pathSeparator)[
             nativePath.split(global.pathSeparator).length - 1
           ]
-          getJSONPreview(jsonPreviewData, submitForm)
+          setTimeout(() => {
+            getJSONPreview(jsonPreviewData, submitForm)
+          }, 500)
 
           JSONFile.nativePath = nativePath
           JSONFile.json = jsonData
@@ -434,7 +440,9 @@ export async function showPopulatorDialog(type, options, data) {
           JSONFileInput.value = nativePath.split(global.pathSeparator)[
             nativePath.split(global.pathSeparator).length - 1
           ]
-          getJSONPreview(jsonPreviewData, submitForm)
+          setTimeout(() => {
+            getJSONPreview(jsonPreviewData, submitForm)
+          }, 500)
 
           JSONFile.nativePath = nativePath
           JSONFile.json = jsonData
@@ -1812,6 +1820,7 @@ export async function showActiveConfigurationDialog(
     // get references to elements
     const dialog = document.getElementById('dialog')
     const questionMarks = document.getElementsByClassName('question-mark')
+    let JSONPreviewDIV = document.getElementById('json-preview-div')
 
     let pathInput
     if (activeConfiguration.type === 'preset') pathInput = document.getElementById('path-input')
@@ -1856,8 +1865,6 @@ export async function showActiveConfigurationDialog(
 
     JSONKeyInput.value = activeConfigurationSpecific.key
 
-    getJSONPreview(data)
-
     randomizeDataCheckbox.checked = options[OPTIONS.RANDOMIZE_DATA]
     trimTextCheckbox.checked = options[OPTIONS.TRIM_TEXT]
     insertEllipsisCheckbox.checked = options[OPTIONS.INSERT_ELLIPSIS]
@@ -1881,6 +1888,10 @@ export async function showActiveConfigurationDialog(
 
     // show modal
     try {
+      showDataPreviewLoadingIndicator(JSONPreviewDIV)
+      setTimeout(() => {
+        getJSONPreview(data)
+      }, 500)
       await dialog.showModal()
     } catch (e) {
     } finally {

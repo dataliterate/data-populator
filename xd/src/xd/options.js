@@ -33,7 +33,6 @@ export default function (newOptions) {
         )
       } catch (e) {
         log(e)
-        reject()
       }
     }
 
@@ -42,7 +41,6 @@ export default function (newOptions) {
       options = JSON.parse(await Data.loadFileInDataFolder('options.json'))
     } catch (e) {
       log(e)
-      reject()
     }
 
     if (!options) {
