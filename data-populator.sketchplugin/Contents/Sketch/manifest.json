@@ -1,0 +1,102 @@
+{
+  "$schema": "https://raw.githubusercontent.com/sketch-hq/SketchAPI/develop/docs/sketch-plugin-manifest-schema.json",
+  "name": "Data Populator",
+  "description": "A plugin to populate your design mockups with meaningful data. Good Bye Lorem Ipsum. Hello JSON.",
+  "author": "precious design studio",
+  "authorEmail": "feedback@datapopulator.com",
+  "identifier": "com.datapopulator.sketch.new",
+  "compatibleVersion": "65",
+  "icon": "images/icon.png",
+  "appcast": "https://raw.githubusercontent.com/preciousforever/data-populator/master/appcast.xml",
+  "commands": [
+    {
+      "name": "Populate with Preset",
+      "shortcut": "",
+      "description": "Please select the preset you'd like to populate your design with and configure the options.",
+      "icon": "images/populateWithPreset.png",
+      "identifier": "com.datapopulator.sketch.populateWithPreset",
+      "script": "__src_sketch_commands_populateWithPreset.js"
+    },
+    {
+      "name": "Populate with JSON",
+      "shortcut": "",
+      "description": "Please select the JSON file you'd like to populate your design with and configure the options.",
+      "icon": "images/populateWithJSON.png",
+      "identifier": "com.datapopulator.sketch.populateWithJSON",
+      "script": "__src_sketch_commands_populateWithJSON.js"
+    },
+    {
+      "name": "Populate from URL",
+      "shortcut": "",
+      "description": "Please enter the URL of the API from which you'd like to fetch live data to populate your design with and configure the options.",
+      "icon": "images/populateFromURL.png",
+      "identifier": "com.datapopulator.sketch.populateFromURL",
+      "script": "__src_sketch_commands_populateFromURL.js"
+    },
+    {
+      "name": "Populate Again",
+      "shortcut": "cmd shift x",
+      "description": "Re-populate the selected layers with the last used data.",
+      "icon": "images/populateAgain.png",
+      "identifier": "com.datapopulator.sketch.populateAgain",
+      "script": "__src_sketch_commands_populateAgain.js"
+    },
+    {
+      "name": "Last Used Data",
+      "shortcut": "",
+      "description": "Your last used command, JSON, data path, data options and default substitute are shown below.",
+      "icon": "images/lastUsedData.png",
+      "identifier": "com.datapopulator.sketch.lastUsedData",
+      "script": "__src_sketch_commands_lastUsedData.js"
+    },
+    {
+      "name": "Clear Layers",
+      "shortcut": "",
+      "description": "Clear populated data from the selected layers.",
+      "icon": "images/clearLayers.png",
+      "identifier": "com.datapopulator.sketch.clearLayers",
+      "script": "__src_sketch_commands_clearLayers.js"
+    },
+    {
+      "name": "Reveal Presets Library",
+      "shortcut": "",
+      "description": "Open the folder storing your presets library.",
+      "icon": "images/revealPresets.png",
+      "identifier": "com.datapopulator.sketch.revealPresets",
+      "script": "__src_sketch_commands_revealPresets.js"
+    },
+    {
+      "name": "Set Presets Library",
+      "shortcut": "",
+      "description": "Choose the folder containing your preset library.",
+      "icon": "images/setPresetsLibrary.png",
+      "identifier": "com.datapopulator.sketch.setPresetsLibrary",
+      "script": "__src_sketch_commands_setPresetsLibrary.js"
+    },
+    {
+      "name": "Need Help?",
+      "shortcut": "",
+      "description": "ind useful tips & tricks and ask for help.",
+      "icon": "images/needHelp.png",
+      "identifier": "com.datapopulator.sketch.needHelp",
+      "script": "__src_sketch_commands_needHelp.js"
+    }
+  ],
+  "menu": {
+    "items": [
+      "com.datapopulator.sketch.populateWithPreset",
+      "com.datapopulator.sketch.populateWithJSON",
+      "com.datapopulator.sketch.populateFromURL",
+      "com.datapopulator.sketch.populateAgain",
+      "com.datapopulator.sketch.lastUsedData",
+      "com.datapopulator.sketch.clearLayers",
+      "-",
+      "com.datapopulator.sketch.revealPresets",
+      "com.datapopulator.sketch.setPresetsLibrary",
+      "-",
+      "com.datapopulator.sketch.needHelp"
+    ]
+  },
+  "version": "3.5.0",
+  "disableCocoaScriptPreprocessor": true
+}
