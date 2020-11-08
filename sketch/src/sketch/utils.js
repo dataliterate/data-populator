@@ -6,6 +6,7 @@
 
 import base64 from 'base-64'
 import utf8 from 'utf8'
+import sketch from 'sketch'
 
 /**
  * Gets the Sketch version.
@@ -92,27 +93,11 @@ export function decode(encodedData) {
  * @return {String}
  */
 export function documentMetadata(doc, key, newValue) {
-  let documentData = doc.documentData()
-
-  // get user info dictionary
-  if (!documentData.userInfo()) {
-    documentData.setUserInfo(NSMutableDictionary.alloc().init())
-  }
-  let userInfo = NSMutableDictionary.dictionaryWithDictionary(documentData.userInfo())
-
-  // get metadata for data populator
-  if (!userInfo.valueForKey('com.datapopulator.sketch')) {
-    userInfo.setValue_forKey(NSMutableDictionary.alloc().init(), 'com.datapopulator.sketch')
-  }
-  let data = userInfo.valueForKey('com.datapopulator.sketch')
-
-  // set new value
   if (newValue) {
-    data.setValue_forKey(newValue, key)
-    documentData.setUserInfo(userInfo)
+    sketch.Settings.setDocumentSettingForKey(doc, key, newValue)
   }
 
-  return data.valueForKey(key)
+  return sketch.Settings.documentSettingForKey(doc, key)
 }
 
 /**
