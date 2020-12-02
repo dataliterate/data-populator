@@ -4,7 +4,25 @@
  * Provides utility and miscellaneous functionality.
  */
 
-import log from '@data-populator/core/log'
+import * as Utils from '@data-populator/core/utils'
+import * as Data from './data'
+
+/**
+ * Returns a persisted ID that identifies the device.
+ */
+export function deviceId() {
+  return new Promise(async resolve => {
+    let id
+    try {
+      id = await Data.loadFileInDataFolder('device_id')
+    } catch (e) {
+      id = Utils.generateUUID()
+      await Data.saveFileInDataFolder('device_id', id)
+    }
+
+    resolve(id)
+  })
+}
 
 /**
  * Checks if url is valid.

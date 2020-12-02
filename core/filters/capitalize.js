@@ -12,6 +12,6 @@ export const alias = 'capitalize'
  * @param {String} param
  * @returns {String}
  */
-export function apply (string, param) {
+export function apply(string, param) {
   return String(string).charAt(0).toUpperCase() + String(string).slice(1).toLowerCase()
 }

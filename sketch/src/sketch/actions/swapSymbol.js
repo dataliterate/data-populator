@@ -12,6 +12,4 @@ export const alias = 'ss'
  * @param {MSLayer} layer
  * @param {Array} params
  */
-export function perform (condition, layer, params) {
-
-}
+export function perform(condition, layer, params) {}

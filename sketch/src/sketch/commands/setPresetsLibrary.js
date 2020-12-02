@@ -8,9 +8,14 @@ import Context from '../context'
 import * as Data from '../data'
 import Options, * as OPTIONS from '../options'
 import Strings, * as STRINGS from '@data-populator/core/strings'
+import * as Utils from '../utils'
+import Analytics from '@data-populator/core/analytics'
 
 export default context => {
   Context(context)
+
+  // configure analytics
+  Analytics.configure(Utils.analyticsConfiguration())
 
   // get options and data path
   let options = Options()
@@ -29,5 +34,9 @@ export default context => {
     // set path and save options
     options[OPTIONS.PRESETS_LIBRARY_PATH] = newPresetsLibrary
     Options(options)
+
+    Analytics.track('setPresetsLibrary')
+  } else {
+    Analytics.track('cancelSetPresetsLibrary')
   }
 }

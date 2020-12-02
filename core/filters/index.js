@@ -10,13 +10,7 @@ import * as UppercaseFilter from './uppercase'
 import * as LowercaseFilter from './lowercase'
 import * as CapitalizeFilter from './capitalize'
 
-let filters = [
-  JoinFilter,
-  MaxFilter,
-  UppercaseFilter,
-  LowercaseFilter,
-  CapitalizeFilter
-]
+let filters = [JoinFilter, MaxFilter, UppercaseFilter, LowercaseFilter, CapitalizeFilter]
 
 /**
  * Extracts filters from the placeholder string, e.g. firstName, lastName | & •
@@ -24,8 +18,7 @@ let filters = [
  * @param {String} string
  * @returns {Array}
  */
-export function extractFilters (string) {
-
+export function extractFilters(string) {
   // prepare filters array
   let extractedFilters = []
 
@@ -33,12 +26,11 @@ export function extractFilters (string) {
   // remove bracketed nested placeholders first, then split on first pipe
   let filtersString = string.replace(/\((.*)\)/g, '').split(/\|(.+)?/g)[1]
   if (filtersString && filtersString.length) {
-
     // get individual filters
     let filterStrings = filtersString.split(/\|/g)
 
     // parse filters
-    extractedFilters = filterStrings.map((filterString) => {
+    extractedFilters = filterStrings.map(filterString => {
       return parseFilter(filterString)
     })
   }
@@ -57,15 +49,15 @@ export function extractFilters (string) {
  *   param: {String}
  * }
  */
-export function parseFilter (filterString) {
-
+export function parseFilter(filterString) {
   // remove leading spaces in filter string
-  while (filterString.substring(0, 1) === ' ') { filterString = filterString.substring(1, filterString.length) }
+  while (filterString.substring(0, 1) === ' ') {
+    filterString = filterString.substring(1, filterString.length)
+  }
 
   // get command
   let command = null
   for (let i = 0; i < filters.length; i++) {
-
     if (filterString.startsWith(filters[i].name)) {
       command = filters[i].name
       break
@@ -97,8 +89,7 @@ export function parseFilter (filterString) {
  * @param {String} string
  * @returns {String}
  */
-export function removeFiltersString (string) {
-
+export function removeFiltersString(string) {
   // get filters string, e.g. & • | upper
   // remove bracketed nested placeholders first, then split on first pipe
   let filtersString = string.replace(/\((.*)\)/g, '').split(/\|(.+)?/g)[1]
@@ -113,8 +104,7 @@ export function removeFiltersString (string) {
  * @param {Object} filter
  * @param {Array/String} input
  */
-export function applyFilter (filter, input) {
-
+export function applyFilter(filter, input) {
   // find apply function for the specified filter
   let applyFunction
   for (let i = 0; i < filters.length; i++) {

@@ -12,6 +12,6 @@ export const alias = 's'
  * @param {MSLayer} layer
  * @param {Array} params
  */
-export function perform (condition, layer, params) {
+export function perform(condition, layer, params) {
   layer.setIsVisible(condition)
 }

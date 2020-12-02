@@ -158,8 +158,14 @@ export function setupWindow() {
           let handler = Handlers[response.handler]
           if (handler) {
             handler((uiHandler, data) => {
-              let encodedData = Utils.encode(data)
-              windowObject.evaluateWebScript(`window.callHandler('${uiHandler}', '${encodedData}')`)
+              try {
+                let encodedData = Utils.encode(data)
+                windowObject.evaluateWebScript(
+                  `window.callHandler('${uiHandler}', '${encodedData}')`
+                )
+              } catch (e) {
+                console.log(e)
+              }
             }, response.data)
           }
         }

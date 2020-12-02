@@ -9,6 +9,7 @@ import Options, * as OPTIONS from './options'
 import Strings, * as STRINGS from '@data-populator/core/strings'
 import * as Data from './data'
 import * as Utils from './utils'
+import Analytics from '@data-populator/core/analytics'
 
 const fs = require('uxp').storage.localFileSystem
 
@@ -256,6 +257,8 @@ export async function showPopulatorDialog(type, options, data) {
       presetSelect.addEventListener('change', async () => {
         let path = data.paths[data.presets[presetSelect.value].nativePath]
         updateJSONPreviewPreset(path, true)
+
+        Analytics.track('selectPreset')
       })
     } else if (type === 'JSON') {
       JSONFileBrowseButton.addEventListener('click', async () => {
@@ -263,7 +266,11 @@ export async function showPopulatorDialog(type, options, data) {
           types: ['json']
         })
 
-        if (file && file.length !== 0) updateJSONPreviewJSONFile(file, true)
+        if (file && file.length !== 0) {
+          updateJSONPreviewJSONFile(file, true)
+
+          Analytics.track('selectJSONFile')
+        }
       })
     } else if (type === 'JSONURL') {
       showAdditionalOptionsButton.addEventListener('click', () => {
@@ -287,6 +294,8 @@ export async function showPopulatorDialog(type, options, data) {
       JSONURLLoadButton.addEventListener('click', () => {
         let url = JSONURLInput.value
         updateJSONPreviewJSONURL(url, true)
+
+        Analytics.track('loadURL')
       })
     }
 
@@ -325,11 +334,23 @@ export async function showPopulatorDialog(type, options, data) {
       if (type === 'preset') {
         let path = data.paths[data.presets[presetSelect.value].nativePath]
         updateJSONPreviewPreset(path, false)
+
+        Analytics.track('reloadData', {
+          populateType: 'preset'
+        })
       } else if (type === 'JSON') {
         updateJSONPreviewJSONFile(JSONFile.file !== undefined ? JSONFile.file : false, false)
+
+        Analytics.track('reloadData', {
+          populateType: 'json'
+        })
       } else if (type === 'JSONURL') {
         let url = JSONURLInput.value
         updateJSONPreviewJSONURL(url, false)
+
+        Analytics.track('reloadData', {
+          populateType: 'url'
+        })
       }
     }
 

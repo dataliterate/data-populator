@@ -12,8 +12,7 @@ export const alias = '&'
  * @param {String} param
  * @returns {String}
  */
-export function apply (inputStrings, param) {
-
+export function apply(inputStrings, param) {
   // make sure that input strings is an array
   if (!(inputStrings instanceof Array)) return inputStrings
 
@@ -21,8 +20,7 @@ export function apply (inputStrings, param) {
   inputStrings = inputStrings.map(str => {
     if (str instanceof Object && str.hasOwnProperty('hasValueForKey')) {
       return str.populated
-    }
-    else {
+    } else {
       return str
     }
   })
@@ -31,7 +29,7 @@ export function apply (inputStrings, param) {
   let delimiter = param
 
   // filter out empty strings
-  inputStrings = inputStrings.filter((inputString) => {
+  inputStrings = inputStrings.filter(inputString => {
     return inputString && inputString.length
   })
 

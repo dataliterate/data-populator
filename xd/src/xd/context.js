@@ -11,7 +11,6 @@ let root = null
 
 // set and get context via the same function
 export default function (newSelection, newRoot) {
-
   // set new context
   if (newSelection) {
     selection = newSelection

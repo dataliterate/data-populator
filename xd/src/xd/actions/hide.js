@@ -12,6 +12,6 @@ export const alias = 'h'
  * @param {SceneNode} layer
  * @param {Array} params
  */
-export function perform (condition, layer, params) {
+export function perform(condition, layer, params) {
   layer.visible = !condition
 }

@@ -34,3 +34,6 @@ window.callHandler = function (handlerName, encodedData, callId) {
     Handlers[handlerName](Utils.callPlugin, data, rootRef, callId)
   }
 }
+
+// Set analytics
+Utils.callPlugin('configureAnalytics')

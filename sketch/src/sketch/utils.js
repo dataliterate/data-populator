@@ -4,9 +4,30 @@
  * Provides utility and miscellaneous functionality.
  */
 
+import * as Utils from '@data-populator/core/utils'
 import base64 from 'base-64'
 import utf8 from 'utf8'
 import sketch from 'sketch'
+
+/**
+ * Returns configuration for analytics
+ */
+export function analyticsConfiguration() {
+  let deviceId = sketch.Settings.settingForKey('device_id')
+  if (!deviceId) {
+    deviceId = Utils.generateUUID()
+    sketch.Settings.setSettingForKey('device_id', deviceId)
+  }
+
+  return {
+    trackingEnabled: !!Number(sketch.Settings.globalSettingForKey('analyticsEnabled')),
+    deviceId,
+    hostName: 'sketch',
+    hostVersion: String(sketch.Settings.version.sketch),
+    hostOS: 'mac',
+    pluginVersion: String(process.env.npm_package_version)
+  }
+}
 
 /**
  * Gets the Sketch version.

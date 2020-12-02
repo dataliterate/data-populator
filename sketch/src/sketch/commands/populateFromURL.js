@@ -11,14 +11,25 @@ import * as Populator from '../populator'
 import Options, * as OPTIONS from '../options'
 import Strings, * as STRINGS from '@data-populator/core/strings'
 import * as Utils from '../utils'
+import Analytics from '@data-populator/core/analytics'
 
 export default async (context, populateAgain) => {
   Context(context)
 
+  // configure analytics
+  Analytics.configure(Utils.analyticsConfiguration())
+
   // get selected layers
   let selectedLayers = Layers.getSelectedLayers()
   if (!selectedLayers.length) {
-    return Context().document.showMessage(Strings(STRINGS.SELECT_LAYERS_TO_POPULATE))
+    Context().document.showMessage(Strings(STRINGS.SELECT_LAYERS_TO_POPULATE))
+
+    Analytics.track(populateAgain ? 'populateAgainError' : 'populateError', {
+      populateType: 'url',
+      reason: 'noSelection'
+    })
+
+    return
   }
 
   // get options and data
@@ -33,7 +44,14 @@ export default async (context, populateAgain) => {
       headers: options[OPTIONS.HEADERS]
     })
     data = Utils.accessObjectByString(data, options[OPTIONS.DATA_PATH] || '')
-    if (!data) return
+    if (!data) {
+      Analytics.track('populateAgainError', {
+        populateType: 'url',
+        reason: 'unableToLoadURL'
+      })
+
+      return
+    }
   } else {
     // wait for user response including options and json data to be used
     let response = await Gui.showWindow({
@@ -41,7 +59,12 @@ export default async (context, populateAgain) => {
     })
 
     // terminate if cancelled
-    if (!response) return
+    if (!response) {
+      Analytics.track('cancelPopulate', {
+        populateType: 'url'
+      })
+      return
+    }
 
     // get updated options and json data
     options = response.options
@@ -58,7 +81,14 @@ export default async (context, populateAgain) => {
 
       // make sure that grid creation was successful
       // could have failed if zero rows were requested for example
-      if (!selectedLayers) return
+      if (!selectedLayers) {
+        Analytics.track(populateAgain ? 'populateAgainError' : 'populateError', {
+          populateType: 'url',
+          reason: 'zeroGridDimension'
+        })
+
+        return
+      }
     }
   }
 
@@ -79,4 +109,15 @@ export default async (context, populateAgain) => {
   Layers.selectLayers(selectedLayers)
 
   context.document.reloadInspector()
+
+  Analytics.track(populateAgain ? 'populateAgain' : 'populateFromURL', {
+    randomizeData: options[OPTIONS.RANDOMIZE_DATA],
+    trimText: options[OPTIONS.TRIM_TEXT],
+    insertEllipsis: options[OPTIONS.INSERT_ELLIPSIS],
+    useDefaultSubstitute: !!options[OPTIONS.DEFAULT_SUBSTITUTE],
+    useDataPath: !!options[OPTIONS.DATA_PATH],
+    useHeaders: !!Object.keys(options[OPTIONS.HEADERS] || {}).length,
+    createGrid: options[OPTIONS.CREATE_GRID],
+    populateType: populateAgain ? 'url' : undefined
+  })
 }

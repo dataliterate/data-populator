@@ -13,13 +13,12 @@ import log from './log'
  * @param {String} string
  * @returns {Array}
  */
-export function extractActions (string) {
-
+export function extractActions(string) {
   // get individual actions
   let actionStrings = string.match(/#\w*\[([^\]]+)]/g) || []
 
   // parse actions
-  let extractedActions = actionStrings.map((actionString) => {
+  let extractedActions = actionStrings.map(actionString => {
     return parseAction(actionString)
   })
 
@@ -51,8 +50,7 @@ export function extractActions (string) {
  *   }]
  * }
  */
-export function parseAction (actionString) {
-
+export function parseAction(actionString) {
   // keep full action string
   // used later on when executing actions
   let fullActionString = actionString
@@ -77,8 +75,7 @@ export function parseAction (actionString) {
 
   // get params
   actionComponents.shift()
-  let params = actionComponents.map((paramString) => {
-
+  let params = actionComponents.map(paramString => {
     // get placeholders in param
     let paramPlaceholders = Placeholders.extractPlaceholders(paramString)
 
@@ -109,30 +106,29 @@ export function parseAction (actionString) {
  * @param action {Object}
  * @param data {Object}
  */
-export function resolveAction (action, data) {
-
+export function resolveAction(action, data) {
   // copy action object
   action = Object.assign({}, action)
 
   // create populated condition string
   let populatedConditionString = action.condition.string
-  action.condition.placeholders.forEach((placeholder) => {
-
+  action.condition.placeholders.forEach(placeholder => {
     // populate placeholder found in the condition string
     let populatedPlaceholder = Placeholders.populatePlaceholder(placeholder, data, 'null')
 
     // replace original placeholder string
-    populatedConditionString = populatedConditionString.replace(placeholder.string, populatedPlaceholder)
+    populatedConditionString = populatedConditionString.replace(
+      placeholder.string,
+      populatedPlaceholder
+    )
   })
   action.condition = populatedConditionString
 
   // populate params
-  let populatedParams = action.params.map((param) => {
-
+  let populatedParams = action.params.map(param => {
     // create populated param string
     let populatedParamString = param.string
-    param.placeholders.forEach((placeholder) => {
-
+    param.placeholders.forEach(placeholder => {
       // populate placeholder found in the param string
       let populatedPlaceholder = Placeholders.populatePlaceholder(placeholder, data, 'null')
 
@@ -147,13 +143,10 @@ export function resolveAction (action, data) {
   // evaluate condition
   let condition
   try {
-
     // evaluate condition
     // eslint-disable-next-line no-new-func
     condition = false // (new Function('return ' + populatedConditionString))()
-
   } catch (e) {
-
     // signify that there was an error resolving the action
     action.resolveError = e
   }

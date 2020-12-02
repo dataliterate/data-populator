@@ -12,14 +12,25 @@ import * as Populator from '../populator'
 import Options, * as OPTIONS from '../options'
 import Strings, * as STRINGS from '@data-populator/core/strings'
 import * as Utils from '../utils'
+import Analytics from '@data-populator/core/analytics'
 
 export default async (context, populateAgain) => {
   Context(context)
 
+  // configure analytics
+  Analytics.configure(Utils.analyticsConfiguration())
+
   // get selected layers
   let selectedLayers = Layers.getSelectedLayers()
   if (!selectedLayers.length) {
-    return Context().document.showMessage(Strings(STRINGS.SELECT_LAYERS_TO_POPULATE))
+    Context().document.showMessage(Strings(STRINGS.SELECT_LAYERS_TO_POPULATE))
+
+    Analytics.track(populateAgain ? 'populateAgainError' : 'populateError', {
+      populateType: 'json',
+      reason: 'noSelection'
+    })
+
+    return
   }
 
   // get options and data
@@ -28,11 +39,30 @@ export default async (context, populateAgain) => {
   let data = null
   if (populateAgain) {
     // load preset data
-    if (!options[OPTIONS.JSON_PATH]) return
+    if (!options[OPTIONS.JSON_PATH]) {
+      Analytics.track('populateAgainError', {
+        populateType: 'json',
+        reason: 'noSelectedJSONFile'
+      })
+      return
+    }
     data = Data.loadJSONData(options[OPTIONS.JSON_PATH])
-    if (!data) return
+    if (!data) {
+      Analytics.track('populateAgainError', {
+        populateType: 'json',
+        reason: 'unableToLoadSelectedJSONFile'
+      })
+      return
+    }
+
     data = Utils.accessObjectByString(data, options[OPTIONS.DATA_PATH] || '')
-    if (!data) return
+    if (!data) {
+      Analytics.track('populateAgainError', {
+        populateType: 'json',
+        reason: 'invalidJSONFile'
+      })
+      return
+    }
   } else {
     // check that any existing JSON file still exists
     if (options[OPTIONS.JSON_PATH]) {
@@ -47,7 +77,12 @@ export default async (context, populateAgain) => {
     })
 
     // terminate if cancelled
-    if (!response) return
+    if (!response) {
+      Analytics.track('cancelPopulate', {
+        populateType: 'json'
+      })
+      return
+    }
 
     // get updated options and json data
     options = response.options
@@ -64,7 +99,14 @@ export default async (context, populateAgain) => {
 
       // make sure that grid creation was successful
       // could have failed if zero rows were requested for example
-      if (!selectedLayers) return
+      if (!selectedLayers) {
+        Analytics.track(populateAgain ? 'populateAgainError' : 'populateError', {
+          populateType: 'json',
+          reason: 'zeroGridDimension'
+        })
+
+        return
+      }
     }
   }
 
@@ -86,4 +128,14 @@ export default async (context, populateAgain) => {
   Layers.selectLayers(selectedLayers)
 
   context.document.reloadInspector()
+
+  Analytics.track(populateAgain ? 'populateAgain' : 'populateWithJSON', {
+    randomizeData: options[OPTIONS.RANDOMIZE_DATA],
+    trimText: options[OPTIONS.TRIM_TEXT],
+    insertEllipsis: options[OPTIONS.INSERT_ELLIPSIS],
+    useDefaultSubstitute: !!options[OPTIONS.DEFAULT_SUBSTITUTE],
+    useDataPath: !!options[OPTIONS.DATA_PATH],
+    createGrid: options[OPTIONS.CREATE_GRID],
+    populateType: populateAgain ? 'json' : undefined
+  })
 }

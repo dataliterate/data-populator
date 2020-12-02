@@ -5,9 +5,9 @@
  */
 
 import * as Data from './data'
+import * as Utils from './utils'
 
-export function readFile (callUI, data) {
-
+export function readFile(callUI, data) {
   let content = String(Data.readFileAsText(data.path))
 
   callUI('setData', {
@@ -16,8 +16,7 @@ export function readFile (callUI, data) {
   })
 }
 
-export function selectJSON (callUI, data) {
-
+export function selectJSON(callUI, data) {
   let path = Data.askForJSON(data.path)
   if (!path) return
   path = String(path)
@@ -25,4 +24,8 @@ export function selectJSON (callUI, data) {
   callUI('setJSONPath', {
     path
   })
+}
+
+export function configureAnalytics(callUI, data) {
+  callUI('configureAnalytics', Utils.analyticsConfiguration())
 }

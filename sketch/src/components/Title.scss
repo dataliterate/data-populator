@@ -1,5 +1,5 @@
 .title-container {
-  border-bottom: 1px solid #EAEAEA;
+  border-bottom: 1px solid #eaeaea;
 
   cursor: default;
 
@@ -27,7 +27,7 @@
   }
 
   h1 {
-    color: #2C2C2C;
+    color: #2c2c2c;
     font-weight: 600;
     font-size: 17px;
     line-height: 18px;
@@ -54,16 +54,16 @@
     height: 16px;
 
     border-radius: 8px;
-    border: 2px solid #CCC;
+    border: 2px solid #ccc;
 
     display: inline-block;
     vertical-align: top;
 
     &:hover {
-      border: 2px solid #BBB;
+      border: 2px solid #bbb;
 
       p {
-        color: #BBB;
+        color: #bbb;
       }
     }
 
@@ -72,7 +72,7 @@
       height: 12px;
       line-height: 12px;
 
-      color: #CCC;
+      color: #ccc;
       text-align: center;
       font-size: 11px;
       font-weight: 500;
@@ -84,11 +84,11 @@
     z-index: 999;
 
     width: 500px;
-    background-color: #F7F7F7;
+    background-color: #f7f7f7;
     padding: 7px;
     border-radius: 5px;
 
-    border: 1px solid #DEDEDE;
+    border: 1px solid #dedede;
 
     display: none;
 

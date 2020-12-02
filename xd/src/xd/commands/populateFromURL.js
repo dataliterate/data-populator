@@ -12,6 +12,7 @@ import * as Gui from '../gui'
 import * as Utils from '../utils'
 import * as Populator from '../populator'
 import Strings, * as STRINGS from '@data-populator/core/strings'
+import Analytics from '@data-populator/core/analytics'
 
 export default async (selection, root) => {
   Context(selection, root)
@@ -22,6 +23,12 @@ export default async (selection, root) => {
       Strings(STRINGS.NO_LAYERS_SELECTED),
       Strings(STRINGS.SELECT_LAYERS_TO_POPULATE)
     )
+
+    Analytics.track('populateError', {
+      populateType: 'url',
+      reason: 'noSelection'
+    })
+
     return
   }
 
@@ -81,11 +88,31 @@ export default async (selection, root) => {
       log(e)
       canceled = true
     })
-  if (canceled) return
+
+  if (canceled) {
+    Analytics.track('cancelPopulate', {
+      populateType: 'url'
+    })
+    return
+  }
+
   if (!canceled) {
-    if (!url) await Gui.createAlert(Strings(STRINGS.NO_URL_ENTERED), Strings(STRINGS.ENTER_URL))
-    else if (!Utils.isValidURL(url))
+    if (!url) {
+      await Gui.createAlert(Strings(STRINGS.NO_URL_ENTERED), Strings(STRINGS.ENTER_URL))
+
+      Analytics.track('populateError', {
+        populateType: 'url',
+        reason: 'noURL'
+      })
+    } else if (!Utils.isValidURL(url)) {
       await Gui.createAlert(Strings(STRINGS.INVALID_URL), Strings(STRINGS.URL_ENTERED_INVALID))
+
+      Analytics.track('populateError', {
+        populateType: 'url',
+        reason: 'invalidURL'
+      })
+    }
+
     if (!url || !Utils.isValidURL(url)) return
   }
 
@@ -106,6 +133,12 @@ export default async (selection, root) => {
       Strings(STRINGS.POPULATING_FAILED),
       Strings(STRINGS.UNABLE_TO_LOAD_JSON_AT_URL)
     )
+
+    Analytics.track('populateError', {
+      populateType: 'url',
+      reason: 'unableToLoadURL'
+    })
+
     return
   }
 
@@ -136,6 +169,15 @@ export default async (selection, root) => {
   } catch (e) {
     log(e)
   }
+
+  Analytics.track('populateFromURL', {
+    randomizeData: options[OPTIONS.RANDOMIZE_DATA],
+    trimText: options[OPTIONS.TRIM_TEXT],
+    insertEllipsis: options[OPTIONS.INSERT_ELLIPSIS],
+    useDefaultSubstitute: !!options[OPTIONS.DEFAULT_SUBSTITUTE],
+    useDataPath: !!JSONKey,
+    useHeaders: !!Object.keys(headers || {}).length
+  })
 
   log('DONE')
 }

@@ -15,8 +15,7 @@ export const alias = 'p'
  * @param {MSLayer} layer
  * @param {Array} params
  */
-export function perform (condition, layer, params) {
-
+export function perform(condition, layer, params) {
   // only run if the condition is true
   if (!condition) return
 
@@ -28,8 +27,7 @@ export function perform (condition, layer, params) {
 
   // build plugin tree
   let plugins = {}
-  Utils.convertToJSArray(pluginBundles.allKeys()).forEach((bundleIdentifier) => {
-
+  Utils.convertToJSArray(pluginBundles.allKeys()).forEach(bundleIdentifier => {
     // get bundle
     let bundle = pluginBundles.objectForKey(bundleIdentifier)
 
@@ -38,8 +36,7 @@ export function perform (condition, layer, params) {
 
     // build command object
     let commands = {}
-    Utils.convertToJSArray(pluginCommands.allKeys()).forEach((commandIdentifier) => {
-
+    Utils.convertToJSArray(pluginCommands.allKeys()).forEach(commandIdentifier => {
       // get command
       let command = pluginCommands.objectForKey(commandIdentifier)
 
@@ -52,7 +49,7 @@ export function perform (condition, layer, params) {
   })
 
   // get plugin command path
-  let commandPath = params[0].split('>').map((component) => {
+  let commandPath = params[0].split('>').map(component => {
     return component.trim()
   })
 
@@ -88,8 +85,7 @@ export function perform (condition, layer, params) {
  * @param {MSLayer} layer
  * @param {Array} params
  */
-function setCommandParamsToMetadata (layer, params) {
-
+function setCommandParamsToMetadata(layer, params) {
   // get layer user info
   let userInfo = NSMutableDictionary.dictionaryWithDictionary(layer.userInfo())
 
@@ -105,8 +101,7 @@ function setCommandParamsToMetadata (layer, params) {
  *
  * @param {MSLayer} layer
  */
-function removeCommandParamsFromMetadata (layer) {
-
+function removeCommandParamsFromMetadata(layer) {
   // get layer user info
   let userInfo = NSMutableDictionary.dictionaryWithDictionary(layer.userInfo())
 

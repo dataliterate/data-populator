@@ -12,7 +12,7 @@ import * as Gui from '../gui'
 import * as Utils from '../utils'
 import * as Populator from '../populator'
 import Strings, * as STRINGS from '@data-populator/core/strings'
-const fs = require('uxp').storage.localFileSystem
+import Analytics from '@data-populator/core/analytics'
 
 export default async (selection, root) => {
   Context(selection, root)
@@ -23,6 +23,12 @@ export default async (selection, root) => {
       Strings(STRINGS.NO_LAYERS_SELECTED),
       Strings(STRINGS.SELECT_LAYERS_TO_POPULATE)
     )
+
+    Analytics.track('populateError', {
+      populateType: 'preset',
+      reason: 'noSelection'
+    })
+
     return
   }
 
@@ -63,6 +69,12 @@ export default async (selection, root) => {
         Strings(STRINGS.CONNECTION_FAILED),
         Strings(STRINGS.UNABLE_TO_DOWNLOAD_PRESETS)
       )
+
+      Analytics.track('populateError', {
+        populateType: 'preset',
+        reason: 'unableToDownloadPresets'
+      })
+
       return
     }
   }
@@ -86,16 +98,26 @@ export default async (selection, root) => {
       log(e)
       canceled = true
     }
-    if (canceled) return
+    if (canceled) {
+      Analytics.track('cancelPopulate', {
+        populateType: 'preset'
+      })
+      return
+    }
   } else {
     await Gui.createAlert(
       Strings(STRINGS.NO_PRESETS_FOUND),
       Strings(STRINGS.NO_JSON_FILES_IN_PRESETS_FOLDER)
     )
+
+    Analytics.track('populateError', {
+      populateType: 'preset',
+      reason: 'noPresets'
+    })
+
     return
   }
 
-  if (canceled) return
   if (!canceled && !path) {
     await Gui.createAlert(Strings(STRINGS.INVALID_PRESET), Strings(STRINGS.SELECTED_PRESET_INVALID))
     return
@@ -115,6 +137,12 @@ export default async (selection, root) => {
       Strings(STRINGS.POPULATING_FAILED),
       Strings(STRINGS.UNABLE_TO_LOAD_SELECTED_PRESET)
     )
+
+    Analytics.track('populateError', {
+      populateType: 'preset',
+      reason: 'unableToLoadSelectedPreset'
+    })
+
     return
   }
 
@@ -143,6 +171,14 @@ export default async (selection, root) => {
   } catch (e) {
     log(e)
   }
+
+  Analytics.track('populateWithPreset', {
+    randomizeData: options[OPTIONS.RANDOMIZE_DATA],
+    trimText: options[OPTIONS.TRIM_TEXT],
+    insertEllipsis: options[OPTIONS.INSERT_ELLIPSIS],
+    useDefaultSubstitute: !!options[OPTIONS.DEFAULT_SUBSTITUTE],
+    useDataPath: !!JSONKey
+  })
 
   log('DONE')
 }

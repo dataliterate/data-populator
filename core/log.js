@@ -24,6 +24,6 @@ export default function log(...strings) {
   })
 
   if (process.env.NODE_ENV === 'development') {
-    console.log(`@datapop |`, indent + strings.join(' ').trim())
+    console.log(`datapop |`, indent + strings.join(' ').trim())
   }
 }
