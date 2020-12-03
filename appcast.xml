@@ -6,6 +6,18 @@
     <description>A plugin to populate your design mockups with meaningful data. Good Bye Lorem Ipsum. Hello JSON.</description>
     <language>en</language>
     <item>
+      <title>Version 3.5.2</title>
+      <description>
+        <![CDATA[
+          <ul>
+            <li>Add support for data properties containing '.' in their name. If your property contains '.', such as imageUrl.2.2 , add backticks (`) around that key. For example, someObject.`property.with.fullstop`</li>
+            <li>We added analytics to the plugin to gather diagnostics and usage data. This will help us identify usage problems and improve the plugin. All data is collected anonymously and cannot be used to identify you. If you want to opt out, just untick the "Privacy" checkbox in the Sketch Settings under "General".</li>
+          </ul>
+        ]]>
+      </description>
+      <enclosure url="https://www.datapopulator.com/releases/datapopulator-sketch-v3.5.2.zip" sparkle:version="3.5.2" />
+    </item>
+    <item>
       <title>Version 3.5.1</title>
       <description>
         <![CDATA[
