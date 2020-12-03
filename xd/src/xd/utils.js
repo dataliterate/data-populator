@@ -14,10 +14,10 @@ export function deviceId() {
   return new Promise(async resolve => {
     let id
     try {
-      id = await Data.loadFileInDataFolder('device_id')
+      id = await Data.loadFileInDataFolder('deviceId')
     } catch (e) {
       id = Utils.generateUUID()
-      await Data.saveFileInDataFolder('device_id', id)
+      await Data.saveFileInDataFolder('deviceId', id)
     }
 
     resolve(id)
@@ -77,7 +77,7 @@ export function accessObjectByString(object, string) {
     string = string.replace(/\[(\w+)\]/g, '.$1') // convert indices to properties e.g [0] => .0
     string = string.replace(/^\./, '') // strip leading dot
 
-    let splitString = string.split('.')
+    let splitString = Utils.getArrayForStringPath(string)
     for (let i = 0; i < splitString.length; i++) {
       let key = splitString[i]
       newObject = newObject[key]
@@ -133,8 +133,11 @@ export function getArrayStringAccessor(object) {
     if (typeof strings[i] === 'number') {
       string += `[${strings[i]}]`
     } else if (typeof strings[i] === 'string') {
-      if (i === 0) string += `${strings[i]}`
-      if (i !== 0) string += `.${strings[i]}`
+      // Wrap string if it contains .
+      const s = strings[i].indexOf('.') > 0 ? `\`${strings[i]}\`` : strings[i]
+
+      if (i === 0) string += `${s}`
+      if (i !== 0) string += `.${s}`
     }
   }
 

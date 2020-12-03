@@ -13,10 +13,10 @@ import sketch from 'sketch'
  * Returns configuration for analytics
  */
 export function analyticsConfiguration() {
-  let deviceId = sketch.Settings.settingForKey('device_id')
+  let deviceId = sketch.Settings.globalSettingForKey('DataPopulator_deviceId')
   if (!deviceId) {
     deviceId = Utils.generateUUID()
-    sketch.Settings.setSettingForKey('device_id', deviceId)
+    sketch.Settings.setGlobalSettingForKey('DataPopulator_deviceId', deviceId)
   }
 
   return {
@@ -25,7 +25,7 @@ export function analyticsConfiguration() {
     hostName: 'sketch',
     hostVersion: String(sketch.Settings.version.sketch),
     hostOS: 'mac',
-    pluginVersion: String(process.env.npm_package_version)
+    pluginVersion: String(process.env.plugin.version())
   }
 }
 
@@ -134,7 +134,7 @@ export function accessObjectByString(object, string) {
     string = string.replace(/\[(\w+)\]/g, '.$1') // convert indices to properties e.g [0] => .0
     string = string.replace(/^\./, '') // strip leading dot
 
-    let splitString = string.split('.')
+    let splitString = Utils.getArrayForStringPath(string)
     for (let i = 0; i < splitString.length; i++) {
       let key = splitString[i]
       newObject = newObject[key]

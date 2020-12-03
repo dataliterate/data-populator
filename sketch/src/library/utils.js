@@ -4,6 +4,7 @@
 
 import base64 from 'base-64'
 import utf8 from 'utf8'
+import * as Utils from '@data-populator/core/utils'
 
 export function callPlugin(handler, data, callId) {
   let hash = encode({
@@ -62,8 +63,11 @@ export function getArrayStringAccessor(object) {
     if (typeof strings[i] === 'number') {
       string += `[${strings[i]}]`
     } else if (typeof strings[i] === 'string') {
-      if (i === 0) string += `${strings[i]}`
-      if (i !== 0) string += `.${strings[i]}`
+      // Wrap string if it contains .
+      const s = strings[i].indexOf('.') > 0 ? `\`${strings[i]}\`` : strings[i]
+
+      if (i === 0) string += `${s}`
+      if (i !== 0) string += `.${s}`
     }
   }
 
@@ -76,7 +80,7 @@ export function accessObjectByString(object, string) {
     string = string.replace(/\[(\w+)\]/g, '.$1') // convert indices to properties e.g [0] => .0
     string = string.replace(/^\./, '') // strip leading dot
 
-    let splitString = string.split('.')
+    let splitString = Utils.getArrayForStringPath(string)
     for (let i = 0; i < splitString.length; i++) {
       let key = splitString[i]
       newObject = newObject[key]

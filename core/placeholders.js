@@ -6,6 +6,7 @@
 
 import getValue from 'lodash/get'
 import * as Filters from './filters'
+import * as Utils from './utils'
 
 /**
  * Extracts placeholders from a string. Placeholders are identified by {}.
@@ -320,7 +321,7 @@ export function populatePlaceholder(placeholder, data, defaultSubstitute, xd) {
   // no nested placeholders, this is the base case
   else {
     // populate with data for keypath
-    populated = getValue(data, placeholder.keypath)
+    populated = getValue(data, Utils.getArrayForStringPath(placeholder.keypath))
 
     // check if substitute is needed
     if (!populated) {
@@ -338,7 +339,7 @@ export function populatePlaceholder(placeholder, data, defaultSubstitute, xd) {
           // the first substitute key that returns data is used
           let substituteStack = placeholder.substitute.substring(1).split('?')
           for (let i = 0; i < substituteStack.length; ++i) {
-            populated = getValue(data, substituteStack[i])
+            populated = getValue(data, Utils.getArrayForStringPath(substituteStack[i]))
             if (populated) break
           }
 

@@ -73,3 +73,39 @@ export function parsePrimitives(value) {
 export function generateUUID() {
   return uuid()
 }
+
+/**
+ * Returns an array representing the path. Handles property names containing '.'
+ *
+ * @param {String} stringPath
+ */
+export function getArrayForStringPath(stringPath) {
+  const items = []
+
+  let currentItem = ''
+  let insideQuotes = false
+  for (let i = 0; i < stringPath.length; i++) {
+    const char = stringPath[i]
+
+    if (char === '.') {
+      if (!insideQuotes) {
+        if (currentItem.length) {
+          items.push(currentItem)
+          currentItem = ''
+        }
+      } else {
+        currentItem += char
+      }
+    } else if (char === '`') {
+      insideQuotes = !insideQuotes
+    } else {
+      currentItem += char
+    }
+
+    if (i === stringPath.length - 1 && currentItem.length) {
+      items.push(currentItem)
+    }
+  }
+
+  return items
+}

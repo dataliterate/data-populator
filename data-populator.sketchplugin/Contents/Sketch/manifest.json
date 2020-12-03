@@ -5,7 +5,7 @@
   "author": "precious design studio",
   "authorEmail": "feedback@datapopulator.com",
   "identifier": "com.datapopulator.sketch.new",
-  "compatibleVersion": "65",
+  "compatibleVersion": "69",
   "icon": "images/icon.png",
   "appcast": "https://raw.githubusercontent.com/preciousforever/data-populator/master/appcast.xml",
   "commands": [
@@ -97,6 +97,6 @@
       "com.datapopulator.sketch.needHelp"
     ]
   },
-  "version": "3.5.1",
+  "version": "3.5.2",
   "disableCocoaScriptPreprocessor": true
 }

@@ -1,9 +1,11 @@
 import log from './log'
 
 const AMPLITUDE_KEYS = {
-  development: '',
-  production: ''
+  development: '6a6183f4a13f66d6165f6fc7e6637788',
+  production: '20748e915398f2569e92f47b1ecc2126'
 }
+
+const IGNORED_DEVICE_IDS = ['development']
 
 let trackingEnabled
 let deviceId
@@ -37,6 +39,12 @@ function track(action, data = {}) {
     return
   }
 
+  // Ignore events from ignored devices in production
+  if (IGNORED_DEVICE_IDS.includes(deviceId) && process.env.NODE_ENV === 'production') {
+    log('Device ID ignored', deviceId)
+    return
+  }
+
   // Send event to amplitude API
   fetch('https://api.amplitude.com/2/httpapi', {
     method: 'POST',
@@ -50,13 +58,13 @@ function track(action, data = {}) {
           device_id: deviceId,
           ip: '$remote',
           event_type: action,
-          event_properties: {
-            ...data,
+          user_properties: {
             hostName,
             hostVersion,
             hostOS,
             pluginVersion
-          }
+          },
+          event_properties: data
         }
       ]
     })
