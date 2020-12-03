@@ -76,7 +76,7 @@
     {
       "name": "Need Help?",
       "shortcut": "",
-      "description": "ind useful tips & tricks and ask for help.",
+      "description": "Find useful tips & tricks and ask for help.",
       "icon": "images/needHelp.png",
       "identifier": "com.datapopulator.sketch.needHelp",
       "script": "__src_sketch_commands_needHelp.js"
