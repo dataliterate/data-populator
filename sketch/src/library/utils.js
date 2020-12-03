@@ -4,9 +4,9 @@
 
 import base64 from 'base-64'
 import utf8 from 'utf8'
+import * as Utils from '@data-populator/core/utils'
 
-export function callPlugin (handler, data, callId) {
-
+export function callPlugin(handler, data, callId) {
   let hash = encode({
     handler,
     data,
@@ -16,19 +16,19 @@ export function callPlugin (handler, data, callId) {
   window.location.hash = hash
 }
 
-export function resolvePluginCall (callId, data) {
+export function resolvePluginCall(callId, data) {
   callPlugin('resolveCall', data, callId)
 }
 
-export function getPropertyValue (object, property, defaultValue) {
+export function getPropertyValue(object, property, defaultValue) {
   return object.hasOwnProperty(property) ? object[property] : defaultValue
 }
 
-export function getArrayStringAccessor (object) {
+export function getArrayStringAccessor(object) {
   let strings = []
   findLongestArrayRecursive(object)
 
-  function findLongestArrayRecursive (obj) {
+  function findLongestArrayRecursive(obj) {
     let newObject = JSON.parse(JSON.stringify(obj))
     let firstLine = JSON.stringify(newObject, null, 4).split('\n')[0].trim()
 
@@ -63,21 +63,24 @@ export function getArrayStringAccessor (object) {
     if (typeof strings[i] === 'number') {
       string += `[${strings[i]}]`
     } else if (typeof strings[i] === 'string') {
-      if (i === 0) string += `${strings[i]}`
-      if (i !== 0) string += `.${strings[i]}`
+      // Wrap string if it contains .
+      const s = strings[i].indexOf('.') > 0 ? `\`${strings[i]}\`` : strings[i]
+
+      if (i === 0) string += `${s}`
+      if (i !== 0) string += `.${s}`
     }
   }
 
   return string
 }
 
-export function accessObjectByString (object, string) {
+export function accessObjectByString(object, string) {
   let newObject = JSON.parse(JSON.stringify(object))
   if (string && string.length) {
     string = string.replace(/\[(\w+)\]/g, '.$1') // convert indices to properties e.g [0] => .0
     string = string.replace(/^\./, '') // strip leading dot
 
-    let splitString = string.split('.')
+    let splitString = Utils.getArrayForStringPath(string)
     for (let i = 0; i < splitString.length; i++) {
       let key = splitString[i]
       newObject = newObject[key]
@@ -87,16 +90,19 @@ export function accessObjectByString (object, string) {
   return newObject
 }
 
-export function isValidURL (url) {
-  if (/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=+$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%/.\w-_]*)?\??(?:[-+=&;%@.\w_]*)#?(?:[\w]*))?)/g.test(url)) {
+export function isValidURL(url) {
+  if (
+    /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=+$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%/.\w-_]*)?\??(?:[-+=&;%@.\w_]*)#?(?:[\w]*))?)/g.test(
+      url
+    )
+  ) {
     return true
   } else {
     return false
   }
 }
 
-export function encode (data) {
-
+export function encode(data) {
   let dataText = JSON.stringify(data)
   let dataBytes = utf8.encode(dataText)
   let encodedData = base64.encode(dataBytes)
@@ -104,8 +110,7 @@ export function encode (data) {
   return encodedData
 }
 
-export function decode (encodedData) {
-
+export function decode(encodedData) {
   let dataBytes = base64.decode(encodedData)
   let dataText = utf8.decode(dataBytes)
   let data = null

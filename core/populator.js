@@ -6,12 +6,10 @@
 
 import * as Utils from './utils'
 
-export function selectDataRow (data, usedRows, randomize) {
-
+export function selectDataRow(data, usedRows, randomize) {
   let dataRow
   if (data instanceof Array) {
     if (randomize) {
-
       let lastRandomIndex = usedRows.length ? usedRows[usedRows.length - 1] : -1
 
       // reset used rows
@@ -22,13 +20,11 @@ export function selectDataRow (data, usedRows, randomize) {
       // get random index
       let randomIndex
       while (!randomIndex && randomIndex !== 0) {
-
         // get random in range
         let random = Utils.randomInteger(0, data.length)
 
         // make sure index doesn't exist in already chosen random indexes
         if (usedRows.indexOf(random) === -1) {
-
           // make sure it's not the same as the last chosen random index
           if (data.length > 1) {
             if (random !== lastRandomIndex) {
@@ -45,9 +41,7 @@ export function selectDataRow (data, usedRows, randomize) {
 
       // get data row for random index
       dataRow = data[randomIndex]
-
     } else {
-
       if (usedRows.length > data.length - 1) {
         usedRows.length = 0
       }

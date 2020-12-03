@@ -9,6 +9,7 @@ import Context from '../context'
 import * as Gui from '../gui'
 import * as Populator from '../populator'
 import Strings, * as STRINGS from '@data-populator/core/strings'
+import Analytics from '@data-populator/core/analytics'
 
 export default async (selection, root) => {
   Context(selection, root)
@@ -19,11 +20,18 @@ export default async (selection, root) => {
       Strings(STRINGS.NO_LAYERS_SELECTED),
       Strings(STRINGS.SELECT_LAYERS_TO_CLEAR)
     )
+
+    Analytics.track('clearLayersError', {
+      reason: 'noSelection'
+    })
+
     return
   }
 
   // clear layers
   await Populator.clearLayers(selection.items)
+
+  Analytics.track('clearLayers')
 
   log('DONE')
 }

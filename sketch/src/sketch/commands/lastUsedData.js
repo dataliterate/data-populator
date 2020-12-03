@@ -9,14 +9,24 @@ import * as Gui from '../gui'
 import Options from '../options'
 import Strings, * as STRINGS from '@data-populator/core/strings'
 import * as Utils from '../utils'
+import Analytics from '@data-populator/core/analytics'
 
 export default async context => {
   Context(context)
 
+  // configure analytics
+  Analytics.configure(Utils.analyticsConfiguration())
+
   // get last used data
   let lastUsedData = Utils.documentMetadata(context.document, 'lastUsedData')
   if (!lastUsedData) {
-    return Context().document.showMessage(Strings(STRINGS.NO_LAST_USED_DATA))
+    Context().document.showMessage(Strings(STRINGS.NO_LAST_USED_DATA))
+
+    Analytics.track('showLastUsedDataError', {
+      reason: 'noActiveConfiguration'
+    })
+
+    return
   }
   lastUsedData = Utils.decode(lastUsedData)
 
@@ -24,5 +34,9 @@ export default async context => {
     viewOnly: true,
     options: Options(),
     jsonData: lastUsedData
+  })
+
+  Analytics.track('showLastUsedData', {
+    populateType: Options().populateType
   })
 }

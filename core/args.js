@@ -13,8 +13,7 @@ import commandLineArgs from 'command-line-args'
  * @param {String} string
  * @param {Array} definitions
  */
-export function extractArgs (string, definitions) {
-
+export function extractArgs(string, definitions) {
   // remove placeholders from string
   string = string.replace(/(?![^(]*\)){([^}]+)}/g, '')
 
@@ -33,8 +32,7 @@ export function extractArgs (string, definitions) {
  *   alias: {String} - the short name of the arg, e.g. l, v, etc
  * }]
  */
-export function parseArgs (string, definitions) {
-
+export function parseArgs(string, definitions) {
   // parse args using the provided definitions
   return commandLineArgs(definitions, string.split(/\s+/g))
 }

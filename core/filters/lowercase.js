@@ -12,6 +12,6 @@ export const alias = 'lower'
  * @param {String} param
  * @returns {String}
  */
-export function apply (string, param) {
+export function apply(string, param) {
   return String(string).toLowerCase()
 }

@@ -4,6 +4,7 @@
  * Populates the selected layers with a preset.
  */
 
+import sketch from 'sketch'
 import Context from '../context'
 import * as Data from '../data'
 import * as Gui from '../gui'
@@ -12,20 +13,38 @@ import * as Populator from '../populator'
 import Options, * as OPTIONS from '../options'
 import Strings, * as STRINGS from '@data-populator/core/strings'
 import * as Utils from '../utils'
+import Analytics from '@data-populator/core/analytics'
 
 export default async (context, populateAgain) => {
   Context(context)
 
+  // configure analytics
+  Analytics.configure(Utils.analyticsConfiguration())
+
   // get selected layers
   let selectedLayers = Layers.getSelectedLayers()
   if (!selectedLayers.length) {
-    return Context().document.showMessage(Strings(STRINGS.SELECT_LAYERS_TO_POPULATE))
+    Context().document.showMessage(Strings(STRINGS.SELECT_LAYERS_TO_POPULATE))
+
+    Analytics.track(populateAgain ? 'populateAgainError' : 'populateError', {
+      populateType: 'preset',
+      reason: 'noSelection'
+    })
+
+    return
   }
 
   // load presets
   let presets = Data.loadPresets()
   if (!presets.length) {
-    return Context().document.showMessage(Strings(STRINGS.NO_PRESETS_FOUND))
+    Context().document.showMessage(Strings(STRINGS.NO_PRESETS_FOUND))
+
+    Analytics.track(populateAgain ? 'populateAgainError' : 'populateError', {
+      populateType: 'preset',
+      reason: 'noPresets'
+    })
+
+    return
   }
 
   // get options and data
@@ -34,10 +53,22 @@ export default async (context, populateAgain) => {
   let data = null
   if (populateAgain) {
     // load preset data
-    if (!options[OPTIONS.SELECTED_PRESET]) return
+    if (!options[OPTIONS.SELECTED_PRESET]) {
+      Analytics.track('populateAgainError', {
+        populateType: 'preset',
+        reason: 'noSelectedPreset'
+      })
+      return
+    }
     data = Data.loadJSONData(options[OPTIONS.SELECTED_PRESET].path)
     data = Utils.accessObjectByString(data, options[OPTIONS.DATA_PATH] || '')
-    if (!data) return
+    if (!data) {
+      Analytics.track('populateAgainError', {
+        populateType: 'preset',
+        reason: 'unableToLoadSelectedPreset'
+      })
+      return
+    }
   } else {
     // wait for user response including options and json data to be used
     let response = await Gui.showWindow({
@@ -46,7 +77,12 @@ export default async (context, populateAgain) => {
     })
 
     // terminate if cancelled
-    if (!response) return
+    if (!response) {
+      Analytics.track('cancelPopulate', {
+        populateType: 'preset'
+      })
+      return
+    }
 
     // get updated options and json data
     options = response.options
@@ -63,7 +99,14 @@ export default async (context, populateAgain) => {
 
       // make sure that grid creation was successful
       // could have failed if zero rows were requested for example
-      if (!selectedLayers) return
+      if (!selectedLayers) {
+        Analytics.track(populateAgain ? 'populateAgainError' : 'populateError', {
+          populateType: 'preset',
+          reason: 'zeroGridDimension'
+        })
+
+        return
+      }
     }
   }
 
@@ -85,4 +128,14 @@ export default async (context, populateAgain) => {
   Layers.selectLayers(selectedLayers)
 
   context.document.reloadInspector()
+
+  Analytics.track(populateAgain ? 'populateAgain' : 'populateWithPreset', {
+    randomizeData: options[OPTIONS.RANDOMIZE_DATA],
+    trimText: options[OPTIONS.TRIM_TEXT],
+    insertEllipsis: options[OPTIONS.INSERT_ELLIPSIS],
+    useDefaultSubstitute: !!options[OPTIONS.DEFAULT_SUBSTITUTE],
+    useDataPath: !!options[OPTIONS.DATA_PATH],
+    createGrid: options[OPTIONS.CREATE_GRID],
+    populateType: populateAgain ? 'preset' : undefined
+  })
 }

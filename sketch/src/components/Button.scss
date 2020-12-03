@@ -6,12 +6,12 @@
 
   height: 24px;
   border-radius: 4px;
-  background-color: #B6B6B6;
+  background-color: #b6b6b6;
   padding: 0 13px;
   min-width: 72px;
 
   &:hover {
-    background-color: #A3A3A3;
+    background-color: #a3a3a3;
   }
 
   &:active {
@@ -22,11 +22,11 @@
     cursor: not-allowed;
 
     &.blue {
-      background-color: #14A6C7 !important;
+      background-color: #14a6c7 !important;
     }
 
     &:not(.blue) {
-      background-color: #B6B6B6 !important;
+      background-color: #b6b6b6 !important;
     }
   }
 
@@ -42,14 +42,14 @@
   }
 
   &.blue {
-    background-color: #14A6C7;
+    background-color: #14a6c7;
 
     &:hover {
-      background-color: #1191AD;
+      background-color: #1191ad;
     }
 
     &:active {
-      background-color: #0F7B94;
+      background-color: #0f7b94;
     }
 
     p {
@@ -59,7 +59,7 @@
 
   p {
     font-size: 12px;
-    color: #FFF;
+    color: #fff;
     line-height: 23px;
     text-align: center;
     font-weight: 500;

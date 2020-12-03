@@ -3,12 +3,12 @@ import './Button.scss'
 import classNames from 'classnames'
 
 class Button extends React.Component {
-  render () {
+  render() {
     let buttonClass = classNames({
-      'button': true,
-      'small': this.props.small,
-      'blue': this.props.blue,
-      'disabled': this.props.disabled
+      button: true,
+      small: this.props.small,
+      blue: this.props.blue,
+      disabled: this.props.disabled
     })
 
     return (

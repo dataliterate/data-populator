@@ -12,7 +12,7 @@ export const alias = 'd'
  * @param {MSLayer} layer
  * @param {Array} params
  */
-export function perform (condition, layer, params) {
+export function perform(condition, layer, params) {
   if (!condition) return
 
   // remove layer from parent

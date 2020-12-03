@@ -6,6 +6,7 @@
 
 import getValue from 'lodash/get'
 import * as Filters from './filters'
+import * as Utils from './utils'
 
 /**
  * Extracts placeholders from a string. Placeholders are identified by {}.
@@ -13,8 +14,7 @@ import * as Filters from './filters'
  * @param {String} string
  * @returns {Array}
  */
-export function extractPlaceholders (string) {
-
+export function extractPlaceholders(string) {
   // get placeholders
   let placeholders = []
 
@@ -22,7 +22,6 @@ export function extractPlaceholders (string) {
   let regex = /(?![^(]*\)|[^[]*]){([^}]+)}/g
   let match = regex.exec(string)
   while (match) {
-
     // parse placeholder
     if (match[0].split('{').length - 1 === match[0].split('}').length - 1) {
       let parsedPlaceholder = parsePlaceholder(match[0])
@@ -204,8 +203,7 @@ export function extractPlaceholders (string) {
  *   }
  * ]
  */
-export function parsePlaceholder (placeholderString) {
-
+export function parsePlaceholder(placeholderString) {
   // prepare placeholder
   let placeholder = {
     string: placeholderString
@@ -220,7 +218,6 @@ export function parsePlaceholder (placeholderString) {
   // get filters
   let filters = Filters.extractFilters(placeholderContent)
   if (filters.length) {
-
     // get placeholder filters
     placeholder.filters = filters
 
@@ -233,7 +230,6 @@ export function parsePlaceholder (placeholderString) {
   let nestedPlaceholders = []
   let buffer = ''
   for (let i = 0; i < placeholderContent.length; i++) {
-
     // get character of content
     let char = placeholderContent[i]
 
@@ -242,9 +238,7 @@ export function parsePlaceholder (placeholderString) {
     if (char === ')') groupingLevel--
 
     // if comma and not nested or if last character
-    if ((char === ',' && groupingLevel === 0) ||
-      (i === placeholderContent.length - 1)) {
-
+    if ((char === ',' && groupingLevel === 0) || i === placeholderContent.length - 1) {
       // add the character in case it's the last character
       if (char !== ',') buffer += char
 
@@ -253,9 +247,7 @@ export function parsePlaceholder (placeholderString) {
 
       // reset placeholder buffer
       buffer = ''
-
     } else {
-
       // append the character to buffer
       buffer += char
     }
@@ -263,10 +255,8 @@ export function parsePlaceholder (placeholderString) {
 
   // parse nested placeholders if there are more than one or the one is a grouped placeholder
   if (nestedPlaceholders.length > 1 || isGroupedPlaceholder(nestedPlaceholders[0])) {
-
     // set nested placeholders of the placeholder
-    placeholder.placeholders = nestedPlaceholders.map((nestedPlaceholder) => {
-
+    placeholder.placeholders = nestedPlaceholders.map(nestedPlaceholder => {
       // recur to parse nested placeholder
       return parsePlaceholder(nestedPlaceholder)
     })
@@ -278,26 +268,27 @@ export function parsePlaceholder (placeholderString) {
 
     // split into components, dividing into the keypath and substitute
     let substituteMarkerIndex = nestedPlaceholder.indexOf('?')
-    let placeholderComponents = (substituteMarkerIndex === -1) ? [nestedPlaceholder] : [nestedPlaceholder.slice(0, substituteMarkerIndex), nestedPlaceholder.slice(substituteMarkerIndex + 1)]
+    let placeholderComponents =
+      substituteMarkerIndex === -1
+        ? [nestedPlaceholder]
+        : [
+            nestedPlaceholder.slice(0, substituteMarkerIndex),
+            nestedPlaceholder.slice(substituteMarkerIndex + 1)
+          ]
 
     // check if has substitute
     if (placeholderComponents.length === 2) {
-
       // set keypath
       placeholder.keypath = placeholderComponents[0].trim()
 
       // set substitute
       if (placeholderComponents[1]) {
         placeholder.substitute = placeholderComponents[1].trim()
-
       } else {
-
         // set to true to signify that a default substitute should be used
         placeholder.substitute = true
       }
-
     } else {
-
       // set keypath to the placeholder itself since there is no substitute
       placeholder.keypath = nestedPlaceholder
     }
@@ -314,26 +305,23 @@ export function parsePlaceholder (placeholderString) {
  * @param {String} defaultSubstitute
  * @returns {String}
  */
-export function populatePlaceholder (placeholder, data, defaultSubstitute, xd) {
-
+export function populatePlaceholder(placeholder, data, defaultSubstitute, xd) {
   // prepare populated string/array
   let populated
   let hasValueForKey = true
 
   // populate nested placeholders
   if (placeholder.placeholders) {
-
     // populate and add to array of populated nested placeholders
-    populated = placeholder.placeholders.map((nestedPlaceholder) => {
+    populated = placeholder.placeholders.map(nestedPlaceholder => {
       return populatePlaceholder(nestedPlaceholder, data, defaultSubstitute, xd)
     })
   }
 
   // no nested placeholders, this is the base case
   else {
-
     // populate with data for keypath
-    populated = getValue(data, placeholder.keypath)
+    populated = getValue(data, Utils.getArrayForStringPath(placeholder.keypath))
 
     // check if substitute is needed
     if (!populated) {
@@ -346,21 +334,18 @@ export function populatePlaceholder (placeholder, data, defaultSubstitute, xd) {
 
       // use specified substitute
       else if (placeholder.substitute && placeholder.substitute.length) {
-
         if (placeholder.substitute[0] === '?') {
-
           // iterate over substitute stack in the given order
           // the first substitute key that returns data is used
           let substituteStack = placeholder.substitute.substring(1).split('?')
           for (let i = 0; i < substituteStack.length; ++i) {
-            populated = getValue(data, substituteStack[i])
+            populated = getValue(data, Utils.getArrayForStringPath(substituteStack[i]))
             if (populated) break
           }
 
           // use default if placeholder substitute didn't return any data
           if (!populated) populated = defaultSubstitute
-        }
-        else {
+        } else {
           populated = placeholder.substitute
         }
       }
@@ -374,7 +359,7 @@ export function populatePlaceholder (placeholder, data, defaultSubstitute, xd) {
 
   // apply filters
   if (placeholder.filters) {
-    placeholder.filters.forEach((filter) => {
+    placeholder.filters.forEach(filter => {
       populated = Filters.applyFilter(filter, populated)
     })
   }
@@ -402,8 +387,8 @@ export function populatePlaceholder (placeholder, data, defaultSubstitute, xd) {
  * @param {String} placeholder
  * @returns {Boolean}
  */
-function isGroupedPlaceholder (placeholder) {
-  return (placeholder && placeholder[0] === '(' && placeholder[placeholder.length - 1] === ')')
+function isGroupedPlaceholder(placeholder) {
+  return placeholder && placeholder[0] === '(' && placeholder[placeholder.length - 1] === ')'
 }
 
 /**
@@ -413,6 +398,6 @@ function isGroupedPlaceholder (placeholder) {
  * @param {String} placeholder
  * @returns {Boolean}
  */
-function isRootPlaceholder (placeholder) {
-  return (placeholder && placeholder[0] === '{' && placeholder[placeholder.length - 1] === '}')
+function isRootPlaceholder(placeholder) {
+  return placeholder && placeholder[0] === '{' && placeholder[placeholder.length - 1] === '}'
 }

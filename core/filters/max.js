@@ -12,7 +12,7 @@ export const alias = 'max'
  * @param {String} param
  * @returns {String}
  */
-export function apply (string, param) {
+export function apply(string, param) {
   if (!string) return
 
   // get max number of characters

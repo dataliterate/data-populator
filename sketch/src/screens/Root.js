@@ -5,6 +5,7 @@
 import React from 'react'
 import './Root.scss'
 import Strings, * as STRINGS from '@data-populator/core/strings'
+import Analytics from '@data-populator/core/analytics'
 import * as OPTIONS from '../library/options'
 import $ from 'jquery'
 
@@ -233,6 +234,8 @@ class Root extends React.Component {
         })
       },
       () => {
+        Analytics.track('selectPreset')
+
         // call internal plugin handler to read file from disk
         Utils.callPlugin('readFile', {
           path: selectedPreset.path
@@ -250,6 +253,8 @@ class Root extends React.Component {
     Utils.callPlugin('selectJSON', {
       path: this.state.options[OPTIONS.JSON_PATH]
     })
+
+    Analytics.track('selectJSONFile')
   }
 
   /**
@@ -352,6 +357,8 @@ class Root extends React.Component {
 
   handleLoadURLButtonClick() {
     this.reloadData()
+
+    Analytics.track('loadURL')
   }
 
   handleAddHeaderButton() {
@@ -425,7 +432,7 @@ class Root extends React.Component {
     })
   }
 
-  reloadData(keepDataPath) {
+  reloadData(keepDataPath, triggeredByClick) {
     if (this.state.options[OPTIONS.POPULATE_TYPE] === OPTIONS.POPULATE_TYPE_PRESET) {
       if (!this.state.options[OPTIONS.SELECTED_PRESET]) return
 
@@ -438,6 +445,12 @@ class Root extends React.Component {
         path: this.state.options[OPTIONS.SELECTED_PRESET].path,
         keepDataPath: keepDataPath
       })
+
+      if (triggeredByClick) {
+        Analytics.track('reloadData', {
+          populateType: 'preset'
+        })
+      }
     } else if (this.state.options[OPTIONS.POPULATE_TYPE] === OPTIONS.POPULATE_TYPE_JSON) {
       if (!this.state.options[OPTIONS.JSON_PATH]) return
 
@@ -454,6 +467,12 @@ class Root extends React.Component {
       $(document).trigger('setJSONFilePath', {
         path: this.state.options[OPTIONS.JSON_PATH]
       })
+
+      if (triggeredByClick) {
+        Analytics.track('reloadData', {
+          populateType: 'json'
+        })
+      }
     } else if (this.state.options[OPTIONS.POPULATE_TYPE] === OPTIONS.POPULATE_TYPE_URL) {
       if (!this.state.options[OPTIONS.URL]) return
 
@@ -480,6 +499,13 @@ class Root extends React.Component {
         })
         .catch(() => {
           this.setData(null, keepDataPath)
+        })
+        .finally(() => {
+          if (triggeredByClick) {
+            Analytics.track('reloadData', {
+              populateType: 'url'
+            })
+          }
         })
     }
   }
@@ -672,7 +698,7 @@ class Root extends React.Component {
                 small
                 text={Strings(STRINGS.RELOAD)}
                 style={{ position: 'absolute', top: 20, right: 20 }}
-                handleClick={() => this.reloadData(true)}
+                handleClick={() => this.reloadData(true, true)}
               />
             ) : (
               ''

@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import ReactDOM from 'react-dom'
 
 class Title extends React.Component {
-  constructor () {
+  constructor() {
     super()
 
     this.state = {
@@ -17,7 +17,7 @@ class Title extends React.Component {
     this.hideTooltip = this.hideTooltip.bind(this)
   }
 
-  showTooltip () {
+  showTooltip() {
     let questionMark = ReactDOM.findDOMNode(this.refs.questionMark)
     let titleContainer = ReactDOM.findDOMNode(this.refs.titleContainer)
 
@@ -28,38 +28,47 @@ class Title extends React.Component {
     })
   }
 
-  hideTooltip () {
+  hideTooltip() {
     this.setState({ showTooltip: false })
   }
 
-  render () {
+  render() {
     let titleContainerClass = classNames({
       'title-container': true,
       'sub-title': this.props.subTitle
     })
 
     let tooltipClass = classNames({
-      'tooltip': true,
-      'show': this.state.showTooltip
+      tooltip: true,
+      show: this.state.showTooltip
     })
 
     return (
-      <div ref='titleContainer' className={titleContainerClass} style={this.props.style}>
+      <div ref="titleContainer" className={titleContainerClass} style={this.props.style}>
         <h1>{this.props.title}</h1>
-        {this.props.description && !this.props.subTitle ? (
-          <h2>{this.props.description}</h2>
-        ) : ''}
+        {this.props.description && !this.props.subTitle ? <h2>{this.props.description}</h2> : ''}
         {this.props.description && this.props.subTitle ? (
-          <div ref='questionMark' onMouseEnter={this.showTooltip} onMouseLeave={this.hideTooltip} className='question-mark'>
+          <div
+            ref="questionMark"
+            onMouseEnter={this.showTooltip}
+            onMouseLeave={this.hideTooltip}
+            className="question-mark"
+          >
             <p>?</p>
           </div>
-        ) : ''}
+        ) : (
+          ''
+        )}
         {this.props.description && this.props.subTitle ? (
-          <div style={{ top: this.state.tooltipTop, left: this.state.tooltipLeft }} className={tooltipClass}>
+          <div
+            style={{ top: this.state.tooltipTop, left: this.state.tooltipLeft }}
+            className={tooltipClass}
+          >
             <p>{this.props.description}</p>
           </div>
-        ) : ''}
-
+        ) : (
+          ''
+        )}
       </div>
     )
   }

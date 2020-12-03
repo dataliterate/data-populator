@@ -6,6 +6,8 @@
 
 import Context from '../context'
 import Options, * as OPTIONS from '../options'
+import * as Utils from '../utils'
+import Analytics from '@data-populator/core/analytics'
 
 import PopulateWithPreset from './populateWithPreset'
 import PopulateWithJSON from './populateWithJSON'
@@ -13,6 +15,9 @@ import PopulateFromURL from './populateFromURL'
 
 export default context => {
   Context(context)
+
+  // configure analytics
+  Analytics.configure(Utils.analyticsConfiguration())
 
   // get options
   let options = Options()

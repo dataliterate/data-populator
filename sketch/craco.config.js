@@ -1,9 +1,11 @@
+const webpack = require('webpack')
 const path = require('path')
 const fs = require('fs')
 const { getLoader, loaderByName } = require('@craco/craco')
 
 const workspaces = JSON.parse(fs.readFileSync(path.join(__dirname, '../package.json'))).workspaces
 const workspacePaths = workspaces.map(workspace => path.join(__dirname, '../', workspace))
+const package = JSON.parse(fs.readFileSync(path.join(__dirname, 'package.json')))
 
 module.exports = {
   webpack: {
@@ -39,6 +41,14 @@ module.exports = {
           usedPlugins.push(p)
         }
       }
+
+      // Set plugin version as env variable
+      usedPlugins.push(
+        new webpack.DefinePlugin({
+          'process.env.PLUGIN_VERSION': JSON.stringify(package.version)
+        })
+      )
+
       config.plugins = usedPlugins
 
       return config

@@ -12,6 +12,7 @@ import * as Gui from '../gui'
 import * as Utils from '../utils'
 import * as Populator from '../populator'
 import Strings, * as STRINGS from '@data-populator/core/strings'
+import Analytics from '@data-populator/core/analytics'
 
 export default async (selection, root) => {
   Context(selection, root)
@@ -22,6 +23,12 @@ export default async (selection, root) => {
       Strings(STRINGS.NO_LAYERS_SELECTED),
       Strings(STRINGS.SELECT_LAYERS_TO_POPULATE)
     )
+
+    Analytics.track('populateError', {
+      populateType: 'json',
+      reason: 'noSelection'
+    })
+
     return
   }
 
@@ -63,15 +70,32 @@ export default async (selection, root) => {
     log(e)
     canceled = true
   }
-  if (canceled) return
+  if (canceled) {
+    Analytics.track('cancelPopulate', {
+      populateType: 'json'
+    })
+    return
+  }
+
   if (!canceled) {
-    if (!JSONFile.nativePath)
+    if (!JSONFile.nativePath) {
       await Gui.createAlert(Strings(STRINGS.NO_FILE_SELECTED), Strings(STRINGS.SELECT_JSON_FILE))
-    else if (!JSONFile.json)
+
+      Analytics.track('populateError', {
+        populateType: 'json',
+        reason: 'noSelectedJSONFile'
+      })
+    } else if (!JSONFile.json) {
       await Gui.createAlert(
         Strings(STRINGS.INVALID_JSON_FILE),
         Strings(STRINGS.SELECTED_JSON_FILE_INVALID)
       )
+
+      Analytics.track('populateError', {
+        populateType: 'json',
+        reason: 'invalidJSONFile'
+      })
+    }
     if (!JSONFile.nativePath || !JSONFile.json) return
   }
 
@@ -90,6 +114,12 @@ export default async (selection, root) => {
       Strings(STRINGS.POPULATING_FAILED),
       Strings(STRINGS.UNABLE_TO_LOAD_SELECTED_JSON_FILE)
     )
+
+    Analytics.track('populateError', {
+      populateType: 'json',
+      reason: 'unableToLoadSelectedJSONFile'
+    })
+
     return
   }
 
@@ -121,6 +151,14 @@ export default async (selection, root) => {
   } catch (e) {
     log(e)
   }
+
+  Analytics.track('populateWithJSON', {
+    randomizeData: options[OPTIONS.RANDOMIZE_DATA],
+    trimText: options[OPTIONS.TRIM_TEXT],
+    insertEllipsis: options[OPTIONS.INSERT_ELLIPSIS],
+    useDefaultSubstitute: !!options[OPTIONS.DEFAULT_SUBSTITUTE],
+    useDataPath: !!JSONKey
+  })
 
   log('DONE')
 }

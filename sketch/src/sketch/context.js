@@ -9,7 +9,6 @@ let context = null
 
 // set and get context via the same function
 export default function (newContext) {
-
   // set new context
   if (newContext) {
     context = newContext

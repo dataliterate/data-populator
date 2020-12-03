@@ -1,16 +1,84 @@
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header,
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video, textarea {
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video,
+textarea {
   margin: 0;
   padding: 0;
   border: 0;
@@ -20,21 +88,33 @@ time, mark, audio, video, textarea {
   vertical-align: baseline;
 }
 
-article, aside, details, figcaption, figure,
-footer, header, menu, nav, section {
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+menu,
+nav,
+section {
   display: block;
 }
 body {
   line-height: 1;
 }
-ol, ul {
+ol,
+ul {
   list-style: none;
 }
-blockquote, q {
+blockquote,
+q {
   quotes: none;
 }
-blockquote:before, blockquote:after,
-q:before, q:after {
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
   content: '';
   content: none;
 }
@@ -42,7 +122,9 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
-input[type=text], input[type=password], textarea {
+input[type='text'],
+input[type='password'],
+textarea {
   box-shadow: none;
   border: none;
   outline: none;
@@ -57,11 +139,14 @@ input[type=text], input[type=password], textarea {
   -webkit-user-select: auto;
 }
 
-*, *:before, *:after {
+*,
+*:before,
+*:after {
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   position: relative;
 }
 
@@ -85,7 +170,8 @@ body {
     height: 100%;
 
     .page {
-      .left, .right {
+      .left,
+      .right {
         position: relative;
         height: 680px;
 
@@ -95,9 +181,9 @@ body {
 
       .left {
         width: 368px;
-        border-right: 1px solid #EAEAEA;
+        border-right: 1px solid #eaeaea;
         padding: 40px;
-        background-color: #F7F7F7;
+        background-color: #f7f7f7;
 
         overflow-y: auto;
 
@@ -108,11 +194,11 @@ body {
 
       .right {
         width: 500px;
-        background-color: #FBFBFB;
+        background-color: #fbfbfb;
 
         .footer {
           background-color: rgba(251, 251, 251, 0.9);
-          border-top: 1px solid #EAEAEA;
+          border-top: 1px solid #eaeaea;
 
           width: 500px;
           height: 65px;

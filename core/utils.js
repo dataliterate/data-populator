@@ -4,6 +4,8 @@
  * Provides utility and miscellaneous functionality.
  */
 
+import uuid from 'uuid/v4'
+
 /**
  * Generates a random integer between min and max inclusive.
  *
@@ -11,7 +13,7 @@
  * @param {Number} max
  * @returns {Number}
  */
-export function randomInteger (min, max) {
+export function randomInteger(min, max) {
   return Math.floor(Math.random() * (max - min)) + min
 }
 
@@ -22,13 +24,11 @@ export function randomInteger (min, max) {
  * @param {Object} values - Object with values to substitute for placeholders.
  * @returns {String} - String with placeholders substituted for values.
  */
-export function mergeStringWithValues (string, values) {
-
+export function mergeStringWithValues(string, values) {
   // get properties in values
   let properties = Object.keys(values)
 
   properties.forEach(function (property) {
-
     // escape regex
     let sanitisedProperty = property.replace(/([.*+?^=!:${}()|[\]/\\])/g, '\\$1')
     sanitisedProperty = '{' + sanitisedProperty + '}'
@@ -49,8 +49,7 @@ export function mergeStringWithValues (string, values) {
  * @param {String} value
  * @returns {*}
  */
-export function parsePrimitives (value) {
-
+export function parsePrimitives(value) {
   if (value === '') {
     return value
   } else if (value === 'true' || value === '1') {
@@ -66,4 +65,47 @@ export function parsePrimitives (value) {
   }
 
   return value
+}
+
+/**
+ * Generates a new UUID.
+ */
+export function generateUUID() {
+  return uuid()
+}
+
+/**
+ * Returns an array representing the path. Handles property names containing '.'
+ *
+ * @param {String} stringPath
+ */
+export function getArrayForStringPath(stringPath) {
+  const items = []
+
+  let currentItem = ''
+  let insideQuotes = false
+  for (let i = 0; i < stringPath.length; i++) {
+    const char = stringPath[i]
+
+    if (char === '.') {
+      if (!insideQuotes) {
+        if (currentItem.length) {
+          items.push(currentItem)
+          currentItem = ''
+        }
+      } else {
+        currentItem += char
+      }
+    } else if (char === '`') {
+      insideQuotes = !insideQuotes
+    } else {
+      currentItem += char
+    }
+
+    if (i === stringPath.length - 1 && currentItem.length) {
+      items.push(currentItem)
+    }
+  }
+
+  return items
 }
