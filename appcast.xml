@@ -6,6 +6,17 @@
     <description>A plugin to populate your design mockups with meaningful data. Good Bye Lorem Ipsum. Hello JSON.</description>
     <language>en</language>
     <item>
+      <title>Version 3.6.0</title>
+      <description>
+        <![CDATA[
+          <ul>
+            <li>Fixes trimming for fixed size text layers. It always trims to one line unless you specify the number of lines using the '-l N' argument in the layer name.</li>
+          </ul>
+        ]]>
+      </description>
+    <enclosure url="https://www.datapopulator.com/releases/datapopulator-sketch-v3.6.0.zip" sparkle:version="3.6.0" />
+  </item>
+    <item>
       <title>Version 3.5.2</title>
       <description>
         <![CDATA[
