@@ -49,7 +49,7 @@ export function populateLayers(layers, data, opt) {
     let dataRow = Core.populator.selectDataRow(data, usedRows, opt.randomizeData)
 
     // populate layer
-    populateLayer(layer, dataRow, {
+    populateLayer(layer, dataRow.dataRow, {
       rootDir: opt.rootDir,
       trimText: opt.trimText,
       insertEllipsis: opt.insertEllipsis,
@@ -622,7 +622,7 @@ function populateTextLayer(layer, data, opt) {
   if (populatedString === originalText) return
 
   // trim text, taking into account the lines arg if available
-  if (layer.textBehaviour() === 1 && opt.trimText) {
+  if (layer.textBehaviour() !== 0 && opt.trimText) {
     populatedString = getTrimmedText(layer, populatedString, opt.insertEllipsis, args.lines)
   }
 
@@ -803,6 +803,9 @@ function getTrimmedText(layer, text, insertEllipsis, lines) {
 
   // create a copy of the layer to prevent changing the actual layer
   layer = Utils.copyLayer(layer)
+
+  // Force to auto-height behaviour if fixed size to allow check for height
+  layer.setTextBehaviour_mayAdjustFrame(1, true)
 
   // set text to a single character to get height of one line
   layer.setStringValue('-')

@@ -1,4 +1,4 @@
-import log from './log'
+import debounce from 'debounce'
 
 const AMPLITUDE_KEYS = {
   development: '6a6183f4a13f66d6165f6fc7e6637788',
@@ -15,8 +15,8 @@ let hostOS
 let pluginVersion
 
 function configure(params) {
-  log('configuring analytics')
-  log(params)
+  console.log('configuring analytics')
+  console.log(params)
 
   trackingEnabled = params.trackingEnabled
   deviceId = params.deviceId
@@ -27,21 +27,21 @@ function configure(params) {
 }
 
 function setEnabled(isEnabled) {
-  log('Tracking set to ', isEnabled ? 'enabled' : 'disabled')
+  console.log('Tracking set to ', isEnabled ? 'enabled' : 'disabled')
   trackingEnabled = isEnabled
 }
 
 function track(action, data = {}) {
-  log('Tracking', action, data)
+  console.log('Tracking', action, data)
 
   if (!trackingEnabled) {
-    log('Tracking disabled')
+    console.log('Tracking disabled')
     return
   }
 
   // Ignore events from ignored devices in production
   if (IGNORED_DEVICE_IDS.includes(deviceId) && process.env.NODE_ENV === 'production') {
-    log('Device ID ignored', deviceId)
+    console.log('Device ID ignored', deviceId)
     return
   }
 
@@ -71,4 +71,6 @@ function track(action, data = {}) {
   })
 }
 
-export default { configure, setEnabled, track }
+const trackDebounced = debounce(track, 500)
+
+export default { configure, setEnabled, track, trackDebounced }

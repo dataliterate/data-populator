@@ -4,7 +4,6 @@
  * Provides functionality to extract, parse and populate placeholders.
  */
 
-import getValue from 'lodash/get'
 import * as Filters from './filters'
 import * as Utils from './utils'
 
@@ -305,7 +304,7 @@ export function parsePlaceholder(placeholderString) {
  * @param {String} defaultSubstitute
  * @returns {String}
  */
-export function populatePlaceholder(placeholder, data, defaultSubstitute, xd) {
+export function populatePlaceholder(placeholder, data, defaultSubstitute) {
   // prepare populated string/array
   let populated
   let hasValueForKey = true
@@ -314,14 +313,14 @@ export function populatePlaceholder(placeholder, data, defaultSubstitute, xd) {
   if (placeholder.placeholders) {
     // populate and add to array of populated nested placeholders
     populated = placeholder.placeholders.map(nestedPlaceholder => {
-      return populatePlaceholder(nestedPlaceholder, data, defaultSubstitute, xd)
+      return populatePlaceholder(nestedPlaceholder, data, defaultSubstitute)
     })
   }
 
   // no nested placeholders, this is the base case
   else {
     // populate with data for keypath
-    populated = getValue(data, Utils.getArrayForStringPath(placeholder.keypath))
+    populated = Utils.accessObjectByString(data, placeholder.keypath)
 
     // check if substitute is needed
     if (!populated) {
@@ -339,7 +338,7 @@ export function populatePlaceholder(placeholder, data, defaultSubstitute, xd) {
           // the first substitute key that returns data is used
           let substituteStack = placeholder.substitute.substring(1).split('?')
           for (let i = 0; i < substituteStack.length; ++i) {
-            populated = getValue(data, Utils.getArrayForStringPath(substituteStack[i]))
+            populated = Utils.accessObjectByString(data, substituteStack[i])
             if (populated) break
           }
 
@@ -370,14 +369,7 @@ export function populatePlaceholder(placeholder, data, defaultSubstitute, xd) {
     populated = populated.join(' ')
   }
 
-  if (!xd) {
-    return String(populated)
-  } else {
-    return {
-      populated: String(populated),
-      hasValueForKey
-    }
-  }
+  return String(populated)
 }
 
 /**

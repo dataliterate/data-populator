@@ -20,7 +20,7 @@ export function analyticsConfiguration() {
   }
 
   return {
-    trackingEnabled: !!Number(sketch.Settings.globalSettingForKey('analyticsEnabled')),
+    trackingEnabled: true,
     deviceId,
     hostName: 'sketch',
     hostVersion: String(sketch.Settings.version.sketch),

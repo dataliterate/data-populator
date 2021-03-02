@@ -14,10 +14,12 @@ export const alias = 'max'
  */
 export function apply(string, param) {
   if (!string) return
+  if (!param) return string
 
   // get max number of characters
-  let maxCharacters = Number(param.trim())
+  let maxCharacters = param ? Number(String(param).trim()) : undefined
+  if (!maxCharacters || isNaN(maxCharacters)) return string
 
   // trim string to max characters
-  return string.substring(0, maxCharacters)
+  return String(string).substring(0, maxCharacters)
 }

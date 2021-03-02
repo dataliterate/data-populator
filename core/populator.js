@@ -1,5 +1,5 @@
 /**
- * Placeholders
+ * Populator
  *
  * Provides shared populator functionality.
  */
@@ -12,20 +12,20 @@ export function selectDataRow(data, usedRows, randomize) {
     if (randomize) {
       let lastRandomIndex = usedRows.length ? usedRows[usedRows.length - 1] : -1
 
-      // reset used rows
+      // Reset used rows
       if (usedRows.length === data.length) {
         usedRows.length = 0
       }
 
-      // get random index
+      // Get random index
       let randomIndex
       while (!randomIndex && randomIndex !== 0) {
-        // get random in range
+        // Get random in range
         let random = Utils.randomInteger(0, data.length)
 
-        // make sure index doesn't exist in already chosen random indexes
+        // Make sure index doesn't exist in already chosen random indexes
         if (usedRows.indexOf(random) === -1) {
-          // make sure it's not the same as the last chosen random index
+          // Make sure it's not the same as the last chosen random index
           if (data.length > 1) {
             if (random !== lastRandomIndex) {
               randomIndex = random
@@ -36,10 +36,10 @@ export function selectDataRow(data, usedRows, randomize) {
         }
       }
 
-      // store selected random index
+      // Store selected random index
       usedRows.push(randomIndex)
 
-      // get data row for random index
+      // Get data row for random index
       dataRow = data[randomIndex]
     } else {
       if (usedRows.length > data.length - 1) {
@@ -53,5 +53,7 @@ export function selectDataRow(data, usedRows, randomize) {
     dataRow = data
   }
 
-  return dataRow
+  return {
+    dataRow
+  }
 }
