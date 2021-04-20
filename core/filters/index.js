@@ -9,8 +9,9 @@ import * as MaxFilter from './max'
 import * as UppercaseFilter from './uppercase'
 import * as LowercaseFilter from './lowercase'
 import * as CapitalizeFilter from './capitalize'
+import * as DateFilter from './date'
 
-let filters = [JoinFilter, MaxFilter, UppercaseFilter, LowercaseFilter, CapitalizeFilter]
+let filters = [JoinFilter, MaxFilter, UppercaseFilter, LowercaseFilter, CapitalizeFilter, DateFilter]
 
 /**
  * Extracts filters from the placeholder string, e.g. firstName, lastName | & •
