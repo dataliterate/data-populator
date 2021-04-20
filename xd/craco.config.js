@@ -91,6 +91,15 @@ module.exports = {
         ]
       }
 
+      // Convert all images to base64
+      const { isFound: isUrlLoaderFound, match: urlLoaderMatch } = getLoader(
+        config,
+        loaderByName('url-loader')
+      )
+      if (isUrlLoaderFound) {
+        urlLoaderMatch.loader.options.limit = undefined
+      }
+
       // Comment out code generation from strings in the build
       config.module.rules.push({
         test: /\.js$/,

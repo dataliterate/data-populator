@@ -1,6 +1,6 @@
 {
   "name": "@data-populator/xd",
-  "version": "3.5.2",
+  "version": "4.0.0",
   "author": "precious design studio",
   "authorEmail": "feedback@datapopulator.com",
   "repository": "https://github.com/preciousforever/data-populator",
@@ -11,9 +11,13 @@
   },
   "dependencies": {
     "@craco/craco": "^5.6.4",
+    "color": "^3.1.3",
+    "debounce": "^1.2.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "^3.4.1"
+    "react-scripts": "^3.4.1",
+    "react-use-mounted": "^1.0.0",
+    "styled-components": "^5.2.1"
   },
   "devDependencies": {
     "adm-zip": "^0.4.16",

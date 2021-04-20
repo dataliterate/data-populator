@@ -1,0 +1,308 @@
+{
+  "blocks": {
+    "childLayers": {
+      "title": "Populatable Child Layers",
+      "layerTypeCount": {
+        "text": "{count} Text layer{plural?s}",
+        "shape": "{count} Shape layer{plural?s}",
+        "repeatGrid": "{count} Repeat grid{plural?s}"
+      },
+      "ownDataOptionsDescription": "1 layer has its own data source configuration which will be used when populating.",
+      "ownDataOptionsDescriptionPlural": "{count} layers have their own data source configurations which will be used when populating.",
+      "noPopulatableLayersDescription": "There are no populatable child layers."
+    },
+    "contentTemplate": {
+      "artboardTitle": "Name Template",
+      "textTitle": "Content Template",
+      "shapeTitle": "Image Path or URL",
+      "empty": "Empty"
+    },
+    "populateWithRow": {
+      "populateWithRow": "Use Data Row"
+    },
+    "dataPreview": {
+      "titlePreview": "Data Preview",
+      "titleSample": "Data Sample",
+      "path": "Path: {path}"
+    },
+    "clearActions": {
+      "clearLayers": "Clear Populated Data",
+      "clearOptions": "Clear Options"
+    },
+    "dataSource": {
+      "local": "Local",
+      "remote": "Remote",
+      "none": "None",
+      "inherit": "Inherit",
+      "missing": "Missing",
+      "dataSourceOption": "{name}",
+      "dataSource": "Data Source",
+      "loadingDataSources": "Loading...",
+      "noInheritableDataSource": "No inheritable data source.",
+      "urlVariableOverrides": "URL Variable Overrides",
+      "rootPath": "Root Path",
+      "root": "Root",
+      "shuffleItems": "Shuffle Items",
+      "repeatItems": "Repeat Items",
+      "document": "Document",
+      "library": "Library"
+    },
+    "dataSources": {
+      "title": "DATA SOURCES",
+      "subtitle": "Manage your sources of data.",
+      "add": "Add",
+      "usedDataSources": "Used Data Sources",
+      "documentDataSources": "Document Data Sources",
+      "noDocumentDataSources": "No data sources in document.",
+      "libraryDataSources": "Library Data Sources",
+      "noLibraryDataSources": "No data sources in library.",
+      "library": "Library",
+      "document": "Document",
+      "missing": "Missing",
+      "outOfSync": "Out of Sync",
+      "overridden": "Overridden",
+      "relink": "Relink",
+      "remove": "Remove",
+      "edit": "Edit",
+      "addToDocument": "Add to Document",
+      "addToLibrary": "Add to Library",
+      "updateToDocumentVersion": "Update to Document Version",
+      "updateToLibraryVersion": "Update to Library Version"
+    },
+    "dataSourceType": {
+      "title": "Data Source Type",
+      "local": "Local",
+      "remote": "Remote"
+    },
+    "dataSourceDestination": {
+      "title": "Data Source Destination",
+      "documentOnly": "Document Only",
+      "libraryOnly": "Library Only",
+      "both": "Both"
+    },
+    "defaultFallback": {
+      "artboardTitle": "Default Data Fallback",
+      "textTitle": "Default Data Fallback",
+      "shapeTitle": "Fallback Image URL",
+      "empty": "Empty",
+      "default": "Default"
+    },
+    "file": {
+      "toImport": "File to Import",
+      "toUpdate": "File to Update Data"
+    },
+    "learn": {
+      "title": "LEARN",
+      "subtitle": "Get started and master populating designs with data.",
+      "tutorial": {
+        "buttonTitle": "Download Examples",
+        "one": {
+          "instructions": "Add dynamic data templates with ^{placeholders} to your design mockups - these can be for both text and images."
+        },
+        "two": {
+          "instructions": "Use local JSON or remote API Data Sources that correspond to the ^{placeholders} in your data templates."
+        },
+        "three": {
+          "instructions": "Populating those ^{placeholders} with meaningful data makes your design mockups more realistic."
+        }
+      },
+      "options": {
+        "tutorial": "Show Intro",
+        "download": "Download Examples",
+        "learn": "Learn More Online",
+        "contact": "Get in Touch"
+      }
+    },
+    "name": {
+      "title": "Name",
+      "dataSourceName": "Data Source Name"
+    },
+    "textTrimming": {
+      "title": "Text Trimming",
+      "trim": "Trim Overflowing Text",
+      "ellipsis": "Insert Ellipsis After Trimming Text"
+    },
+    "url": {
+      "title": "URL",
+      "enterURL": "Enter a URL",
+      "preview": "Preview",
+      "headers": "Headers",
+      "key": "Key",
+      "value": "Value",
+      "addHeader": "Add Header",
+      "variables": "Variables",
+      "variable": "Variable",
+      "addVariable": "Add Variable",
+      "defaultValue": "Default Value"
+    }
+  },
+  "components": {
+    "modals": {
+      "help": {
+        "contentTemplateArtboard": {
+          "title": "Name Template for Artboard",
+          "description": "The tempate for the name of your Artboard."
+        },
+        "contentTemplateText": {
+          "title": "Content Template for Text",
+          "description": "The template for the content of your Text – e.g. Hello ^{placeholder}. ^{placeholder} will be populated with the respective data."
+        },
+        "contentTemplateShape": {
+          "title": "Content Template for Shape",
+          "description": "The template for your Image Shape."
+        },
+        "dataSource": {
+          "title": "Data Source",
+          "description": "Where your data is being taken from. You can create your own Data Sources and reuse them across your Documents. A Data Source can be either a local JSON file or a URL, e.g. an online JSON file or an API endpoint with dedicated Headers."
+        },
+        "urlVariableOverrides": {
+          "title": "URL Variable Overrides",
+          "description": "Override default URL variable values set for this data source to use dynamic variations of data."
+        },
+        "rootPath": {
+          "title": "Root Path",
+          "description": "The Root Path of your JSON. Use it if your JSON is nested and you only want to use deeper levels of your data."
+        },
+        "usedDataSources": {
+          "title": "Used Data Sources",
+          "description": "All Data Sources used in the current document."
+        },
+        "documentDataSources": {
+          "title": "Document Data Sources",
+          "description": "Data Sources that are stored in this document. When you share the document, the Data Sources will remain available. If a Data Source exists both in the document and in the library, the document version will take precedence."
+        },
+        "libraryDataSources": {
+          "title": "Library Data Sources",
+          "description": "Data Sources that are stored in your library. They are only available to you and can be used across your projects. Add library Data Sources to the document to make them available to others."
+        },
+        "dataSourceType": {
+          "title": "Data Source Type",
+          "description": "Data Sources can be either Local or Remote. Local refers to a locally referenced JSON file. Remote a to an online JSON file or an API endpoint."
+        },
+        "dataSourceDestination": {
+          "title": "Data Source Destination",
+          "description": "Select the destination to which you would like to store the new Data Source."
+        },
+        "defaultFallbackArtboard": {
+          "title": "Default Data Fallback",
+          "description": "If your Data Source doesn't contain data for the selected item, the Fallback will be used instead. For an email address, this could be something like 'No email address available'. Add a '?' to your placeholder to indicate the use of a fallback – like {email?}."
+        },
+        "defaultFallbackText": {
+          "title": "Default Data Fallback for Text",
+          "description": "If your Data Source doesn't contain data for the selected item, the Fallback will be used instead. For an email address, this could be something like 'No email address available'. Add a '?' to your placeholder to indicate the use of a fallback – like {email?}."
+        },
+        "defaultFallbackShape": {
+          "title": "Fallback for Shape",
+          "description": "If your Data Source doesn't contain data for the selected item, the Fallback will be used instead."
+        },
+        "dataSources": {
+          "title": "Data sources",
+          "description": "No data sources available. Add one to start populating your designs with meaningful data."
+        },
+        "textTrimming": {
+          "title": "Text Trimming",
+          "description": "If your data needs more space than your Text Layer provides, you can configure to trim it and optionally display an Elipsis after the cutoff."
+        },
+        "urlVariables": {
+          "title": "URL Variables",
+          "description": "Define dynamic parts of your data source URL by using ^{variable} placeholders. Assign default variable values and override them on per-instance basis when using this data source."
+        }
+      },
+      "missingDataSource": {
+        "title": "Relink Missing Data Source",
+        "dataSourceToRelink": "Data Source to relink",
+        "newDataSource": "New Data Source",
+        "selectSource": "Select a Data Source",
+        "confirm": "Confirm"
+      }
+    },
+    "data": {
+      "expand": "Click to expand"
+    },
+    "dataSource": {
+      "library": "Library",
+      "document": "Document",
+      "layerCount": "Used by {count} layer{plural?s}"
+    },
+    "fileSelector": {
+      "selectFile": "Select a File",
+      "browse": "Browse"
+    },
+    "tutorialStep": {
+      "skip": "Close Intro"
+    },
+    "type": {
+      "local": "Local",
+      "remote": "Remote"
+    }
+  },
+  "modals": {
+    "dataPreview": {
+      "title": "DATA",
+      "dismiss": "Dismiss",
+      "library": "Library",
+      "document": "Document"
+    },
+    "clearAction": {
+      "populatedData": {
+        "title": "CLEAR POPULATED DATA",
+        "info": "Remove populated data from selected layers. Original content of text layers will be restored. Images will be set to placeholders."
+      },
+      "options": {
+        "title": "CLEAR OPTIONS",
+        "info": "Remove all options such as content templates and data sources associated with selected layers."
+      },
+      "applyToChildren": "Clear Child Layers",
+      "cancel": "Cancel",
+      "clear": "Clear"
+    }
+  },
+  "panels": {
+    "addDataSource": {
+      "title": "ADD DATA SOURCE",
+      "add": "Add"
+    },
+    "artboard": {
+      "title": "ARTBOARD SELECTION",
+      "populate": "Populate",
+      "footer": "Restore original content and reset layer settings.",
+      "clear": "Clear"
+    },
+    "editDataSource": {
+      "title": "EDIT DATA SOURCE",
+      "save": "Save",
+      "footer": "All layers using this data source will no longer be populated.",
+      "delete": "Delete"
+    },
+    "group": {
+      "title": "GROUP SELECTION",
+      "repeatGridTitle": "REPEAT GRID SELECTION",
+      "populate": "Populate",
+      "footer": "Restore original content and reset layer settings.",
+      "clear": "Clear"
+    },
+    "multiSelection": {
+      "title": "MULTI SELECTION",
+      "subtitle": "Populate multiple supported layers at once.",
+      "populate": "Populate",
+      "footer": "Restore original content and reset layer settings.",
+      "clear": "Clear"
+    },
+    "shape": {
+      "title": "SHAPE SELECTION",
+      "populate": "Populate",
+      "footer": "Restore original content and reset layer settings.",
+      "clear": "Clear"
+    },
+    "text": {
+      "title": "TEXT SELECTION",
+      "populate": "Populate",
+      "footer": "Restore original content and reset layer settings.",
+      "clear": "Clear"
+    },
+    "unsupportedSelection": {
+      "title": "UNSUPPORTED SELECTION",
+      "subtitle": "Current layer selection cannot be populated."
+    }
+  }
+}

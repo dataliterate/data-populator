@@ -8,7 +8,6 @@
   "dependencies": {
     "command-line-args": "^3.0.1",
     "lodash": "^4.17.10",
-    "uuid": "^8.3.1",
-    "debounce": "^1.2.0"
+    "uuid": "^8.3.1"
   }
 }
