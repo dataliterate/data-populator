@@ -18,13 +18,17 @@ export function apply(string, param) {
 
   if (!string) return
 
+  //catch non numerical subsitutions and escape.
+  if (isNaN(string) === true) return string;
+
 // if we have no params, we can default to YYYY-MM-DD
 //if (!param) return string
 
 //get date formatting rules
 let dateFormat = param ? String(param) : 'YYYY-MM-DD'
 
-return moment(string).format(dateFormat);
+//substiutions might be in string format, so make sure to convert them to integers
+return moment(parseInt(string) ).format(dateFormat);
 }
 
 
