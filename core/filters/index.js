@@ -12,6 +12,7 @@ import * as CapitalizeFilter from './capitalize'
 import * as NumberFilter from './numeral'
 import * as MetricFilter from './metric'
 import * as ConvertFilter from './convert'
+import * as DateFilter from './date'
 
 
 let filters = [JoinFilter,
@@ -21,7 +22,8 @@ let filters = [JoinFilter,
                CapitalizeFilter, 
                NumberFilter,
                MetricFilter,
-               ConvertFilter]
+               ConvertFilter,
+               DateFilter]
 
 /**
  * Extracts filters from the placeholder string, e.g. firstName, lastName | & •
