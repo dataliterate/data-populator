@@ -1,6 +1,6 @@
 {
   "name": "@data-populator/sketch",
-  "version": "3.6.0",
+  "version": "3.6.1",
   "description": "A plugin to populate your design mockups with meaningful data. Good Bye Lorem Ipsum. Hello JSON.",
   "author": "precious design studio",
   "authorEmail": "feedback@datapopulator.com",
