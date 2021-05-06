@@ -26,7 +26,6 @@ export function apply(string, param) {
 
   let params = param.split(" "); 
 
-
   let localeString = "none"; //default
   let formatString = "0.0"; //default
   let hasLocale = false;
@@ -35,10 +34,10 @@ export function apply(string, param) {
   // check if we have a locale string and if so, set locale.
   params.forEach(function(item, index){
     if (!hasLocale){
+      //trim extra characters like spaces, etc.
       localeString = item.trim();  
       if( localeString in numeral.locales)
       {
-        console.log("valid string: " + localeString)      
         hasLocale = true;
         localesIndex = index;
       }
@@ -46,17 +45,17 @@ export function apply(string, param) {
   })
   
   if (hasLocale){
-  console.log ("localeString: " + localeString);
+    //set the locale and trime the params array.
     numeral.locale(localeString);
     params.splice(localesIndex, 1);
   }
 
   //rejoin and trim string:
   formatString = params.join('').trim();
-  console.log ("formatString:" + formatString);
   
   // if we have no params, we can default to '0,0' 
   let numFormat = formatString ? String(formatString) : '0,0' 
-    //format and return the value
+  
+  //format and return the value
   return numeral(string).format(numFormat);
 }
