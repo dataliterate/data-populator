@@ -13,8 +13,13 @@ export const alias = 'convert'
  * @returns {String}
  */
 
-export function apply(string, param) {
+var countDecimals = function (value) {
+  if(Math.floor(value) === value) return 0;
+  return value.toString().split(".")[1].length || 0;
+  }
 
+export function apply(string, param) {
+  
    //if there is no string return an empty ""
   if (!string) return ""
   if (!param) return string
@@ -28,9 +33,10 @@ export function apply(string, param) {
     else return ""
   }
 
-//default to 1 if no params (redundant??)
-let factor = param ? parseInt(param) : 1
+  //count the decimals place in the input:
+  let decimalPlaces = countDecimals(Number(string));
 
-let newValue = parseInt(string) * param
-return newValue;
+  let newValue = Number(string) * param
+  //trim the decimal places to match the original input 
+  return newValue.toFixed(decimalPlaces)
 }
