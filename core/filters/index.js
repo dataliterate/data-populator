@@ -10,7 +10,7 @@ import * as UppercaseFilter from './uppercase'
 import * as LowercaseFilter from './lowercase'
 import * as CapitalizeFilter from './capitalize'
 import * as NumberFilter from './numeral'
-import * as MetricFilter from './metric'
+import * as UnitFilter from './unit'
 import * as ConvertFilter from './convert'
 import * as DateFilter from './date'
 
@@ -21,7 +21,7 @@ let filters = [JoinFilter,
                LowercaseFilter, 
                CapitalizeFilter, 
                NumberFilter,
-               MetricFilter,
+               UnitFilter,
                ConvertFilter,
                DateFilter]
 

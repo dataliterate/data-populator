@@ -1,9 +1,9 @@
 /**
- * Metrics filter
+ * Units filter - append a unit to a value e.g. 200 Mbps, 10 lbs, etc.
  */
 
-export const name = 'metric'
-export const alias = 'metric'
+export const name = 'unit'
+export const alias = 'unit'
 
 /**
  * Apply various numerical formats
@@ -28,9 +28,11 @@ export function apply(string, param) {
   }
 
 // if we have no params, we can default to 'X' 
-let format = param ? String(param) : 'X' 
+let format = param ? String(param) : ' X' 
+//trim leading space character
+format = format.substring(1);
 
 
 //format and return the value
-return (string + " " + format);
+return (string + format);
 }
