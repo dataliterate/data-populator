@@ -26,7 +26,6 @@ export function apply(string, param) {
   // catch empty paramters
   if (!param) return string
 
-  console.log("param: " + param);
 
   let params = param.split(" "); 
 
