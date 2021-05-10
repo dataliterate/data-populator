@@ -6,6 +6,17 @@
     <description>A plugin to populate your design mockups with meaningful data. Good Bye Lorem Ipsum. Hello JSON.</description>
     <language>en</language>
     <item>
+      <title>Version 3.6.1</title>
+      <description>
+        <![CDATA[
+          <ul>
+            <li>Added new filters: date, numeral, convert, unit. Thanks to our dear contributor Dennis Rosenfeld! See https://www.datapopulator.com/documentation/ for more details. </li>
+          </ul>
+        ]]>
+      </description>
+      <enclosure url="https://www.datapopulator.com/releases/datapopulator-sketch-v3.6.1.zip" sparkle:version="3.6.1" />
+    </item>
+    <item>
       <title>Version 3.6.0</title>
       <description>
         <![CDATA[
@@ -14,8 +25,8 @@
           </ul>
         ]]>
       </description>
-    <enclosure url="https://www.datapopulator.com/releases/datapopulator-sketch-v3.6.0.zip" sparkle:version="3.6.0" />
-  </item>
+      <enclosure url="https://www.datapopulator.com/releases/datapopulator-sketch-v3.6.0.zip" sparkle:version="3.6.0" />
+    </item>
     <item>
       <title>Version 3.5.2</title>
       <description>
