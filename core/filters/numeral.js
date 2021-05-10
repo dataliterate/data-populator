@@ -23,6 +23,10 @@ export function apply(string, param) {
 
   //catch non numerical subsitutions and escape.
   if (isNaN(string) === true) return string;
+  // catch empty paramters
+  if (!param) return string
+
+  console.log("param: " + param);
 
   let params = param.split(" "); 
 
