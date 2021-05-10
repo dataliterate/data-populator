@@ -36,7 +36,7 @@ export function apply(string, param) {
     }
     else{
       //substitutions might be in string format, so make sure to convert them to integers
-      timestamp = moment(parseInt(timestamp) ).format(dateFormat);
+      timestamp = parseInt(timestamp);
     }
   }
 
