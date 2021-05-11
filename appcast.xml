@@ -6,98 +6,105 @@
     <description>A plugin to populate your design mockups with meaningful data. Good Bye Lorem Ipsum. Hello JSON.</description>
     <language>en</language>
     <item>
-      <title>Version 3.6.1</title>
+      <title>Version 2.2.0</title>
       <description>
         <![CDATA[
           <ul>
-            <li>Added new filters: date, numeral, convert, unit. Thanks to our dear contributor Dennis Rosenfeld! See https://www.datapopulator.com/documentation/ for more details. </li>
+            <li>Improvements for Sketch 44 and 45 compatibility</li>
+            <li>Bug fixes</li>
           </ul>
         ]]>
       </description>
-      <enclosure url="https://www.datapopulator.com/releases/datapopulator-sketch-v3.6.1.zip" sparkle:version="3.6.1" />
+      <enclosure url="https://github.com/preciousforever/data-populator/releases/download/v2.2.0/SketchDataPopulator.zip" sparkle:version="1.1" />
     </item>
     <item>
-      <title>Version 3.6.0</title>
+      <title>Version 2.2.1</title>
       <description>
         <![CDATA[
           <ul>
-            <li>Fixes trimming for fixed size text layers. It always trims to one line unless you specify the number of lines using the '-l N' argument in the layer name.</li>
+            <li>Added support for Sketch 47.</li>
           </ul>
         ]]>
       </description>
-      <enclosure url="https://www.datapopulator.com/releases/datapopulator-sketch-v3.6.0.zip" sparkle:version="3.6.0" />
+      <enclosure url="https://github.com/preciousforever/data-populator/releases/download/v2.2.1/SketchDataPopulator.zip" sparkle:version="2.2.1" />
     </item>
     <item>
-      <title>Version 3.5.2</title>
+      <title>Version 2.2.2</title>
       <description>
         <![CDATA[
           <ul>
-            <li>Add support for data properties containing '.' in their name. If your property contains '.', such as imageUrl.2.2 , add backticks (`) around that key. For example, someObject.`property.with.fullstop`</li>
-            <li>We added analytics to the plugin to gather diagnostics and usage data. This will help us identify usage problems and improve the plugin. All data is collected anonymously and cannot be used to identify you. If you want to opt out, just untick the "Privacy" checkbox in the Sketch Settings under "General".</li>
+            <li>Added support for Sketch 48.</li>
+            <li>Minor bug fixes when configuring grid settings.</li>
           </ul>
         ]]>
       </description>
-      <enclosure url="https://www.datapopulator.com/releases/datapopulator-sketch-v3.5.2.zip" sparkle:version="3.5.2" />
+      <enclosure url="https://github.com/preciousforever/data-populator/releases/download/v2.2.2/SketchDataPopulator.zip" sparkle:version="2.2.2" />
     </item>
     <item>
-      <title>Version 3.5.1</title>
+      <title>Version 2.3.0</title>
       <description>
         <![CDATA[
           <ul>
-            <li>Sketch 69 compatibility fix</li>
+            <li>It is now possible to select the location of your presets library.</li>
           </ul>
         ]]>
       </description>
-      <enclosure url="https://www.datapopulator.com/releases/datapopulator-sketch-v3.5.1.zip" sparkle:version="3.5.1" />
+      <enclosure url="https://github.com/preciousforever/data-populator/releases/download/v2.3.0/SketchDataPopulator.zip" sparkle:version="2.3.0" />
     </item>
     <item>
-      <title>Version 3.5.0</title>
+      <title>Version 2.3.1</title>
       <description>
         <![CDATA[
           <ul>
-            <li>we fixed the most critical issues. Details: https://github.com/preciousforever/data-populator/projects/2</li>
+            <li>Removed all image assets from the plugin bundle for faster internal updates. They're now URLs in the demo JSON.</li>
           </ul>
         ]]>
       </description>
-      <enclosure url="https://www.datapopulator.com/releases/datapopulator-sketch-v3.5.0.zip" sparkle:version="3.5.0" />
+      <enclosure url="https://github.com/preciousforever/data-populator/releases/download/v2.3.1/SketchDataPopulator.zip" sparkle:version="2.3.1" />
     </item>
     <item>
-      <title>Version 3.0.3</title>
+      <title>Version 2.3.2</title>
       <description>
         <![CDATA[
           <ul>
-            <li>{placeholders} can now be used in override text content!</li>
-            <li>Data substitutes can now be stacked in order of priority: for example, {name??email?phone} will use 'email if there's no data for 'name' and 'phone' if there's no data for 'email' etc.</li>
-            <li>'#swapSymbol' Conditional Action: if you don't pass a symbol name (eg. #swapSymbol[true]), it will swap the symbol to 'None', hiding the symbol effectively</li>
+            <li>Added <em>Capitalize</em> Filter.</li>
           </ul>
         ]]>
       </description>
-      <enclosure url="https://www.datapopulator.com/releases/datapopulator-sketch-v3.0.3.zip" sparkle:version="3.0.3" />
+      <enclosure url="https://github.com/preciousforever/data-populator/releases/download/v2.3.2/SketchDataPopulator.zip" sparkle:version="2.3.2" />
     </item>
     <item>
-      <title>Version 3.0.2</title>
+      <title>Version 2.3.3</title>
       <description>
         <![CDATA[
           <ul>
-            <li>Fixed symbols in Sketch 52.3</li>
-            <li>'#swapSymbol' Conditional Action now works with Libraries</li>
+            <li>Fixed <em>Capitalize</em> Filter.</li>
           </ul>
         ]]>
       </description>
-      <enclosure url="https://www.datapopulator.com/releases/datapopulator-sketch-v3.0.2.zip" sparkle:version="3.0.2" />
+      <enclosure url="https://github.com/preciousforever/data-populator/releases/download/v2.3.3/SketchDataPopulator.zip" sparkle:version="2.3.3" />
     </item>
     <item>
-      <title>Version 3.0.1</title>
+      <title>Version 2.3.4</title>
       <description>
         <![CDATA[
           <ul>
-            <li>no more crashes when running populate with JSON and the previously selected JSON file no longer exists</li>
-            <li>pressing enter key to select JSON files no longer automatically runs populate (you didn't even get a chance to look at the settings before and it would just populate immediately)</li>
-            <li>it's now possible to use data for substitutes! For example, {something?name} will insert 'name' but {something??name} will use the data for the 'name' key in the data</li>
+            <li>Renamed the plugin from "Sketch Data Populator" to "Data Populator".</li>
           </ul>
         ]]>
       </description>
-      <enclosure url="https://www.datapopulator.com/releases/datapopulator-sketch-v3.0.1.zip" sparkle:version="3.0.1" />
+      <enclosure url="https://github.com/preciousforever/data-populator/releases/download/v2.3.4/DataPopulator.zip" sparkle:version="2.3.4" />
+    </item>
+    <item>
+      <title>Version 2.3.5</title>
+      <description>
+        <![CDATA[
+          <ul>
+            <li>Fixed compatibility issues for populating images in Sketch 52.</li>
+          </ul>
+        ]]>
+      </description>
+      <enclosure url="https://github.com/preciousforever/data-populator/releases/download/v2.3.5/DataPopulator.zip" sparkle:version="2.3.5" />
     </item>
     <item>
       <title>Version 3.0.0</title>
@@ -113,105 +120,109 @@
       <enclosure url="https://www.datapopulator.com/releases/datapopulator-sketch-v3.0.0.zip" sparkle:version="3.0.0" />
     </item>
     <item>
-      <title>Version 2.3.5</title>
+      <title>Version 3.0.1</title>
       <description>
         <![CDATA[
           <ul>
-            <li>Fixed compatibility issues for populating images in Sketch 52.</li>
+            <li>no more crashes when running populate with JSON and the previously selected JSON file no longer exists</li>
+            <li>pressing enter key to select JSON files no longer automatically runs populate (you didn't even get a chance to look at the settings before and it would just populate immediately)</li>
+            <li>it's now possible to use data for substitutes! For example, {something?name} will insert 'name' but {something??name} will use the data for the 'name' key in the data</li>
           </ul>
         ]]>
       </description>
-      <enclosure url="https://github.com/preciousforever/data-populator/releases/download/v2.3.5/DataPopulator.zip" sparkle:version="2.3.5" />
+      <enclosure url="https://www.datapopulator.com/releases/datapopulator-sketch-v3.0.1.zip" sparkle:version="3.0.1" />
     </item>
     <item>
-      <title>Version 2.3.4</title>
+      <title>Version 3.0.2</title>
       <description>
         <![CDATA[
           <ul>
-            <li>Renamed the plugin from "Sketch Data Populator" to "Data Populator".</li>
+            <li>Fixed symbols in Sketch 52.3</li>
+            <li>'#swapSymbol' Conditional Action now works with Libraries</li>
           </ul>
         ]]>
       </description>
-      <enclosure url="https://github.com/preciousforever/data-populator/releases/download/v2.3.4/DataPopulator.zip" sparkle:version="2.3.4" />
+      <enclosure url="https://www.datapopulator.com/releases/datapopulator-sketch-v3.0.2.zip" sparkle:version="3.0.2" />
     </item>
     <item>
-      <title>Version 2.3.3</title>
+      <title>Version 3.0.3</title>
       <description>
         <![CDATA[
           <ul>
-            <li>Fixed <em>Capitalize</em> Filter.</li>
+            <li>{placeholders} can now be used in override text content!</li>
+            <li>Data substitutes can now be stacked in order of priority: for example, {name??email?phone} will use 'email if there's no data for 'name' and 'phone' if there's no data for 'email' etc.</li>
+            <li>'#swapSymbol' Conditional Action: if you don't pass a symbol name (eg. #swapSymbol[true]), it will swap the symbol to 'None', hiding the symbol effectively</li>
           </ul>
         ]]>
       </description>
-      <enclosure url="https://github.com/preciousforever/data-populator/releases/download/v2.3.3/SketchDataPopulator.zip" sparkle:version="2.3.3" />
+      <enclosure url="https://www.datapopulator.com/releases/datapopulator-sketch-v3.0.3.zip" sparkle:version="3.0.3" />
     </item>
     <item>
-      <title>Version 2.3.2</title>
+      <title>Version 3.5.0</title>
       <description>
         <![CDATA[
           <ul>
-            <li>Added <em>Capitalize</em> Filter.</li>
+            <li>we fixed the most critical issues. Details: https://github.com/preciousforever/data-populator/projects/2</li>
           </ul>
         ]]>
       </description>
-      <enclosure url="https://github.com/preciousforever/data-populator/releases/download/v2.3.2/SketchDataPopulator.zip" sparkle:version="2.3.2" />
+      <enclosure url="https://www.datapopulator.com/releases/datapopulator-sketch-v3.5.0.zip" sparkle:version="3.5.0" />
     </item>
-      <item>
-        <title>Version 2.3.1</title>
-        <description>
-          <![CDATA[
-            <ul>
-              <li>Removed all image assets from the plugin bundle for faster internal updates. They're now URLs in the demo JSON.</li>
-            </ul>
-          ]]>
-        </description>
-        <enclosure url="https://github.com/preciousforever/data-populator/releases/download/v2.3.1/SketchDataPopulator.zip" sparkle:version="2.3.1" />
-      </item>
-      <item>
-        <title>Version 2.3.0</title>
-        <description>
-          <![CDATA[
-            <ul>
-              <li>It is now possible to select the location of your presets library.</li>
-            </ul>
-          ]]>
-        </description>
-        <enclosure url="https://github.com/preciousforever/data-populator/releases/download/v2.3.0/SketchDataPopulator.zip" sparkle:version="2.3.0" />
-      </item>
-      <item>
-        <title>Version 2.2.2</title>
-        <description>
-          <![CDATA[
-            <ul>
-              <li>Added support for Sketch 48.</li>
-              <li>Minor bug fixes when configuring grid settings.</li>
-            </ul>
-          ]]>
-        </description>
-        <enclosure url="https://github.com/preciousforever/data-populator/releases/download/v2.2.2/SketchDataPopulator.zip" sparkle:version="2.2.2" />
-      </item>
-      <item>
-        <title>Version 2.2.1</title>
-        <description>
-          <![CDATA[
-            <ul>
-              <li>Added support for Sketch 47.</li>
-            </ul>
-          ]]>
-        </description>
-        <enclosure url="https://github.com/preciousforever/data-populator/releases/download/v2.2.1/SketchDataPopulator.zip" sparkle:version="2.2.1" />
-      </item>
-      <item>
-        <title>Version 2.2.0</title>
-        <description>
-          <![CDATA[
-            <ul>
-              <li>Improvements for Sketch 44 and 45 compatibility</li>
-              <li>Bug fixes</li>
-            </ul>
-          ]]>
-        </description>
-        <enclosure url="https://github.com/preciousforever/data-populator/releases/download/v2.2.0/SketchDataPopulator.zip" sparkle:version="1.1" />
-      </item>
+    <item>
+      <title>Version 3.5.1</title>
+      <description>
+        <![CDATA[
+          <ul>
+            <li>Sketch 69 compatibility fix</li>
+          </ul>
+        ]]>
+      </description>
+      <enclosure url="https://www.datapopulator.com/releases/datapopulator-sketch-v3.5.1.zip" sparkle:version="3.5.1" />
+    </item>
+    <item>
+      <title>Version 3.5.2</title>
+      <description>
+        <![CDATA[
+          <ul>
+            <li>Add support for data properties containing '.' in their name. If your property contains '.', such as imageUrl.2.2 , add backticks (`) around that key. For example, someObject.`property.with.fullstop`</li>
+            <li>We added analytics to the plugin to gather diagnostics and usage data. This will help us identify usage problems and improve the plugin. All data is collected anonymously and cannot be used to identify you. If you want to opt out, just untick the "Privacy" checkbox in the Sketch Settings under "General".</li>
+          </ul>
+        ]]>
+      </description>
+      <enclosure url="https://www.datapopulator.com/releases/datapopulator-sketch-v3.5.2.zip" sparkle:version="3.5.2" />
+    </item>
+    <item>
+      <title>Version 3.6.0</title>
+      <description>
+        <![CDATA[
+          <ul>
+            <li>Fixes trimming for fixed size text layers. It always trims to one line unless you specify the number of lines using the '-l N' argument in the layer name.</li>
+          </ul>
+        ]]>
+      </description>
+      <enclosure url="https://www.datapopulator.com/releases/datapopulator-sketch-v3.6.0.zip" sparkle:version="3.6.0" />
+    </item>
+    <item>
+      <title>Version 3.6.1</title>
+      <description>
+        <![CDATA[
+          <ul>
+            <li>Added new filters: date, numeral, convert, unit. Thanks to our dear contributor Dennis Rosenfeld! See https://www.datapopulator.com/documentation/ for more details.</li>
+          </ul>
+        ]]>
+      </description>
+      <enclosure url="https://www.datapopulator.com/releases/datapopulator-sketch-v3.6.1.zip" sparkle:version="3.6.1" />
+    </item>
+    <item>
+      <title>Version 3.6.2</title>
+      <description>
+        <![CDATA[
+          <ul>
+            <li>Bugfix for new filters</li>
+          </ul>
+        ]]>
+      </description>
+      <enclosure url="https://www.datapopulator.com/releases/datapopulator-sketch-v3.6.2.zip" sparkle:version="3.6.2" />
+    </item>
   </channel>
 </rss>
