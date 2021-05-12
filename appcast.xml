@@ -215,6 +215,7 @@
     </item>
     <item>
       <title>Version 3.6.2</title>
+      <sparkle:releaseNotesLink>https://www.datapopulator.com/sketch/changelog.html</sparkle:releaseNotesLink>
       <description>
         <![CDATA[
           <ul>
