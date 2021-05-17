@@ -322,7 +322,15 @@ export function populatePlaceholder(placeholder, data, defaultSubstitute) {
     // populate with data for keypath
     populated = Utils.accessObjectByString(data, placeholder.keypath)
 
+    //Check to see if 'populated' is a numeric 0
+    if( typeof(populated) === 'number' && populated === 0)
+    {
+      //convert to a string 0 as numeric zero will fail a test like - if (!populated){do something}
+      populated = "0";
+    } 
+    
     // check if substitute is needed
+    //NOTE - this check will fail for a numeric zero.
     if (!populated) {
       hasValueForKey = false
 
