@@ -22,7 +22,9 @@ export function apply(string, param) {
   
   let params
   let timestamp = string;
-  if(param) params = param.split(" "); 
+  //split params but keep delimeters (using lookahead)
+  if(param) params = param.split(/(?=[.,:; ])|(?<=[.,:; ])/g);
+
   let localeString = "none"; //default
   let formatString = "YYYY-MM-DD"; //default
   let hasLocale = false;
@@ -61,7 +63,7 @@ export function apply(string, param) {
   
   //get date formatting rules
   // if we have no params, we can default to YYYY-MM-DD
-  let dateFormat = formatString ? String(formatString.trim() ) : 'YYYY-MM-DD'
+  let dateFormat = formatString ? String(formatString) : 'YYYY-MM-DD'
 
  
   
