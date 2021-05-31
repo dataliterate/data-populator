@@ -1,7 +1,8 @@
 /**
  * Date / Timestamp filter
  */
-import moment from 'moment/min/moment-with-locales';
+import moment from 'moment';
+import 'moment/min/locales';
 
 export const name = 'date'
 export const alias = 'date'
