@@ -17,56 +17,45 @@ export const alias = 'date'
 
 export function apply(string, param) {
 
-
-
   if (!string) return
   
-  let params
+  let matches
+  let indexStart = -1;
+  let indexEnd = -1;
   let timestamp = string;
-  //split params but keep delimeters (using lookahead)
-  if(param) params = param.split(/(?=[.,:; ])|(?<=[.,:; ])/g);
+    
+  //Seperate out locales within a < > 
+  const regex = /(?<=\<).+?(?=\>)/g;
+  if(param) matches = param.match(regex);
 
   let localeString = "none"; //default
   let formatString = "YYYY-MM-DD"; //default
   let hasLocale = false;
-  let localesIndex = -1;
   let localesArray = Object.values(moment.locales() ); //get an array of the locales to check against
 
   //default to english
   moment.locale('en');
 
-    // ignore empty paramters
-    if (param) {
-      // check if we have a locale string and if so, set locale.
-      params.forEach(function(item, index){
-        if (!hasLocale){
-          //trim extra characters like spaces, etc.
-          localeString = item.trim();  
-          //check if string matches a valid locale:
-          if( localesArray.includes(localeString) )
-          {
-            hasLocale = true;
-            localesIndex = index;
-          }
-        }
-      })
-
-      if (hasLocale){
-        //set the locale and trime the params array.
-        // numeral.locale(localeString);
-        moment.locale(localeString);
-        params.splice(localesIndex, 1);
-      }
-
-      //rejoin and trim string:
-      formatString = params.join('').trim();
+  if (matches){
+    localeString = String(matches)
+    indexStart = param.indexOf('<');
+    indexEnd = param.indexOf('>');
+    param = param.slice(0, indexStart) + param.slice(indexEnd+1);
+  
+    // check if we have a locale string and if so, set locale.
+    if( localesArray.includes(localeString) )
+    {
+      hasLocale = true;
+      moment.locale(localeString);
     }
+  }
   
   //get date formatting rules
   // if we have no params, we can default to YYYY-MM-DD
+  formatString = param.trim();
   let dateFormat = formatString ? String(formatString) : 'YYYY-MM-DD'
 
- 
+
   
   //check if the string is actually a valid date, a unix timestamp, or an invalid entry
   if (!moment(timestamp).isValid())
