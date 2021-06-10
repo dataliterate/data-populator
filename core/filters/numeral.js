@@ -27,35 +27,40 @@ export function apply(string, param) {
   if (!param) return string
 
 
-  let params = param.split(" "); 
+  let matches
+  let indexStart = -1;
+  let indexEnd = -1;
+
+  //Seperate out locales within a < > 
+  const regex = /(?<=\<).+?(?=\>)/g;
+  if(param) matches = param.match(regex);
+
 
   let localeString = "none"; //default
   let formatString = "0.0"; //default
   let hasLocale = false;
-  let localesIndex = -1;
 
-  // check if we have a locale string and if so, set locale.
-  params.forEach(function(item, index){
-    if (!hasLocale){
-      //trim extra characters like spaces, etc.
-      localeString = item.trim();  
-      if( localeString in numeral.locales)
-      {
-        hasLocale = true;
-        localesIndex = index;
-      }
-    }
-  })
+  //default to english
+  numeral.locale('en');
+
+  if (matches){
+    localeString = String(matches)
+    indexStart = param.indexOf('<');
+    indexEnd = param.indexOf('>');
+    param = param.slice(0, indexStart) + param.slice(indexEnd+1);
   
-  if (hasLocale){
-    //set the locale and trime the params array.
-    numeral.locale(localeString);
-    params.splice(localesIndex, 1);
+    // check if we have a locale string and if so, set locale.
+    if( localeString in numeral.locales )
+    {
+      hasLocale = true;
+      numeral.locale(localeString);
+    }
   }
 
+
   //rejoin and trim string:
-  formatString = params.join('').trim();
-  
+  formatString = param.trim();
+
   // if we have no params, we can default to '0,0' 
   let numFormat = formatString ? String(formatString) : '0,0' 
   
