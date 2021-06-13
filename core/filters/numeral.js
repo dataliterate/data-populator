@@ -32,7 +32,7 @@ export function apply(string, param) {
   let indexEnd = -1;
 
   //Seperate out locales within a < > 
-  const regex = /(?<=\<).+?(?=\>)/g;
+  const regex = /\<.+?\>/;
   if(param) matches = param.match(regex);
 
 
@@ -44,7 +44,7 @@ export function apply(string, param) {
   numeral.locale('en');
 
   if (matches){
-    localeString = String(matches)
+    localeString = String(matches).slice(1,-1);
     indexStart = param.indexOf('<');
     indexEnd = param.indexOf('>');
     param = param.slice(0, indexStart) + param.slice(indexEnd+1);
