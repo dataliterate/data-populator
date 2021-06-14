@@ -25,7 +25,13 @@ export function apply(string, param) {
   let timestamp = string;
     
   //Seperate out locales within a < > 
-  const regex = /(?<=\<).+?(?=\>)/g;
+  
+  // regex with lookahead (Sketch Uses Safari for its JS, and Safari doesn't currently support lookbehind)
+  //  const regex = /(?<=\<).+?(?=\>)/g;
+
+  //regex without lookahead
+  const regex = /\<.+?\>/;
+
   if(param) matches = param.match(regex);
 
   let localeString = "none"; //default
@@ -37,7 +43,7 @@ export function apply(string, param) {
   moment.locale('en');
 
   if (matches){
-    localeString = String(matches)
+    localeString = String(matches).slice(1,-1);
     indexStart = param.indexOf('<');
     indexEnd = param.indexOf('>');
     param = param.slice(0, indexStart) + param.slice(indexEnd+1);
