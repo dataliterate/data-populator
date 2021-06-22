@@ -232,12 +232,23 @@
         <![CDATA[
           <ul>
             <li>Added locale support and relative timestamps to 'date' filter</li>
-            <li>Locales for 'numeral' and 'date' filters now need to be defined with brackets, like '<de>'</li>
             <li>Fixed a bug where '0' in the data was populated as 'undefined'</li>
           </ul>
         ]]>
       </description>
       <enclosure url="https://www.datapopulator.com/releases/datapopulator-sketch-v3.6.3.zip" sparkle:version="3.6.3" />
+    </item>
+    <item>
+      <title>Version 3.6.4</title>
+      <sparkle:releaseNotesLink>https://www.datapopulator.com/sketch/changelog.html</sparkle:releaseNotesLink>
+      <description>
+        <![CDATA[
+          <ul>
+            <li>Locales for 'numeral' and 'date' filters now need to be defined with angle brackets</li>
+          </ul>
+        ]]>
+      </description>
+      <enclosure url="https://www.datapopulator.com/releases/datapopulator-sketch-v3.6.4.zip" sparkle:version="3.6.4" />
     </item>
   </channel>
 </rss>
