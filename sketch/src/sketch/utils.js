@@ -46,9 +46,6 @@ export function sketchVersion() {
  * @returns {Array}
  */
 export function convertToJSArray(nativeArray) {
-  if (nativeArray.class() === MSLayerArray) {
-    nativeArray = nativeArray.layers()
-  }
   let length = nativeArray.count()
   let jsArray = []
 
