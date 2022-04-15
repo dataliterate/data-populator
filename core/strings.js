@@ -129,7 +129,7 @@ export const strings = {
     [NO_PRESETS_FOUND]: 'No presets found.',
     [CONNECTION_FAILED]: 'Connection failed',
     [UNABLE_TO_DOWNLOAD_PRESETS]:
-      "Unable to download the default presets at 'https://www.datapopulator.com/demodata/' provided by precious design studio.",
+      "Unable to download the default presets at 'https://www.datapopulator.com/demodata/' provided by Data Literate.",
     [NO_JSON_FILES_IN_PRESETS_FOLDER]:
       'There are no JSON files in the presets folder to populate with.',
     [NO_PRESETS_FOLDER]: 'No presets folder',

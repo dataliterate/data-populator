@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle"  xmlns:dc="http://purl.org/dc/elements/1.1/">
   <channel>
     <title>Data Populator</title>
-    <link>https://raw.githubusercontent.com/preciousforever/data-populator/master/appcast.xml</link>
+    <link>https://raw.githubusercontent.com/dataliterate/data-populator/master/appcast.xml</link>
     <description>A plugin to populate your design mockups with meaningful data. Good Bye Lorem Ipsum. Hello JSON.</description>
     <language>en</language>
     <item>
@@ -15,7 +15,7 @@
           </ul>
         ]]>
       </description>
-      <enclosure url="https://github.com/preciousforever/data-populator/releases/download/v2.2.0/SketchDataPopulator.zip" sparkle:version="1.1" />
+      <enclosure url="https://github.com/dataliterate/data-populator/releases/download/v2.2.0/SketchDataPopulator.zip" sparkle:version="1.1" />
     </item>
     <item>
       <title>Version 2.2.1</title>
@@ -26,7 +26,7 @@
           </ul>
         ]]>
       </description>
-      <enclosure url="https://github.com/preciousforever/data-populator/releases/download/v2.2.1/SketchDataPopulator.zip" sparkle:version="2.2.1" />
+      <enclosure url="https://github.com/dataliterate/data-populator/releases/download/v2.2.1/SketchDataPopulator.zip" sparkle:version="2.2.1" />
     </item>
     <item>
       <title>Version 2.2.2</title>
@@ -38,7 +38,7 @@
           </ul>
         ]]>
       </description>
-      <enclosure url="https://github.com/preciousforever/data-populator/releases/download/v2.2.2/SketchDataPopulator.zip" sparkle:version="2.2.2" />
+      <enclosure url="https://github.com/dataliterate/data-populator/releases/download/v2.2.2/SketchDataPopulator.zip" sparkle:version="2.2.2" />
     </item>
     <item>
       <title>Version 2.3.0</title>
@@ -49,7 +49,7 @@
           </ul>
         ]]>
       </description>
-      <enclosure url="https://github.com/preciousforever/data-populator/releases/download/v2.3.0/SketchDataPopulator.zip" sparkle:version="2.3.0" />
+      <enclosure url="https://github.com/dataliterate/data-populator/releases/download/v2.3.0/SketchDataPopulator.zip" sparkle:version="2.3.0" />
     </item>
     <item>
       <title>Version 2.3.1</title>
@@ -60,7 +60,7 @@
           </ul>
         ]]>
       </description>
-      <enclosure url="https://github.com/preciousforever/data-populator/releases/download/v2.3.1/SketchDataPopulator.zip" sparkle:version="2.3.1" />
+      <enclosure url="https://github.com/dataliterate/data-populator/releases/download/v2.3.1/SketchDataPopulator.zip" sparkle:version="2.3.1" />
     </item>
     <item>
       <title>Version 2.3.2</title>
@@ -71,7 +71,7 @@
           </ul>
         ]]>
       </description>
-      <enclosure url="https://github.com/preciousforever/data-populator/releases/download/v2.3.2/SketchDataPopulator.zip" sparkle:version="2.3.2" />
+      <enclosure url="https://github.com/dataliterate/data-populator/releases/download/v2.3.2/SketchDataPopulator.zip" sparkle:version="2.3.2" />
     </item>
     <item>
       <title>Version 2.3.3</title>
@@ -82,7 +82,7 @@
           </ul>
         ]]>
       </description>
-      <enclosure url="https://github.com/preciousforever/data-populator/releases/download/v2.3.3/SketchDataPopulator.zip" sparkle:version="2.3.3" />
+      <enclosure url="https://github.com/dataliterate/data-populator/releases/download/v2.3.3/SketchDataPopulator.zip" sparkle:version="2.3.3" />
     </item>
     <item>
       <title>Version 2.3.4</title>
@@ -93,7 +93,7 @@
           </ul>
         ]]>
       </description>
-      <enclosure url="https://github.com/preciousforever/data-populator/releases/download/v2.3.4/DataPopulator.zip" sparkle:version="2.3.4" />
+      <enclosure url="https://github.com/dataliterate/data-populator/releases/download/v2.3.4/DataPopulator.zip" sparkle:version="2.3.4" />
     </item>
     <item>
       <title>Version 2.3.5</title>
@@ -104,7 +104,7 @@
           </ul>
         ]]>
       </description>
-      <enclosure url="https://github.com/preciousforever/data-populator/releases/download/v2.3.5/DataPopulator.zip" sparkle:version="2.3.5" />
+      <enclosure url="https://github.com/dataliterate/data-populator/releases/download/v2.3.5/DataPopulator.zip" sparkle:version="2.3.5" />
     </item>
     <item>
       <title>Version 3.0.0</title>
@@ -162,7 +162,7 @@
       <description>
         <![CDATA[
           <ul>
-            <li>we fixed the most critical issues. Details: https://github.com/preciousforever/data-populator/projects/2</li>
+            <li>we fixed the most critical issues. Details: https://github.com/dataliterate/data-populator/projects/2</li>
           </ul>
         ]]>
       </description>

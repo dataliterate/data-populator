@@ -29,7 +29,7 @@ https://my.api.mockaroo.com/boardingpass.json?key=aa343f30
 [airlines.csv](airlines.csv)
 
 ## Author
-Christophe Stoll of [precious design studio](http://www.precious-forever.com), makers of [Data Populator](http://www.datapopulator.com)
+Christophe Stoll of [Data Literate](http://www.dataliterate.de), makers of [Data Populator](http://www.datapopulator.com)
 
 ## Data Sources & Credits
 https://www.mockaroo.com  
