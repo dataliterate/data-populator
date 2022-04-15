@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@craco/craco": "^5.6.4",
-    "axios": "^0.21.0",
+    "axios": "^0.21.2",
     "base-64": "^0.1.0",
     "classnames": "2.2.5",
     "jquery": "^3.5.1",
