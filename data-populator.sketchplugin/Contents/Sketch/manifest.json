@@ -2,12 +2,12 @@
   "$schema": "https://raw.githubusercontent.com/sketch-hq/SketchAPI/develop/docs/sketch-plugin-manifest-schema.json",
   "name": "Data Populator",
   "description": "A plugin to populate your design mockups with meaningful data. Good Bye Lorem Ipsum. Hello JSON.",
-  "author": "precious design studio",
+  "author": "Data Literate",
   "authorEmail": "feedback@datapopulator.com",
   "identifier": "com.datapopulator.sketch.new",
   "compatibleVersion": "69",
   "icon": "images/icon.png",
-  "appcast": "https://raw.githubusercontent.com/preciousforever/data-populator/master/appcast.xml",
+  "appcast": "https://raw.githubusercontent.com/dataliterate/data-populator/master/appcast.xml",
   "commands": [
     {
       "name": "Populate with Preset",
@@ -97,6 +97,6 @@
       "com.datapopulator.sketch.needHelp"
     ]
   },
-  "version": "3.6.4",
+  "version": "3.6.5",
   "disableCocoaScriptPreprocessor": true
 }

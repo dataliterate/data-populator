@@ -250,5 +250,17 @@
       </description>
       <enclosure url="https://www.datapopulator.com/releases/datapopulator-sketch-v3.6.4.zip" sparkle:version="3.6.4" />
     </item>
+    <item>
+      <title>Version 3.6.5</title>
+      <sparkle:releaseNotesLink>https://www.datapopulator.com/sketch/changelog.html</sparkle:releaseNotesLink>
+      <description>
+        <![CDATA[
+          <ul>
+            <li>Fix for Sketch versions >84</li>
+          </ul>
+        ]]>
+      </description>
+      <enclosure url="https://www.datapopulator.com/releases/datapopulator-sketch-v3.6.5.zip" sparkle:version="3.6.5" />
+    </item>
   </channel>
 </rss>
