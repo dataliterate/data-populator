@@ -27,7 +27,7 @@
     "jquery.caret": "0.3.1",
     "mocha-js-delegate": "^0.2.0",
     "moment": "^2.29.2",
-    "node-sass": "^4.14.1",
+    "node-sass": "^7.0.0",
     "nprogress": "0.2.0",
     "numeral": "^2.0.6",
     "pretty-date": "0.2.0",
