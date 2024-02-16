@@ -69,7 +69,11 @@ export function perform(condition, layer, params) {
   setCommandParamsToMetadata(layer, params)
 
   // run the command
-  NSApp.delegate().runPluginCommand(command)
+  if (NSApp.delegate().runPluginCommand_fromMenu_context_) {
+    NSApp.delegate().runPluginCommand_fromMenu_context_(command, null, {})
+  } else {
+    throw new Error("The current version of Sketch is not supported.")
+  }
 
   // remove params
   removeCommandParamsFromMetadata(layer)
